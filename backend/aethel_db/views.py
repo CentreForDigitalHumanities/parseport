@@ -33,6 +33,11 @@ class AethelListItem:
     type: str
     samples: List[AethelListSample] = field(default_factory=list)
 
+    def serialize(self):
+        out = asdict(self)
+        out['samples'] = sorted(out['samples'], key=lambda sample: len(sample['sentence']))
+        return out
+
 
 @dataclass
 class AethelListResponse:
@@ -68,7 +73,7 @@ class AethelListResponse:
         )
 
     def json_response(self) -> JsonResponse:
-        results = [asdict(result) for result in self.results]
+        results = [result.serialize() for result in self.results]
 
         return JsonResponse(
             {
