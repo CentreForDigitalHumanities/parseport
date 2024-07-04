@@ -50,7 +50,7 @@ class AethelListResponse:
     results: List[AethelListItem] = field(default_factory=list)
     error: Optional[str] = None
 
-    def get_or_create_existing_result(
+    def get_or_create_result(
         self, lemma: str, word: str, type: str
     ) -> AethelListItem:
         """
@@ -131,7 +131,7 @@ class AethelQueryView(APIView):
         # Finally, we serialize the samples and add them to the response object.
         for key, samples in result_dict.items():
             lemma, word, type = key
-            list_item = response_object.get_or_create_existing_result(
+            list_item = response_object.get_or_create_result(
                 lemma=lemma, word=word, type=type
             )
             for sample_name, phrase_indices in samples.items():
