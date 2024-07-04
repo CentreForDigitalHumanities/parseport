@@ -42,7 +42,6 @@ export interface AethelListReturnItem {
     samples: {
         name: string;
         phrases: {
-            index: string;
             display: string;
             highlight: boolean;
         }[];

@@ -22,7 +22,6 @@ def aethel_status():
 
 @dataclass
 class AethelSamplePhrase:
-    index: str
     display: str
     highlight: bool
 
@@ -50,9 +49,7 @@ class AethelListResponse:
     results: List[AethelListItem] = field(default_factory=list)
     error: Optional[str] = None
 
-    def get_or_create_result(
-        self, lemma: str, word: str, type: str
-    ) -> AethelListItem:
+    def get_or_create_result(self, lemma: str, word: str, type: str) -> AethelListItem:
         """
         Return an existing result with the same lemma, word, and type, or create a new one if it doesn't exist.
         """
@@ -98,7 +95,6 @@ class AethelQueryView(APIView):
             for index, phrase in enumerate(sample.lexical_phrases):
                 highlighted = index in highlighted_phrase_indices
                 new_phrase = AethelSamplePhrase(
-                    index=index,
                     display=phrase.string,
                     highlight=highlighted,
                 )
@@ -117,7 +113,7 @@ class AethelQueryView(APIView):
         # Then we transform the results.
         # Each key in result_dict is a unique combination of lemma, word, and type.
         # Each value is a sample, mapped to a set of indices referring to the specific phrase that has the type.
-        result_dict: dict[tuple[str, str, str], dict[str, set]] = {}
+        result_dict: dict[tuple[str, str, str], dict[str, set[int]]] = {}
         for sample in query_result:
             for phrase_index, phrase in enumerate(sample.lexical_phrases):
                 for item in phrase.items:
