@@ -56,7 +56,9 @@ class AethelListResponse:
         for result in self.results:
             if result.lemma == lemma and result.type == type and result.word == word:
                 return result
-        return AethelListItem(lemma=lemma, word=word, type=type, samples=[])
+        new_result = AethelListItem(lemma=lemma, word=word, type=type, samples=[])
+        self.results.append(new_result)
+        return new_result
 
     def json_response(self) -> JsonResponse:
         results = [asdict(result) for result in self.results]
@@ -85,23 +87,6 @@ class AethelQueryView(APIView):
                 or query_input.lower() in item.word.lower()
             )
 
-        def serialize_sample(
-            sample: Sample, highlighted_phrase_indices: set[int]
-        ) -> AethelListSample:
-            """
-            Turns a Sample into an AethelListSample, while marking phrases that should be highlighted.
-            """
-            new_phrases = []
-            for index, phrase in enumerate(sample.lexical_phrases):
-                highlighted = index in highlighted_phrase_indices
-                new_phrase = AethelSamplePhrase(
-                    display=phrase.string,
-                    highlight=highlighted,
-                )
-                new_phrases.append(new_phrase)
-
-            return AethelListSample(sample.name, new_phrases)
-
         response_object = AethelListResponse()
 
         # First we select all relevant samples from the dataset that contain the query string.
@@ -110,30 +95,34 @@ class AethelQueryView(APIView):
             query=in_word(query_input) | in_lemma(query_input),
         )
 
-        # Then we transform the results.
-        # Each key in result_dict is a unique combination of lemma, word, and type.
-        # Each value is a sample, mapped to a set of indices referring to the specific phrase that has the type.
-        result_dict: dict[tuple[str, str, str], dict[str, set[int]]] = {}
         for sample in query_result:
             for phrase_index, phrase in enumerate(sample.lexical_phrases):
                 for item in phrase.items:
                     if item_contains_query_string(item, query_input):
-                        key = (item.lemma, item.word, str(phrase.type))
-                        # setdefault gets the value for a given key or adds the key with a provided value if None is found.
-                        samples = result_dict.setdefault(key, {})
-                        phrase_indices = samples.setdefault(sample.name, set())
-                        phrase_indices.add(phrase_index)
+                        result = response_object.get_or_create_result(
+                            lemma=item.lemma, word=item.word, type=str(phrase.type)
+                        )
 
-        # Finally, we serialize the samples and add them to the response object.
-        for key, samples in result_dict.items():
-            lemma, word, type = key
-            list_item = response_object.get_or_create_result(
-                lemma=lemma, word=word, type=type
-            )
-            for sample_name, phrase_indices in samples.items():
-                sample = dataset.find_by_name(sample_name).pop()
-                list_item.samples.append(serialize_sample(sample, phrase_indices))
-            response_object.results.append(list_item)
+                        # Check whether we have already added this sample for this result
+                        existing_sample = next(
+                            (s for s in result.samples if s.name == sample.name),
+                            None,
+                        )
+
+                        if existing_sample:
+                            existing_sample.phrases[phrase_index].highlight = True
+                        else:
+                            new_sample = AethelListSample(name=sample.name, phrases=[])
+                            for index, sample_phrase in enumerate(
+                                sample.lexical_phrases
+                            ):
+                                highlighted = index == phrase_index
+                                new_phrase = AethelSamplePhrase(
+                                    display=sample_phrase.string,
+                                    highlight=highlighted,
+                                )
+                                new_sample.phrases.append(new_phrase)
+                            result.samples.append(new_sample)
 
         return response_object.json_response()
 
