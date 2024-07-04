@@ -21,9 +21,16 @@ def aethel_status():
 
 
 @dataclass
+class AethelSamplePhrase:
+    index: str
+    display: str
+    highlight: bool
+
+
+@dataclass
 class AethelListSample:
     name: str
-    sentence: str
+    phrases: List[AethelSamplePhrase] = field(default_factory=list)
 
 
 @dataclass
@@ -43,29 +50,16 @@ class AethelListResponse:
     results: List[AethelListItem] = field(default_factory=list)
     error: Optional[str] = None
 
-    def existing_result(
+    def get_or_create_existing_result(
         self, lemma: str, word: str, type: str
-    ) -> Optional[AethelListItem]:
+    ) -> AethelListItem:
         """
-        Return an existing result with the same lemma, word, and type, if it exists.
+        Return an existing result with the same lemma, word, and type, or create a new one if it doesn't exist.
         """
-        for item in self.results:
-            if item.lemma == lemma and item.type == type and item.word == word:
-                return item
-        return None
-
-    def add_result(
-        self, lemma: str, word: str, type: str, sample_name: str, sample_sentence: str
-    ) -> None:
-        result_item = self.existing_result(lemma, word, type)
-
-        if result_item is None:
-            result_item = AethelListItem(lemma=lemma, word=word, type=type)
-            self.results.append(result_item)
-
-        result_item.samples.append(
-            AethelListSample(name=sample_name, sentence=sample_sentence)
-        )
+        for result in self.results:
+            if result.lemma == lemma and result.type == type and result.word == word:
+                return result
+        return AethelListItem(lemma=lemma, word=word, type=type, samples=[])
 
     def json_response(self) -> JsonResponse:
         results = [asdict(result) for result in self.results]
@@ -85,32 +79,65 @@ class AethelQueryView(APIView):
         if query_input is None or len(query_input) < 3:
             return AethelListResponse().json_response()
 
+        def item_contains_query_string(item: LexicalItem, query_input: str) -> bool:
+            """
+            Checks if a LexicalItem contains a given input string in its word or its lemma.
+            """
+            return (
+                query_input.lower() in item.lemma.lower()
+                or query_input.lower() in item.word.lower()
+            )
+
+        def serialize_sample(
+            sample: Sample, highlighted_phrase_indices: set[int]
+        ) -> AethelListSample:
+            """
+            Turns a Sample into an AethelListSample, while marking phrases that should be highlighted.
+            """
+            new_phrases = []
+            for index, phrase in enumerate(sample.lexical_phrases):
+                highlighted = index in highlighted_phrase_indices
+                new_phrase = AethelSamplePhrase(
+                    index=index,
+                    display=phrase.string,
+                    highlight=highlighted,
+                )
+                new_phrases.append(new_phrase)
+
+            return AethelListSample(sample.name, new_phrases)
+
+        response_object = AethelListResponse()
+
         # First we select all relevant samples from the dataset that contain the query string.
         query_result = search(
             bank=dataset.samples,
             query=in_word(query_input) | in_lemma(query_input),
         )
 
-        def item_contains_query_string(item: LexicalItem) -> bool:
-            return (
-                query_input.lower() in item.lemma.lower()
-                or query_input.lower() in item.word.lower()
-            )
-
-        response_object = AethelListResponse()
-        # Then we loop over the samples and extract what we need from them (lemma, word, type etc.).
+        # Then we transform the results.
+        # Each key in result_dict is a unique combination of lemma, word, and type.
+        # Each value is a sample, mapped to a set of indices referring to the specific phrase that has the type.
+        result_dict: dict[tuple[str, str, str], dict[str, set]] = {}
         for sample in query_result:
-            lexical_phrases = sample.lexical_phrases
-            for phrase in lexical_phrases:
+            for phrase_index, phrase in enumerate(sample.lexical_phrases):
                 for item in phrase.items:
-                    if item_contains_query_string(item):
-                        response_object.add_result(
-                            item.lemma,
-                            item.word,
-                            str(phrase.type),
-                            sample.name,
-                            sample.sentence,
-                        )
+                    if item_contains_query_string(item, query_input):
+                        key = (item.lemma, item.word, str(phrase.type))
+                        # setdefault gets the value for a given key or adds the key with a provided value if None is found.
+                        samples = result_dict.setdefault(key, {})
+                        phrase_indices = samples.setdefault(sample.name, set())
+                        phrase_indices.add(phrase_index)
+
+        # Finally, we serialize the samples and add them to the response object.
+        for key, samples in result_dict.items():
+            lemma, word, type = key
+            list_item = response_object.get_or_create_existing_result(
+                lemma=lemma, word=word, type=type
+            )
+            for sample_name, phrase_indices in samples.items():
+                sample = dataset.find_by_name(sample_name).pop()
+                list_item.samples.append(serialize_sample(sample, phrase_indices))
+            response_object.results.append(list_item)
 
         return response_object.json_response()
 
@@ -124,8 +151,9 @@ class AethelDetailError(Enum):
 aethel_detail_status_codes = {
     AethelDetailError.NO_QUERY_INPUT: status.HTTP_400_BAD_REQUEST,
     AethelDetailError.SAMPLE_NOT_FOUND: status.HTTP_404_NOT_FOUND,
-    AethelDetailError.MULTIPLE_FOUND: status.HTTP_500_INTERNAL_SERVER_ERROR
+    AethelDetailError.MULTIPLE_FOUND: status.HTTP_500_INTERNAL_SERVER_ERROR,
 }
+
 
 @dataclass
 class AethelDetailResult:
@@ -134,6 +162,7 @@ class AethelDetailResult:
     term: str
     subset: str
     phrases: list[dict]
+
 
 @dataclass
 class AethelDetailResponse:
@@ -151,7 +180,9 @@ class AethelDetailResponse:
 
     def json_response(self) -> JsonResponse:
         result = asdict(self.result) if self.result else None
-        status_code = aethel_detail_status_codes[self.error] if self.error else status.HTTP_200_OK
+        status_code = (
+            aethel_detail_status_codes[self.error] if self.error else status.HTTP_200_OK
+        )
 
         return JsonResponse(
             {

@@ -107,10 +107,11 @@
         <ng-template pTemplate="rowexpansion" let-row>
             @for (sample of row.samples; track $index) {
             <tr class="expanded-row">
-                <td
-                    colspan="4"
-                    [innerHTML]="sample.sentence | highlight: row.word"
-                ></td>
+                <td colspan="4">
+                    @for (phrase of sample.phrases; track phrase.index) {
+                        <span [class.highlight]="phrase.highlight">{{ phrase.display }} </span>
+                    }
+                </td>
                 <td class="button-container" colspan="1">
                     <a
                         [routerLink]="getSampleURL(sample.name)"
