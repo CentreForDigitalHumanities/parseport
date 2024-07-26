@@ -21,9 +21,15 @@ def aethel_status():
 
 
 @dataclass
+class AethelSamplePhrase:
+    display: str
+    highlight: bool
+
+
+@dataclass
 class AethelListSample:
     name: str
-    sentence: str
+    phrases: List[AethelSamplePhrase] = field(default_factory=list)
 
 
 @dataclass
@@ -48,29 +54,16 @@ class AethelListResponse:
     results: List[AethelListItem] = field(default_factory=list)
     error: Optional[str] = None
 
-    def existing_result(
-        self, lemma: str, word: str, type: str
-    ) -> Optional[AethelListItem]:
+    def get_or_create_result(self, lemma: str, word: str, type: str) -> AethelListItem:
         """
-        Return an existing result with the same lemma, word, and type, if it exists.
+        Return an existing result with the same lemma, word, and type, or create a new one if it doesn't exist.
         """
-        for item in self.results:
-            if item.lemma == lemma and item.type == type and item.word == word:
-                return item
-        return None
-
-    def add_result(
-        self, lemma: str, word: str, type: str, sample_name: str, sample_sentence: str
-    ) -> None:
-        result_item = self.existing_result(lemma, word, type)
-
-        if result_item is None:
-            result_item = AethelListItem(lemma=lemma, word=word, type=type)
-            self.results.append(result_item)
-
-        result_item.samples.append(
-            AethelListSample(name=sample_name, sentence=sample_sentence)
-        )
+        for result in self.results:
+            if result.lemma == lemma and result.type == type and result.word == word:
+                return result
+        new_result = AethelListItem(lemma=lemma, word=word, type=type, samples=[])
+        self.results.append(new_result)
+        return new_result
 
     def json_response(self) -> JsonResponse:
         results = [result.serialize() for result in self.results]
@@ -90,32 +83,51 @@ class AethelQueryView(APIView):
         if query_input is None or len(query_input) < 3:
             return AethelListResponse().json_response()
 
-        # First we select all relevant samples from the dataset that contain the query string.
-        query_result = search(
-            bank=dataset.samples,
-            query=in_word(query_input) | in_lemma(query_input),
-        )
-
-        def item_contains_query_string(item: LexicalItem) -> bool:
+        def item_contains_query_string(item: LexicalItem, query_input: str) -> bool:
+            """
+            Checks if a LexicalItem contains a given input string in its word or its lemma.
+            """
             return (
                 query_input.lower() in item.lemma.lower()
                 or query_input.lower() in item.word.lower()
             )
 
         response_object = AethelListResponse()
-        # Then we loop over the samples and extract what we need from them (lemma, word, type etc.).
+
+        # First we select all relevant samples from the dataset that contain the query string.
+        query_result = search(
+            bank=dataset.samples,
+            query=in_word(query_input) | in_lemma(query_input),
+        )
+
         for sample in query_result:
-            lexical_phrases = sample.lexical_phrases
-            for phrase in lexical_phrases:
+            for phrase_index, phrase in enumerate(sample.lexical_phrases):
                 for item in phrase.items:
-                    if item_contains_query_string(item):
-                        response_object.add_result(
-                            item.lemma,
-                            item.word,
-                            str(phrase.type),
-                            sample.name,
-                            sample.sentence,
+                    if item_contains_query_string(item, query_input):
+                        result = response_object.get_or_create_result(
+                            lemma=item.lemma, word=item.word, type=str(phrase.type)
                         )
+
+                        # Check whether we have already added this sample for this result
+                        existing_sample = next(
+                            (s for s in result.samples if s.name == sample.name),
+                            None,
+                        )
+
+                        if existing_sample:
+                            existing_sample.phrases[phrase_index].highlight = True
+                        else:
+                            new_sample = AethelListSample(name=sample.name, phrases=[])
+                            for index, sample_phrase in enumerate(
+                                sample.lexical_phrases
+                            ):
+                                highlighted = index == phrase_index
+                                new_phrase = AethelSamplePhrase(
+                                    display=sample_phrase.string,
+                                    highlight=highlighted,
+                                )
+                                new_sample.phrases.append(new_phrase)
+                            result.samples.append(new_sample)
 
         return response_object.json_response()
 
@@ -129,8 +141,9 @@ class AethelDetailError(Enum):
 aethel_detail_status_codes = {
     AethelDetailError.NO_QUERY_INPUT: status.HTTP_400_BAD_REQUEST,
     AethelDetailError.SAMPLE_NOT_FOUND: status.HTTP_404_NOT_FOUND,
-    AethelDetailError.MULTIPLE_FOUND: status.HTTP_500_INTERNAL_SERVER_ERROR
+    AethelDetailError.MULTIPLE_FOUND: status.HTTP_500_INTERNAL_SERVER_ERROR,
 }
+
 
 @dataclass
 class AethelDetailResult:
@@ -139,6 +152,7 @@ class AethelDetailResult:
     term: str
     subset: str
     phrases: list[dict]
+
 
 @dataclass
 class AethelDetailResponse:
@@ -156,7 +170,9 @@ class AethelDetailResponse:
 
     def json_response(self) -> JsonResponse:
         result = asdict(self.result) if self.result else None
-        status_code = aethel_detail_status_codes[self.error] if self.error else status.HTTP_200_OK
+        status_code = (
+            aethel_detail_status_codes[self.error] if self.error else status.HTTP_200_OK
+        )
 
         return JsonResponse(
             {

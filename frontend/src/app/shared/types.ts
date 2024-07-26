@@ -35,17 +35,17 @@ export interface SpindleReturn {
     lexical_phrases: LexicalPhrase[];
     proof: Record<string, unknown> | null;
 }
-
-export interface AethelSample {
-    name: string;
-    sentence: string;
-}
-
 export interface AethelListReturnItem {
     lemma: string;
     word: string;
     type: string;
-    samples: AethelSample[];
+    samples: {
+        name: string;
+        phrases: {
+            display: string;
+            highlight: boolean;
+        }[];
+    }[];
 }
 
 export interface AethelListReturn {

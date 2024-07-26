@@ -18,7 +18,6 @@ import { ExportButtonComponent } from "./spindle/export-button/export-button.com
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { TableModule } from "primeng/table";
 import { AethelComponent } from "./aethel/aethel.component";
-import { HighlightPipe } from "./shared/pipes/highlight.pipe";
 import { SpindleAboutComponent } from "./spindle/spindle-about/spindle-about.component";
 import { SpindleNotationComponent } from "./spindle/spindle-notation/spindle-notation.component";
 import { ReferencesComponent } from "./references/references.component";
@@ -39,7 +38,6 @@ import { SampleComponent } from "./sample/sample.component";
         SpindleNotationComponent,
         ReferencesComponent,
         AethelComponent,
-        HighlightPipe,
         ProofPipe,
         SampleComponent,
     ],
