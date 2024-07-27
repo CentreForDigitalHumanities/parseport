@@ -41,7 +41,7 @@ class AethelListItem:
 
     def serialize(self):
         out = asdict(self)
-        out['samples'] = sorted(out['samples'], key=lambda sample: len(sample['sentence']))
+        out['samples'] = sorted(out['samples'], key=lambda sample: len(sample['phrases']))
         return out
 
 
