@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from spindle.utils import serialize_phrases_with_infix_notation
 from aethel_db.search import (
-    match_type,
+    match_type_with_phrase,
     match_word_with_item,
     match_word_with_phrase,
     search,
@@ -100,7 +100,10 @@ class AethelQueryView(APIView):
         # Format results
         for sample in query_result:
             for phrase_index, phrase in enumerate(sample.lexical_phrases):
-                if not match_word_with_phrase(phrase, word_input) and not match_type(phrase, type_input):
+                word_match = word_input and match_word_with_phrase(phrase, word_input)
+                type_match = type_input and  match_type_with_phrase(phrase, type_input)
+
+                if not (word_match or type_match):
                     continue
 
                 phrase_word = ' '.join([item.word for item in phrase.items])

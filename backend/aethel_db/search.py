@@ -13,22 +13,18 @@ def search(bank: Iterable[Sample], query: Callable[[Sample], bool]) -> Iterator[
 def get_query(word_input: str | None = None, type_input: str | None = None) -> Query:
     def f(sample: Sample) -> bool:
         return any(
-            match_word_with_phrase(phrase, word_input) or match_type(phrase, type_input)
+            (word_input and match_word_with_phrase(phrase, word_input)) or
+            (type_input and match_type_with_phrase(phrase, type_input))
             for phrase in sample.lexical_phrases
         )
-
     return Query(f)
 
 
-def match_type(phrase: LexicalPhrase, type_input: str | None) -> bool:
-    if type_input is None:
-        return False
+def match_type_with_phrase(phrase: LexicalPhrase, type_input: str) -> bool:
     return type_input == type_repr(phrase.type)
 
 
-def match_word_with_phrase(phrase: LexicalPhrase, word_input: str | None) -> bool:
-    if word_input is None:
-        return False
+def match_word_with_phrase(phrase: LexicalPhrase, word_input: str) -> bool:
     return any(match_word_with_item(item, word_input) for item in phrase.items)
 
 
