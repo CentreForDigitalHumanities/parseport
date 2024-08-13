@@ -37,15 +37,12 @@ export class AethelApiService
                 "Content-Type": "application/json",
             });
 
-
-            let params = new HttpParams()
-
+            let params = new HttpParams();
             if (input.word) {
-                params = params.set('word', input.word)
+                params = params.set("word", input.word);
             }
-
             if (input.type) {
-                params = params.set('type', input.type)
+                params = params.set("type", input.type);
             }
 
             return this.http

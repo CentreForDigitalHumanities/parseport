@@ -16,6 +16,18 @@ import { By } from "@angular/platform-browser";
 import { ProofPipe } from "../shared/pipes/proof.pipe";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
+const fakePhrase: LexicalPhrase = {
+    type: "cheese->tosti",
+    items: [
+        {
+            word: "cheeses",
+            lemma: "tostis",
+            pos: "TOSTI",
+            pt: "CHEESE",
+        },
+    ],
+};
+
 describe("SampleComponent", () => {
     let component: SampleComponent;
     let fixture: ComponentFixture<SampleComponent>;
@@ -27,7 +39,11 @@ describe("SampleComponent", () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             declarations: [SampleComponent, ProofPipe],
-            imports: [HttpClientTestingModule, FontAwesomeModule, RouterModule.forRoot(routes)],
+            imports: [
+                HttpClientTestingModule,
+                FontAwesomeModule,
+                RouterModule.forRoot(routes),
+            ],
             providers: [
                 {
                     provide: ActivatedRoute,
@@ -53,20 +69,27 @@ describe("SampleComponent", () => {
         expect(component).toBeTruthy();
     });
 
-    it("should construct a valid route", () => {
+    it("should construct a valid route for word search", () => {
         const spy = spyOn(router, "navigate");
-        const items: LexicalPhrase["items"] = [
-            {
-                lemma: "test",
-                pos: "2",
-                pt: "2",
-                word: "testQuery",
-            },
-        ];
-
-        component.routeToAethel(items);
+        component.searchAethel(fakePhrase, 'word');
         expect(spy).toHaveBeenCalledOnceWith(["/aethel"], {
-            queryParams: { query: "testQuery" },
+            queryParams: { word: "cheeses" },
+        });
+    });
+
+    it("should construct a valid route for type search", () => {
+        const spy = spyOn(router, "navigate");
+        component.searchAethel(fakePhrase, 'type');
+        expect(spy).toHaveBeenCalledOnceWith(["/aethel"], {
+            queryParams: { type: "cheese->tosti" },
+        });
+    });
+
+    it("should construct a valid route for word and type search", () => {
+        const spy = spyOn(router, "navigate");
+        component.searchAethel(fakePhrase, 'word-and-type');
+        expect(spy).toHaveBeenCalledOnceWith(["/aethel"], {
+            queryParams: { word: "cheeses", type: "cheese->tosti" },
         });
     });
 
