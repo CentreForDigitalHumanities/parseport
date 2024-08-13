@@ -39,9 +39,15 @@
                 <span class="proof" [innerHtml]="phrase.type | proof"></span>
             </td>
             <td class="has-text-right">
-                @if (showButton(phrase.items)) {
-                    <button class="button is-info" (click)="routeToAethel(phrase.items)">
-                        Search in Æthel
+                @if (showButtons(phrase.items)) {
+                    <button class="button is-info" (click)="searchAethel(phrase, 'word')">
+                        Word
+                    </button>
+                    <button class="button is-info" (click)="searchAethel(phrase, 'type')">
+                        Type
+                    </button>
+                    <button class="button is-info" (click)="searchAethel(phrase, 'word-and-type')">
+                        Word and type
                     </button>
                 }
             </td>
