@@ -8,10 +8,7 @@ from rest_framework.views import APIView
 from spindle.utils import serialize_phrases_with_infix_notation
 from aethel_db.search import (
     match_type_with_phrase,
-    match_word_with_item,
     match_word_with_phrase,
-    search,
-    get_query,
 )
 from aethel.frontend import Sample
 from .models import dataset
@@ -91,29 +88,21 @@ class AethelQueryView(APIView):
 
         response_object = AethelListResponse()
 
-        # First we select all relevant samples from the dataset that contain the queried word and/or type.
-        query_result = search(
-            bank=dataset.samples,
-            query=get_query(word_input, type_input),
-        )
-
-        # Format results
-        for sample in query_result:
+        for sample in dataset.samples:
             for phrase_index, phrase in enumerate(sample.lexical_phrases):
                 word_match = word_input and match_word_with_phrase(phrase, word_input)
-                type_match = type_input and  match_type_with_phrase(phrase, type_input)
-
+                type_match = type_input and match_type_with_phrase(phrase, type_input)
                 if not (word_match or type_match):
                     continue
 
-                phrase_word = ' '.join([item.word for item in phrase.items])
-                phrase_lemma = ' '.join([item.lemma for item in phrase.items])
+                phrase_word = " ".join([item.word for item in phrase.items])
+                phrase_lemma = " ".join([item.lemma for item in phrase.items])
 
                 result = response_object.get_or_create_result(
                     lemma=phrase_lemma, word=phrase_word, type=str(phrase.type)
                 )
 
-                # Check whether we have already added this sample for this result
+                # Check whether we have already added this sample for this result.
                 existing_sample = next(
                     (s for s in result.samples if s.name == sample.name),
                     None,
