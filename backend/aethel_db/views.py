@@ -5,15 +5,16 @@ from typing import List, Optional
 from django.http import HttpRequest, JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
-from aethel.frontend import LexicalItem
 from spindle.utils import serialize_phrases_with_infix_notation
-from aethel_db.search import search, in_lemma, in_word
+from aethel_db.search import (
+    match_type,
+    match_word_with_item,
+    match_word_with_phrase,
+    search,
+    get_query,
+)
 from aethel.frontend import Sample
-
-from aethel.frontend import LexicalItem
-
 from .models import dataset
-from .search import search, in_lemma, in_word
 
 
 def aethel_status():
@@ -41,7 +42,9 @@ class AethelListItem:
 
     def serialize(self):
         out = asdict(self)
-        out['samples'] = sorted(out['samples'], key=lambda sample: len(sample['phrases']))
+        out["samples"] = sorted(
+            out["samples"], key=lambda sample: len(sample["phrases"])
+        )
         return out
 
 
@@ -79,55 +82,52 @@ class AethelListResponse:
 
 class AethelQueryView(APIView):
     def get(self, request: HttpRequest) -> JsonResponse:
-        query_input = self.request.query_params.get("query", None)
-        if query_input is None or len(query_input) < 3:
-            return AethelListResponse().json_response()
+        word_input = self.request.query_params.get("word", None)
+        type_input = self.request.query_params.get("type", None)
 
-        def item_contains_query_string(item: LexicalItem, query_input: str) -> bool:
-            """
-            Checks if a LexicalItem contains a given input string in its word or its lemma.
-            """
-            return (
-                query_input.lower() in item.lemma.lower()
-                or query_input.lower() in item.word.lower()
-            )
+        # We only search for strings of 3 or more characters.
+        if word_input is not None and len(word_input) < 3:
+            return AethelListResponse().json_response()
 
         response_object = AethelListResponse()
 
-        # First we select all relevant samples from the dataset that contain the query string.
+        # First we select all relevant samples from the dataset that contain the queried word and/or type.
         query_result = search(
             bank=dataset.samples,
-            query=in_word(query_input) | in_lemma(query_input),
+            query=get_query(word_input, type_input),
         )
 
+        # Format results
         for sample in query_result:
             for phrase_index, phrase in enumerate(sample.lexical_phrases):
-                for item in phrase.items:
-                    if item_contains_query_string(item, query_input):
-                        result = response_object.get_or_create_result(
-                            lemma=item.lemma, word=item.word, type=str(phrase.type)
-                        )
+                if not match_word_with_phrase(phrase, word_input) and not match_type(phrase, type_input):
+                    continue
 
-                        # Check whether we have already added this sample for this result
-                        existing_sample = next(
-                            (s for s in result.samples if s.name == sample.name),
-                            None,
-                        )
+                phrase_word = ' '.join([item.word for item in phrase.items])
+                phrase_lemma = ' '.join([item.lemma for item in phrase.items])
 
-                        if existing_sample:
-                            existing_sample.phrases[phrase_index].highlight = True
-                        else:
-                            new_sample = AethelListSample(name=sample.name, phrases=[])
-                            for index, sample_phrase in enumerate(
-                                sample.lexical_phrases
-                            ):
-                                highlighted = index == phrase_index
-                                new_phrase = AethelSamplePhrase(
-                                    display=sample_phrase.string,
-                                    highlight=highlighted,
-                                )
-                                new_sample.phrases.append(new_phrase)
-                            result.samples.append(new_sample)
+                result = response_object.get_or_create_result(
+                    lemma=phrase_lemma, word=phrase_word, type=str(phrase.type)
+                )
+
+                # Check whether we have already added this sample for this result
+                existing_sample = next(
+                    (s for s in result.samples if s.name == sample.name),
+                    None,
+                )
+
+                if existing_sample:
+                    existing_sample.phrases[phrase_index].highlight = True
+                else:
+                    new_sample = AethelListSample(name=sample.name, phrases=[])
+                    for index, sample_phrase in enumerate(sample.lexical_phrases):
+                        highlighted = index == phrase_index
+                        new_phrase = AethelSamplePhrase(
+                            display=sample_phrase.string,
+                            highlight=highlighted,
+                        )
+                        new_sample.phrases.append(new_phrase)
+                    result.samples.append(new_sample)
 
         return response_object.json_response()
 
