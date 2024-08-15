@@ -51,22 +51,19 @@ class AethelListResponse:
     Response object for Aethel query view.
     """
 
-    results: List[AethelListItem] = field(default_factory=list)
+    results: dict[tuple[str, str, str], AethelListItem] = field(default_factory=dict)
     error: Optional[str] = None
 
     def get_or_create_result(self, lemma: str, word: str, type: str) -> AethelListItem:
         """
         Return an existing result with the same lemma, word, and type, or create a new one if it doesn't exist.
         """
-        for result in self.results:
-            if result.lemma == lemma and result.type == type and result.word == word:
-                return result
+        key = (lemma, word, type)
         new_result = AethelListItem(lemma=lemma, word=word, type=type, samples=[])
-        self.results.append(new_result)
-        return new_result
+        return self.results.setdefault(key, new_result)
 
     def json_response(self) -> JsonResponse:
-        results = [result.serialize() for result in self.results]
+        results = [result.serialize() for result in self.results.values()]
 
         return JsonResponse(
             {
