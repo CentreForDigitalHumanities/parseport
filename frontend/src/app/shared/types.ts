@@ -35,6 +35,14 @@ export interface SpindleReturn {
     lexical_phrases: LexicalPhrase[];
     proof: Record<string, unknown> | null;
 }
+
+export type AethelMode = "word" | "type" | "word-and-type";
+
+export interface AethelInput {
+    word?: string;
+    type?: string;
+}
+
 export interface AethelListReturnItem {
     lemma: string;
     word: string;

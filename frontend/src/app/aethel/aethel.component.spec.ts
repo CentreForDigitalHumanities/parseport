@@ -6,10 +6,12 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { routes } from "../routes";
 import { of } from "rxjs";
+import { AethelApiService } from "../shared/services/aethel-api.service";
 
 describe("AethelComponent", () => {
     let component: AethelComponent;
     let fixture: ComponentFixture<AethelComponent>;
+    let apiService: AethelApiService;
     let httpController: HttpTestingController;
     let route: ActivatedRoute;
     let router: Router;
@@ -28,6 +30,7 @@ describe("AethelComponent", () => {
         route = TestBed.inject(ActivatedRoute);
         router = TestBed.inject(Router);
         fixture = TestBed.createComponent(AethelComponent);
+        apiService = TestBed.inject(AethelApiService);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
@@ -43,17 +46,24 @@ describe("AethelComponent", () => {
         httpController.expectNone("/api/aethel");
     });
 
-    it("should request data when there is a query parameter on init", () => {
-        route.queryParams = of({ query: "test" });
+    it("should insert data into the form when there is a 'word' query parameter", () => {
+        route.queryParams = of({ word: "test" });
         component.ngOnInit();
         expect(component.form.controls.aethelInput.value).toBe("test");
-        httpController.expectOne("/api/aethel/?query=test");
+    });
+
+    it("should pass query param data to the API service", () => {
+        apiService.input$.subscribe(input => {
+            expect(input.word).toBe("test3");
+         });
+        route.queryParams = of({ word: "test3" });
+        component.ngOnInit();
     });
 
     it("should react to form submissions", () => {
         const navigatorSpy = spyOn(router, "navigateByUrl");
         component.form.controls.aethelInput.setValue("test-two");
         component.submit();
-        expect(navigatorSpy).toHaveBeenCalledWith("/?query=test-two");
+        expect(navigatorSpy).toHaveBeenCalledWith("/?word=test-two");
     });
 });

@@ -5,15 +5,13 @@ from typing import List, Optional
 from django.http import HttpRequest, JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
-from aethel.frontend import LexicalItem
 from spindle.utils import serialize_phrases_with_infix_notation
-from aethel_db.search import search, in_lemma, in_word
+from aethel_db.search import (
+    match_type_with_phrase,
+    match_word_with_phrase,
+)
 from aethel.frontend import Sample
-
-from aethel.frontend import LexicalItem
-
 from .models import dataset
-from .search import search, in_lemma, in_word
 
 
 def aethel_status():
@@ -41,7 +39,9 @@ class AethelListItem:
 
     def serialize(self):
         out = asdict(self)
-        out['samples'] = sorted(out['samples'], key=lambda sample: len(sample['sentence']))
+        out["samples"] = sorted(
+            out["samples"], key=lambda sample: len(sample["phrases"])
+        )
         return out
 
 
@@ -51,22 +51,19 @@ class AethelListResponse:
     Response object for Aethel query view.
     """
 
-    results: List[AethelListItem] = field(default_factory=list)
+    results: dict[tuple[str, str, str], AethelListItem] = field(default_factory=dict)
     error: Optional[str] = None
 
     def get_or_create_result(self, lemma: str, word: str, type: str) -> AethelListItem:
         """
         Return an existing result with the same lemma, word, and type, or create a new one if it doesn't exist.
         """
-        for result in self.results:
-            if result.lemma == lemma and result.type == type and result.word == word:
-                return result
+        key = (lemma, word, type)
         new_result = AethelListItem(lemma=lemma, word=word, type=type, samples=[])
-        self.results.append(new_result)
-        return new_result
+        return self.results.setdefault(key, new_result)
 
     def json_response(self) -> JsonResponse:
-        results = [result.serialize() for result in self.results]
+        results = [result.serialize() for result in self.results.values()]
 
         return JsonResponse(
             {
@@ -79,55 +76,47 @@ class AethelListResponse:
 
 class AethelQueryView(APIView):
     def get(self, request: HttpRequest) -> JsonResponse:
-        query_input = self.request.query_params.get("query", None)
-        if query_input is None or len(query_input) < 3:
-            return AethelListResponse().json_response()
+        word_input = self.request.query_params.get("word", None)
+        type_input = self.request.query_params.get("type", None)
 
-        def item_contains_query_string(item: LexicalItem, query_input: str) -> bool:
-            """
-            Checks if a LexicalItem contains a given input string in its word or its lemma.
-            """
-            return (
-                query_input.lower() in item.lemma.lower()
-                or query_input.lower() in item.word.lower()
-            )
+        # We only search for strings of 3 or more characters.
+        if word_input is not None and len(word_input) < 3:
+            return AethelListResponse().json_response()
 
         response_object = AethelListResponse()
 
-        # First we select all relevant samples from the dataset that contain the query string.
-        query_result = search(
-            bank=dataset.samples,
-            query=in_word(query_input) | in_lemma(query_input),
-        )
-
-        for sample in query_result:
+        for sample in dataset.samples:
             for phrase_index, phrase in enumerate(sample.lexical_phrases):
-                for item in phrase.items:
-                    if item_contains_query_string(item, query_input):
-                        result = response_object.get_or_create_result(
-                            lemma=item.lemma, word=item.word, type=str(phrase.type)
-                        )
+                word_match = word_input and match_word_with_phrase(phrase, word_input)
+                type_match = type_input and match_type_with_phrase(phrase, type_input)
+                if not (word_match or type_match):
+                    continue
 
-                        # Check whether we have already added this sample for this result
-                        existing_sample = next(
-                            (s for s in result.samples if s.name == sample.name),
-                            None,
-                        )
+                phrase_word = " ".join([item.word for item in phrase.items])
+                phrase_lemma = " ".join([item.lemma for item in phrase.items])
 
-                        if existing_sample:
-                            existing_sample.phrases[phrase_index].highlight = True
-                        else:
-                            new_sample = AethelListSample(name=sample.name, phrases=[])
-                            for index, sample_phrase in enumerate(
-                                sample.lexical_phrases
-                            ):
-                                highlighted = index == phrase_index
-                                new_phrase = AethelSamplePhrase(
-                                    display=sample_phrase.string,
-                                    highlight=highlighted,
-                                )
-                                new_sample.phrases.append(new_phrase)
-                            result.samples.append(new_sample)
+                result = response_object.get_or_create_result(
+                    lemma=phrase_lemma, word=phrase_word, type=str(phrase.type)
+                )
+
+                # Check whether we have already added this sample for this result.
+                existing_sample = next(
+                    (s for s in result.samples if s.name == sample.name),
+                    None,
+                )
+
+                if existing_sample:
+                    existing_sample.phrases[phrase_index].highlight = True
+                else:
+                    new_sample = AethelListSample(name=sample.name, phrases=[])
+                    for index, sample_phrase in enumerate(sample.lexical_phrases):
+                        highlighted = index == phrase_index
+                        new_phrase = AethelSamplePhrase(
+                            display=sample_phrase.string,
+                            highlight=highlighted,
+                        )
+                        new_sample.phrases.append(new_phrase)
+                    result.samples.append(new_sample)
 
         return response_object.json_response()
 

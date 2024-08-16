@@ -63,14 +63,17 @@ export class AethelComponent implements OnInit {
         // Whenever the query parameter changes, we run a new query.
         this.route.queryParams
             .pipe(
-                map((queryParams) => queryParams["query"]),
                 isNonNull(),
                 distinctUntilChanged(),
                 takeUntilDestroyed(this.destroyRef),
             )
             .subscribe((query) => {
-                this.form.controls.aethelInput.setValue(query);
-                this.apiService.input$.next(query);
+                const word = query['word'];
+                const type = query['type']
+                if (word) {
+                    this.form.controls.aethelInput.setValue(word);
+                }
+                this.apiService.input$.next({ word, type });
             });
     }
 
@@ -91,7 +94,7 @@ export class AethelComponent implements OnInit {
     private updateUrl(query: string): void {
         // This does not actually refresh the page because it just adds parameters to the current route.
         // It just updates the URL in the browser, triggering a new query.
-        const url = this.router.createUrlTree([], { relativeTo: this.route, queryParams: { query } }).toString();
+        const url = this.router.createUrlTree([], { relativeTo: this.route, queryParams: { word: query } }).toString();
         this.router.navigateByUrl(url);
     }
 
