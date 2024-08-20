@@ -68,9 +68,9 @@
                     <span i18n>Type</span>
                     <p-sortIcon field="type"></p-sortIcon>
                 </th>
-                <th style="width: 10%" pSortableColumn="samples">
+                <th style="width: 10%" pSortableColumn="sampleCount">
                     <span i18n>Samples</span>
-                    <p-sortIcon field="samples"></p-sortIcon>
+                    <p-sortIcon field="sampleCount"></p-sortIcon>
                 </th>
             </tr>
         </ng-template>
@@ -96,7 +96,7 @@
                 <td>{{ row.word }}</td>
                 <td>{{ row.lemma }}</td>
                 <td [innerHTML]="row.type | proof"></td>
-                <td>{{ row.samples.length }}</td>
+                <td>{{ row.sampleCount }}</td>
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">

@@ -47,13 +47,7 @@ export interface AethelListResult {
     lemma: string;
     word: string;
     type: string;
-    samples: {
-        name: string;
-        phrases: {
-            display: string;
-            highlight: boolean;
-        }[];
-    }[];
+    sampleCount: number;
 }
 
 export interface AethelList {

@@ -1,4 +1,4 @@
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 
 from django.http import HttpRequest, JsonResponse
 from rest_framework import status
@@ -25,13 +25,18 @@ class AethelListItem:
     lemma: str
     word: str
     type: str
-    samples: list[AethelListSample] = field(default_factory=list)
+    sampleCount: int = 0
+    # Counter for the number of samples that contain this item.
+    # Not meant to be serialized / sent to the frontend.
+    _sample_names: set[str] = field(default_factory=set)
 
     def serialize(self):
-        out = asdict(self)
-        out["samples"] = sorted(
-            out["samples"], key=lambda sample: len(sample["phrases"])
-        )
+        out = {
+            "lemma": self.lemma,
+            "word": self.word,
+            "type": self.type,
+            "sampleCount": len(self._sample_names),
+        }
         return out
 
 
@@ -49,7 +54,7 @@ class AethelListResponse:
         Return an existing result with the same lemma, word, and type, or create a new one if it doesn't exist.
         """
         key = (lemma, word, type)
-        new_result = AethelListItem(lemma=lemma, word=word, type=type, samples=[])
+        new_result = AethelListItem(lemma=lemma, word=word, type=type, sampleCount=0)
         return self.results.setdefault(key, new_result)
 
     def json_response(self) -> JsonResponse:
@@ -89,23 +94,6 @@ class AethelListView(APIView):
                     lemma=phrase_lemma, word=phrase_word, type=str(phrase.type)
                 )
 
-                # Check whether we have already added this sample for this result.
-                existing_sample = next(
-                    (s for s in result.samples if s.name == sample.name),
-                    None,
-                )
-
-                if existing_sample:
-                    existing_sample.phrases[phrase_index].highlight = True
-                else:
-                    new_sample = AethelListSample(name=sample.name, phrases=[])
-                    for index, sample_phrase in enumerate(sample.lexical_phrases):
-                        highlighted = index == phrase_index
-                        new_phrase = AethelListSamplePhrase(
-                            display=sample_phrase.string,
-                            highlight=highlighted,
-                        )
-                        new_sample.phrases.append(new_phrase)
-                    result.samples.append(new_sample)
+                result._sample_names.add(sample.name)
 
         return response_object.json_response()
