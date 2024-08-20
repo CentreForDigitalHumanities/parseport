@@ -43,7 +43,7 @@ export interface AethelInput {
     type?: string;
 }
 
-export interface AethelListReturnItem {
+export interface AethelListResult {
     lemma: string;
     word: string;
     type: string;
@@ -56,8 +56,8 @@ export interface AethelListReturnItem {
     }[];
 }
 
-export interface AethelListReturn {
-    results: AethelListReturnItem[];
+export interface AethelList {
+    results: AethelListResult[];
     error: string | null;
 }
 
@@ -77,6 +77,6 @@ export interface AethelDetailResult {
 }
 
 export interface AethelDetail {
-    error: AethelDetailError | null;
     result: AethelDetailResult | null;
+    error: AethelDetailError | null;
 }
