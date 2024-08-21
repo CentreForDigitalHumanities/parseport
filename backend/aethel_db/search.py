@@ -16,3 +16,7 @@ def match_word_with_item(item: LexicalItem, word_input: str) -> bool:
         word_input.lower() in item.lemma.lower()
         or word_input.lower() in item.word.lower()
     )
+
+
+def match_word_with_phrase_exact(phrase: LexicalPhrase, word_input: str) -> bool:
+    return any(item.word == word_input for item in phrase.items)

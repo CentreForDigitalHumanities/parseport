@@ -9,18 +9,6 @@ from aethel_db.models import dataset
 
 
 @dataclass
-class AethelListSamplePhrase:
-    display: str
-    highlight: bool
-
-
-@dataclass
-class AethelListSample:
-    name: str
-    phrases: list[AethelListSamplePhrase] = field(default_factory=list)
-
-
-@dataclass
 class AethelListItem:
     lemma: str
     word: str
