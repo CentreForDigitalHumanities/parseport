@@ -19,6 +19,7 @@ export class SampleDataComponent implements OnInit {
     @Input({ required: true }) aethelResult!: AethelListResult;
 
     public samples: AethelSampleDataResult[] = [];
+    public loading = false;
 
     constructor(
         private destroyRef: DestroyRef,
@@ -26,6 +27,8 @@ export class SampleDataComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.loading = true;
+
         this.http
             .get<AethelSampleDataReturn>(
                 `${environment.apiUrl}aethel/sample-data`,
@@ -36,6 +39,7 @@ export class SampleDataComponent implements OnInit {
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((data) => {
                 this.samples = data.results;
+                this.loading = false;
             });
     }
 

@@ -1,16 +1,26 @@
 <td colspan="5">
+    @if (loading) {
+    <p i18n>Loading samples...</p>
+    } @else {
     <ul class="sample-list">
         @for (sample of samples; track $index) {
         <li class="sample-item">
             <p class="phrase-list">
                 @for (phrase of sample.phrases; track phrase.index) {
-                <span [class.highlight]="phrase.highlight">{{ phrase.display }} </span>
+                <span [class.highlight]="phrase.highlight"
+                    >{{ phrase.display }}
+                </span>
                 }
             </p>
-            <a [routerLink]="getSampleURL(sample.name)" class="button is-primary" i18n>
+            <a
+                [routerLink]="getSampleURL(sample.name)"
+                class="button is-primary"
+                i18n
+            >
                 Go to sample
             </a>
         </li>
         }
     </ul>
+    }
 </td>

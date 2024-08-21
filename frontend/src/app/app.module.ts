@@ -23,6 +23,7 @@ import { SpindleNotationComponent } from "./spindle/spindle-notation/spindle-not
 import { ReferencesComponent } from "./references/references.component";
 import { ProofPipe } from "./shared/pipes/proof.pipe";
 import { SampleComponent } from "./sample/sample.component";
+import { SampleDataComponent } from "./aethel/sample-details/sample-data.component";
 
 @NgModule({
     declarations: [
@@ -40,6 +41,7 @@ import { SampleComponent } from "./sample/sample.component";
         AethelComponent,
         ProofPipe,
         SampleComponent,
+        SampleDataComponent,
     ],
     imports: [
         AppRoutingModule,
