@@ -74,3 +74,19 @@ export interface AethelDetail {
     result: AethelDetailResult | null;
     error: AethelDetailError | null;
 }
+
+export interface AethelSampleDataPhrase {
+    index: number;
+    highlight: boolean;
+    display: string;
+}
+
+export interface AethelSampleDataResult {
+    name: string;
+    phrases: AethelSampleDataPhrase[];
+}
+
+export interface AethelSampleDataReturn {
+    results: AethelSampleDataResult[];
+    error: string | null;
+}

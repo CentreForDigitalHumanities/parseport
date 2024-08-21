@@ -88,10 +88,6 @@ export class AethelComponent implements OnInit {
         this.updateUrl(query);
     }
 
-    public getSampleURL(sampleName: string): string[] {
-        return ["sample", sampleName.replace(".xml", "")];
-    }
-
     private updateUrl(query: string): void {
         // This does not actually refresh the page because it just adds parameters to the current route.
         // It just updates the URL in the browser, triggering a new query.
