@@ -16,7 +16,7 @@ import { environment } from "src/environments/environment";
     styleUrl: "./sample-data.component.scss",
 })
 export class SampleDataComponent implements OnInit {
-    @Input({ required: true }) aethelResult!: AethelListResult;
+    @Input({ required: true }) aethelResult: AethelListResult | null = null;
 
     public samples: AethelSampleDataResult[] = [];
     public loading = false;
@@ -27,6 +27,10 @@ export class SampleDataComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        if (!this.aethelResult) {
+            return;
+        }
+
         this.loading = true;
 
         this.http
@@ -49,7 +53,9 @@ export class SampleDataComponent implements OnInit {
 
     private formatParams(aethelResult: AethelListResult): Params {
         const queryParams: Params = {
-            word: JSON.stringify(aethelResult.phrase.items.map((item) => item.word)),
+            word: JSON.stringify(
+                aethelResult.phrase.items.map((item) => item.word),
+            ),
             type: aethelResult.type,
         };
         return queryParams;
