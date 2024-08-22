@@ -49,9 +49,8 @@ export class SampleDataComponent implements OnInit {
 
     private formatParams(aethelResult: AethelListResult): Params {
         const queryParams: Params = {
-            word: aethelResult.word,
+            word: JSON.stringify(aethelResult.phrase.items.map((item) => item.word)),
             type: aethelResult.type,
-            lemma: aethelResult.lemma,
         };
         return queryParams;
     }

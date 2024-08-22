@@ -93,8 +93,8 @@
                         ></fa-icon>
                     </button>
                 </td>
-                <td>{{ row.word }}</td>
-                <td>{{ row.lemma }}</td>
+                <td>{{ combineWord(row) }}</td>
+                <td>{{ combineLemma(row) }}</td>
                 <td [innerHTML]="row.type | proof"></td>
                 <td>{{ row.sampleCount }}</td>
             </tr>

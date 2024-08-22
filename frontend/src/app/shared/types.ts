@@ -43,9 +43,17 @@ export interface AethelInput {
     type?: string;
 }
 
-export interface AethelListResult {
-    lemma: string;
+export interface AethelListLexicalItem {
     word: string;
+    lemma: string;
+}
+
+export interface AethelListPhrase {
+    items: AethelListLexicalItem[]
+}
+
+export interface AethelListResult {
+    phrase: AethelListPhrase
     type: string;
     sampleCount: number;
 }
