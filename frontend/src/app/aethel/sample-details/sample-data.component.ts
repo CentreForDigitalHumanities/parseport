@@ -10,6 +10,7 @@ import {
 import { environment } from "src/environments/environment";
 
 @Component({
+    // We use this component as an attribute to a <tr>, so it does not mess up PrimeNG's table styles.
     // eslint-disable-next-line @angular-eslint/component-selector
     selector: "[pp-sample-data]",
     templateUrl: "./sample-data.component.html",
