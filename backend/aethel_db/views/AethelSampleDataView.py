@@ -1,4 +1,5 @@
 from dataclasses import asdict, dataclass, field
+import json
 from django.http import HttpRequest, JsonResponse
 from rest_framework.views import APIView
 from rest_framework import status
@@ -6,7 +7,10 @@ from rest_framework import status
 from aethel.frontend import Sample
 
 from aethel_db.models import dataset
-from aethel_db.search import match_type_with_phrase, match_word_with_phrase, match_word_with_phrase_exact
+from aethel_db.search import (
+    match_type_with_phrase,
+    match_word_with_phrase_exact,
+)
 
 
 @dataclass
@@ -67,11 +71,16 @@ class AethelSampleDataView(APIView):
         type_input = self.request.query_params.get("type", None)
         word_input = self.request.query_params.get("word", None)
 
+        if word_input:
+            word_input = json.loads(word_input)
+
         response_object = AethelSampleDataResponse()
 
         for sample in dataset.samples:
             for phrase_index, phrase in enumerate(sample.lexical_phrases):
-                word_match = word_input and match_word_with_phrase_exact(phrase, word_input)
+                word_match = word_input and match_word_with_phrase_exact(
+                    phrase, word_input
+                )
                 type_match = type_input and match_type_with_phrase(phrase, type_input)
 
                 if not (word_match and type_match):

@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 
 from django.http import HttpRequest, JsonResponse
 from rest_framework import status
@@ -7,11 +7,23 @@ from rest_framework.views import APIView
 from aethel_db.search import match_type_with_phrase, match_word_with_phrase
 from aethel_db.models import dataset
 
+from aethel.frontend import LexicalPhrase
+
 
 @dataclass
-class AethelListItem:
-    lemma: str
+class AethelListLexicalItem:
     word: str
+    lemma: str
+
+
+@dataclass
+class AethelListPhrase:
+    items: list[AethelListLexicalItem]
+
+
+@dataclass
+class AethelListResult:
+    phrase: AethelListPhrase
     type: str
     sampleCount: int = 0
     # Counter for the number of samples that contain this item.
@@ -19,13 +31,11 @@ class AethelListItem:
     _sample_names: set[str] = field(default_factory=set)
 
     def serialize(self):
-        out = {
-            "lemma": self.lemma,
-            "word": self.word,
+        return {
+            "phrase": asdict(self.phrase),
             "type": self.type,
             "sampleCount": len(self._sample_names),
         }
-        return out
 
 
 @dataclass
@@ -34,15 +44,27 @@ class AethelListResponse:
     Response object for Aethel query view.
     """
 
-    results: dict[tuple[str, str, str], AethelListItem] = field(default_factory=dict)
+    results: dict[tuple[str, str, str], AethelListResult] = field(default_factory=dict)
     error: str | None = None
 
-    def get_or_create_result(self, lemma: str, word: str, type: str) -> AethelListItem:
+    def get_or_create_result(
+        self, phrase: LexicalPhrase, type: str
+    ) -> AethelListResult:
         """
         Return an existing result with the same lemma, word, and type, or create a new one if it doesn't exist.
         """
-        key = (lemma, word, type)
-        new_result = AethelListItem(lemma=lemma, word=word, type=type, sampleCount=0)
+        items = [
+            AethelListLexicalItem(word=item.word, lemma=item.lemma)
+            for item in phrase.items
+        ]
+        new_phrase = AethelListPhrase(items=items)
+
+        # Construct a unique 'key' for every combination of word, lemma and type, so we can group samples.
+        key_word = " ".join([item.word for item in phrase.items])
+        key_lemma = " ".join([item.lemma for item in phrase.items])
+        key = (key_word, key_lemma, type)
+
+        new_result = AethelListResult(phrase=new_phrase, type=type, sampleCount=0)
         return self.results.setdefault(key, new_result)
 
     def json_response(self) -> JsonResponse:
@@ -75,11 +97,8 @@ class AethelListView(APIView):
                 if not (word_match or type_match):
                     continue
 
-                phrase_word = " ".join([item.word for item in phrase.items])
-                phrase_lemma = " ".join([item.lemma for item in phrase.items])
-
                 result = response_object.get_or_create_result(
-                    lemma=phrase_lemma, word=phrase_word, type=str(phrase.type)
+                    phrase=phrase, type=str(phrase.type)
                 )
 
                 result._sample_names.add(sample.name)
