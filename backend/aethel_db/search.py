@@ -19,6 +19,4 @@ def match_word_with_item(item: LexicalItem, word_input: str) -> bool:
 
 
 def match_word_with_phrase_exact(phrase: LexicalPhrase, word_input: list[str]) -> bool:
-    phrase_combined = "".join([item.word for item in phrase.items])
-    word_input_combined = "".join(word_input)
-    return phrase_combined == word_input_combined
+    return [item.word for item in phrase.items] == word_input
