@@ -66,6 +66,7 @@ class AethelSampleDataResponse:
         )
 
 
+import cProfile
 class AethelSampleDataView(APIView):
     def get(self, request: HttpRequest) -> JsonResponse:
         type_input = self.request.query_params.get("type", None)
@@ -76,7 +77,15 @@ class AethelSampleDataView(APIView):
 
         response_object = AethelSampleDataResponse()
 
-        for sample in dataset.samples:
+        assert dataset is not None
+        by_type = dataset.by_type(type_input)
+        by_word = dataset.by_word(' '.join(word_input))
+        by_name = {sample.name: sample for sample in by_type + by_word}
+        # we have to do the intersection by name because Samples are not hashable
+        intersection = set(s.name for s in by_type).intersection(set(s.name for s in by_word))
+        samples = [by_name[name] for name in intersection]
+
+        for sample in samples:
             for phrase_index, phrase in enumerate(sample.lexical_phrases):
                 word_match = word_input and match_word_with_phrase_exact(
                     phrase, word_input
