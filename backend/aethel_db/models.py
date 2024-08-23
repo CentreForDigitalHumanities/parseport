@@ -19,6 +19,14 @@ class IndexedProofBank(ProofBank):
     def by_word(self, word: str) -> list[Sample]:
         return [self.samples[i] for i in self.word_index.get(word, [])]
 
+    def by_words(self, words: list[str]) -> list[Sample]:
+        candidates = set(self.word_index.get(words[0], []))
+
+        for word in words[1:]:
+            candidates = candidates.intersection(set(self.word_index.get(word, [])))
+
+        return [self.samples[i] for i in candidates]
+
 dataset: Optional[IndexedProofBank] = None
 
 def load_dataset():

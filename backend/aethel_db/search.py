@@ -1,10 +1,9 @@
 from __future__ import annotations
-from aethel.frontend import LexicalPhrase, LexicalItem
-from aethel.mill.types import type_repr
+from aethel.frontend import LexicalPhrase, LexicalItem, Type
 
 
-def match_type_with_phrase(phrase: LexicalPhrase, type_input: str) -> bool:
-    return type_input == type_repr(phrase.type)
+def match_type_with_phrase(phrase: LexicalPhrase, type_input: Type) -> bool:
+    return type_input == phrase.type
 
 
 def match_word_with_phrase(phrase: LexicalPhrase, word_input: str) -> bool:

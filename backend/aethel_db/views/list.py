@@ -1,5 +1,6 @@
 from dataclasses import asdict, dataclass, field
 
+from aethel.mill.types import type_prefix
 from django.http import HttpRequest, JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
@@ -98,7 +99,7 @@ class AethelListView(APIView):
                     continue
 
                 result = response_object.get_or_create_result(
-                    phrase=phrase, type=str(phrase.type)
+                    phrase=phrase, type=type_prefix(phrase.type)
                 )
 
                 result._sample_names.add(sample.name)

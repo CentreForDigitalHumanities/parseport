@@ -4,7 +4,7 @@ from django.http import HttpRequest, JsonResponse
 from rest_framework.views import APIView
 from rest_framework import status
 
-from aethel.frontend import Sample
+from aethel.frontend import Sample, Type
 
 from aethel_db.models import dataset
 from aethel_db.search import (
@@ -66,7 +66,6 @@ class AethelSampleDataResponse:
         )
 
 
-import cProfile
 class AethelSampleDataView(APIView):
     def get(self, request: HttpRequest) -> JsonResponse:
         type_input = self.request.query_params.get("type", None)
@@ -78,8 +77,9 @@ class AethelSampleDataView(APIView):
         response_object = AethelSampleDataResponse()
 
         assert dataset is not None
-        by_type = dataset.by_type(type_input)
-        by_word = dataset.by_word(' '.join(word_input))
+        type_input = Type.parse_prefix(type_input)
+        by_type = dataset.by_type(str(type_input))  # re-serialize type to match index
+        by_word = dataset.by_words(word_input)
         by_name = {sample.name: sample for sample in by_type + by_word}
         # we have to do the intersection by name because Samples are not hashable
         intersection = set(s.name for s in by_type).intersection(set(s.name for s in by_word))
