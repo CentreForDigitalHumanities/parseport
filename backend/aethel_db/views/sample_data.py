@@ -25,6 +25,9 @@ class AethelSampleDataResult:
     name: str
     phrases: list[AethelSampleDataPhrase] = field(default_factory=list)
 
+    def highlight_phrase_at_index(self, index: int) -> None:
+        self.phrases[index].highlight = True
+
     def serialize(self):
         return asdict(self)
 
@@ -34,7 +37,7 @@ class AethelSampleDataResponse:
     results: list[AethelSampleDataResult] = field(default_factory=list)
     error: str | None = None
 
-    def get_or_create_sample(self, sample: Sample) -> AethelSampleDataResult:
+    def get_or_create_result(self, sample: Sample) -> AethelSampleDataResult:
         """
         Return an existing result with the same sample.name if it exists. Else create a new one.
         """
@@ -51,11 +54,6 @@ class AethelSampleDataResponse:
         self.results.append(new_result)
         return new_result
 
-    def highlight_phrase(
-        self, sample: AethelSampleDataResult, highlighted_phrase_index: int
-    ) -> None:
-        sample.phrases[highlighted_phrase_index].highlight = True
-
     def json_response(self) -> JsonResponse:
         return JsonResponse(
             {
@@ -71,10 +69,13 @@ class AethelSampleDataView(APIView):
         type_input = self.request.query_params.get("type", None)
         word_input = self.request.query_params.get("word", None)
 
-        if word_input:
-            word_input = json.loads(word_input)
-
         response_object = AethelSampleDataResponse()
+
+        # Not expected.
+        if not type_input or not word_input:
+            return response_object.json_response()
+
+        word_input = json.loads(word_input)
 
         for sample in dataset.samples:
             for phrase_index, phrase in enumerate(sample.lexical_phrases):
@@ -86,10 +87,8 @@ class AethelSampleDataView(APIView):
                 if not (word_match and type_match):
                     continue
 
-                aethel_sample = response_object.get_or_create_sample(sample=sample)
+                aethel_sample = response_object.get_or_create_result(sample=sample)
 
-                response_object.highlight_phrase(
-                    sample=aethel_sample, highlighted_phrase_index=phrase_index
-                )
+                aethel_sample.highlight_phrase_at_index(index=phrase_index)
 
         return response_object.json_response()
