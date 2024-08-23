@@ -13,7 +13,7 @@ import {
     throttleTime,
 } from "rxjs";
 import { environment } from "src/environments/environment";
-import { AethelDetail, AethelInput, AethelListReturn } from "../types";
+import { AethelDetail, AethelInput, AethelList } from "../types";
 import { ErrorHandlerService } from "./error-handler.service";
 import { ParsePortDataService } from "./ParsePortDataService";
 
@@ -21,7 +21,7 @@ import { ParsePortDataService } from "./ParsePortDataService";
     providedIn: "root",
 })
 export class AethelApiService
-    implements ParsePortDataService<AethelInput, AethelListReturn>
+    implements ParsePortDataService<AethelInput, AethelList>
 {
     input$ = new Subject<AethelInput>();
 
@@ -46,7 +46,7 @@ export class AethelApiService
             }
 
             return this.http
-                .get<AethelListReturn | null>(`${environment.apiUrl}aethel/`, {
+                .get<AethelList | null>(`${environment.apiUrl}aethel/`, {
                     headers,
                     params,
                 })

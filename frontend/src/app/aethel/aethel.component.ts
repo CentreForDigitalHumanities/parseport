@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AethelListReturnItem } from "../shared/types";
+import { AethelListResult } from "../shared/types";
 import { AethelApiService } from "../shared/services/aethel-api.service";
 import { Subject, distinctUntilChanged, map } from "rxjs";
 import {
@@ -23,7 +23,7 @@ export class AethelComponent implements OnInit {
             validators: [Validators.minLength(3)],
         }),
     });
-    public rows: AethelListReturnItem[] = [];
+    public rows: AethelListResult[] = [];
     public loading$ = this.apiService.loading$;
     public submitted = this.apiService.output$.pipe(map(() => true));
 
@@ -39,13 +39,14 @@ export class AethelComponent implements OnInit {
         private destroyRef: DestroyRef,
         private router: Router,
         private route: ActivatedRoute,
-        private statusService: StatusService
+        private statusService: StatusService,
     ) {}
 
     ngOnInit(): void {
-        this.statusService.get().pipe(
-            takeUntilDestroyed(this.destroyRef),
-        ).subscribe(status => this.status$.next(status.aethel));
+        this.statusService
+            .get()
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((status) => this.status$.next(status.aethel));
 
         this.apiService.output$
             .pipe(takeUntilDestroyed(this.destroyRef))
@@ -68,8 +69,8 @@ export class AethelComponent implements OnInit {
                 takeUntilDestroyed(this.destroyRef),
             )
             .subscribe((query) => {
-                const word = query['word'];
-                const type = query['type']
+                const word = query["word"];
+                const type = query["type"];
                 if (word) {
                     this.form.controls.aethelInput.setValue(word);
                 }
@@ -94,16 +95,19 @@ export class AethelComponent implements OnInit {
     private updateUrl(query: string): void {
         // This does not actually refresh the page because it just adds parameters to the current route.
         // It just updates the URL in the browser, triggering a new query.
-        const url = this.router.createUrlTree([], { relativeTo: this.route, queryParams: { word: query } }).toString();
+        const url = this.router
+            .createUrlTree([], {
+                relativeTo: this.route,
+                queryParams: { word: query },
+            })
+            .toString();
         this.router.navigateByUrl(url);
     }
 
     /**
      * Adds unique keys to the items in the array. This is needed for the table to keep track of the data and automatically collapse rows when the data changes.
      */
-    private addUniqueKeys(
-        items: AethelListReturnItem[],
-    ): AethelListReturnItem[] {
+    private addUniqueKeys(items: AethelListResult[]): AethelListResult[] {
         return items.map((item, index) => ({
             ...item,
             key: `${index}-${item.lemma}-${item.word}-${item.type}`,
