@@ -60,8 +60,8 @@ class AethelListResponse:
         new_phrase = AethelListPhrase(items=items)
 
         # Construct a unique 'key' for every combination of word, lemma and type, so we can group samples.
-        key_word = " ".join([item.word for item in phrase.items])
-        key_lemma = " ".join([item.lemma for item in phrase.items])
+        key_word = tuple(item.word for item in phrase.items)
+        key_lemma = tuple(item.lemma for item in phrase.items)
         key = (key_word, key_lemma, type)
 
         new_result = AethelListResult(phrase=new_phrase, type=type, sampleCount=0)
