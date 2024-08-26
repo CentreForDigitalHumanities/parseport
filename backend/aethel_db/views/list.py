@@ -62,9 +62,10 @@ class AethelListResponse:
         ]
         new_phrase = AethelListPhrase(items=items)
 
-        # type_repr: parenthesised notation, used for frontend.
+        # type_repr uses a parenthesised notation, used for frontend.
         display_type = type_repr(type)
-        # type_prefix: space-separated notation, used to find sample data.
+
+        # type_prefix uses a space-separated notation, expected by parse_prefix in AethelSampleDataView.
         type = type_prefix(type)
 
         # Construct a unique 'key' for every combination of word, lemma and type, so we can group samples.
