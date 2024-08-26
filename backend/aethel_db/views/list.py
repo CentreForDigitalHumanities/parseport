@@ -8,6 +8,7 @@ from aethel_db.search import match_type_with_phrase, match_word_with_phrase
 from aethel_db.models import dataset
 
 from aethel.frontend import LexicalPhrase
+from aethel.mill.types import type_prefix
 
 
 @dataclass
@@ -91,14 +92,15 @@ class AethelListView(APIView):
         response_object = AethelListResponse()
 
         for sample in dataset.samples:
-            for phrase_index, phrase in enumerate(sample.lexical_phrases):
+            for phrase in sample.lexical_phrases:
                 word_match = word_input and match_word_with_phrase(phrase, word_input)
                 type_match = type_input and match_type_with_phrase(phrase, type_input)
                 if not (word_match or type_match):
                     continue
 
                 result = response_object.get_or_create_result(
-                    phrase=phrase, type=str(phrase.type)
+                    # type_prefix returns a string representation of the type, with spaces between the elements.
+                    phrase=phrase, type=type_prefix(phrase.type)
                 )
 
                 result._sample_names.add(sample.name)
