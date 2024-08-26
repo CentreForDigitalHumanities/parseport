@@ -8,7 +8,7 @@ from aethel_db.search import match_type_with_phrase, match_word_with_phrase
 from aethel_db.models import dataset
 
 from aethel.frontend import LexicalPhrase
-from aethel.mill.types import type_prefix
+from aethel.mill.types import type_prefix, Type, type_repr
 
 
 @dataclass
@@ -25,6 +25,7 @@ class AethelListPhrase:
 @dataclass
 class AethelListResult:
     phrase: AethelListPhrase
+    display_type: str
     type: str
     sampleCount: int = 0
     # Counter for the number of samples that contain this item.
@@ -34,6 +35,7 @@ class AethelListResult:
     def serialize(self):
         return {
             "phrase": asdict(self.phrase),
+            "displayType": self.display_type,
             "type": self.type,
             "sampleCount": len(self._sample_names),
         }
@@ -49,7 +51,7 @@ class AethelListResponse:
     error: str | None = None
 
     def get_or_create_result(
-        self, phrase: LexicalPhrase, type: str
+        self, phrase: LexicalPhrase, type: Type
     ) -> AethelListResult:
         """
         Return an existing result with the same lemma, word, and type, or create a new one if it doesn't exist.
@@ -60,12 +62,22 @@ class AethelListResponse:
         ]
         new_phrase = AethelListPhrase(items=items)
 
+        # type_repr: parenthesised notation, used for frontend.
+        display_type = type_repr(type)
+        # type_prefix: space-separated notation, used to find sample data.
+        type = type_prefix(type)
+
         # Construct a unique 'key' for every combination of word, lemma and type, so we can group samples.
         key_word = tuple(item.word for item in phrase.items)
         key_lemma = tuple(item.lemma for item in phrase.items)
         key = (key_word, key_lemma, type)
 
-        new_result = AethelListResult(phrase=new_phrase, type=type, sampleCount=0)
+        new_result = AethelListResult(
+            phrase=new_phrase,
+            display_type=display_type,
+            type=type,
+            sampleCount=0,
+        )
         return self.results.setdefault(key, new_result)
 
     def json_response(self) -> JsonResponse:
@@ -100,7 +112,8 @@ class AethelListView(APIView):
 
                 result = response_object.get_or_create_result(
                     # type_prefix returns a string representation of the type, with spaces between the elements.
-                    phrase=phrase, type=type_prefix(phrase.type)
+                    phrase=phrase,
+                    type=phrase.type,
                 )
 
                 result._sample_names.add(sample.name)

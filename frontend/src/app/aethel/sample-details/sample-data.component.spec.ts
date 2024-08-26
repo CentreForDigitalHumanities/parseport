@@ -46,6 +46,7 @@ describe("SampleDataComponent", () => {
             },
             sampleCount: 0,
             type: "test",
+            displayType: "Test",
         };
         const mockResponse: AethelSampleDataReturn = {
             results: [],

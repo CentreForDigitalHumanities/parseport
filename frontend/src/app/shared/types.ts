@@ -55,6 +55,7 @@ export interface AethelListPhrase {
 export interface AethelListResult {
     phrase: AethelListPhrase
     type: string;
+    displayType: string;
     sampleCount: number;
 }
 

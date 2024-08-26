@@ -95,7 +95,7 @@
                 </td>
                 <td>{{ combineWord(row) }}</td>
                 <td>{{ combineLemma(row) }}</td>
-                <td [innerHTML]="row.type | proof"></td>
+                <td [innerHTML]="row.displayType | proof"></td>
                 <td>{{ row.sampleCount }}</td>
             </tr>
         </ng-template>
