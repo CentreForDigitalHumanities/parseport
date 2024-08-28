@@ -1,4 +1,5 @@
 from dataclasses import asdict, dataclass, field
+from enum import Enum
 
 from django.http import HttpRequest, JsonResponse
 from rest_framework import status
@@ -20,6 +21,11 @@ class AethelListLexicalItem:
 @dataclass
 class AethelListPhrase:
     items: list[AethelListLexicalItem]
+
+
+class AethelListError(Enum):
+    INVALID_LIMIT_OR_SKIP = "INVALID_LIMIT_OR_SKIP"
+    WORD_TOO_SHORT = "WORD_TOO_SHORT"
 
 
 @dataclass
@@ -48,7 +54,9 @@ class AethelListResponse:
     """
 
     results: dict[tuple[str, str, str], AethelListResult] = field(default_factory=dict)
-    error: str | None = None
+    error: AethelListError | None = None
+    limit: int = 10
+    skip: int = 0
 
     def get_or_create_result(
         self, phrase: LexicalPhrase, type: Type
@@ -82,11 +90,24 @@ class AethelListResponse:
         return self.results.setdefault(key, new_result)
 
     def json_response(self) -> JsonResponse:
-        results = [result.serialize() for result in self.results.values()]
+        if self.error:
+            return JsonResponse(
+                {
+                    "results": [],
+                    "totalCount": 0,
+                    "error": self.error,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        total_count = len(self.results)
+        paginated = list(self.results.values())[self.skip : self.skip + self.limit]
+        serialized = [result.serialize() for result in paginated]
 
         return JsonResponse(
             {
-                "results": results,
+                "results": serialized,
+                "totalCount": total_count,
                 "error": self.error,
             },
             status=status.HTTP_200_OK,
@@ -97,12 +118,24 @@ class AethelListView(APIView):
     def get(self, request: HttpRequest) -> JsonResponse:
         word_input = self.request.query_params.get("word", None)
         type_input = self.request.query_params.get("type", None)
+        limit = self.request.query_params.get("limit", 10)
+        skip = self.request.query_params.get("skip", 0)
+
+        try:
+            limit = int(limit)
+            skip = int(skip)
+        except ValueError:
+            return AethelListResponse(
+                error=AethelListError.INVALID_LIMIT_OR_SKIP
+            ).json_response()
 
         # We only search for strings of 3 or more characters.
         if word_input is not None and len(word_input) < 3:
-            return AethelListResponse().json_response()
+            return AethelListResponse(
+                error=AethelListError.WORD_TOO_SHORT
+            ).json_response()
 
-        response_object = AethelListResponse()
+        response_object = AethelListResponse(skip=skip, limit=limit)
 
         for sample in dataset.samples:
             for phrase in sample.lexical_phrases:
