@@ -41,6 +41,8 @@ export type AethelMode = "word" | "type" | "word-and-type";
 export interface AethelInput {
     word?: string;
     type?: string;
+    limit?: number;
+    skip?: number;
 }
 
 export interface AethelListLexicalItem {
@@ -61,6 +63,7 @@ export interface AethelListResult {
 
 export interface AethelList {
     results: AethelListResult[];
+    totalCount: number;
     error: string | null;
 }
 
