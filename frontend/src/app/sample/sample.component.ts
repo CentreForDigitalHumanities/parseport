@@ -37,7 +37,7 @@ export class SampleComponent {
     }
 
     public showButtons(items: LexicalPhrase["items"]): boolean {
-        // Buttons are hidden if the phrase consists of too few characters.
+        // Buttons are hidden if the phrase contains too few characters.
         const combined = items.map((item) => item.word).join(" ");
         return combined.length > 2;
     }

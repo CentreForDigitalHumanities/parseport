@@ -43,17 +43,20 @@ export interface AethelInput {
     type?: string;
 }
 
-export interface AethelListResult {
-    lemma: string;
+export interface AethelListLexicalItem {
     word: string;
+    lemma: string;
+}
+
+export interface AethelListPhrase {
+    items: AethelListLexicalItem[]
+}
+
+export interface AethelListResult {
+    phrase: AethelListPhrase
     type: string;
-    samples: {
-        name: string;
-        phrases: {
-            display: string;
-            highlight: boolean;
-        }[];
-    }[];
+    displayType: string;
+    sampleCount: number;
 }
 
 export interface AethelList {
@@ -79,4 +82,20 @@ export interface AethelDetailResult {
 export interface AethelDetail {
     result: AethelDetailResult | null;
     error: AethelDetailError | null;
+}
+
+export interface AethelSampleDataPhrase {
+    index: number;
+    highlight: boolean;
+    display: string;
+}
+
+export interface AethelSampleDataResult {
+    name: string;
+    phrases: AethelSampleDataPhrase[];
+}
+
+export interface AethelSampleDataReturn {
+    results: AethelSampleDataResult[];
+    error: string | null;
 }

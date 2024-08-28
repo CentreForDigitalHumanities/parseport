@@ -78,6 +78,14 @@ export class AethelComponent implements OnInit {
             });
     }
 
+    public combineWord(row: AethelListResult): string {
+        return row.phrase.items.map((item) => item.word).join(" ");
+    }
+
+    public combineLemma(row: AethelListResult): string {
+        return row.phrase.items.map((item) => item.lemma).join(" ");
+    }
+
     public submit(): void {
         this.form.markAllAsTouched();
         this.form.controls.aethelInput.updateValueAndValidity();
@@ -86,10 +94,6 @@ export class AethelComponent implements OnInit {
             return;
         }
         this.updateUrl(query);
-    }
-
-    public getSampleURL(sampleName: string): string[] {
-        return ["sample", sampleName.replace(".xml", "")];
     }
 
     private updateUrl(query: string): void {
@@ -107,10 +111,18 @@ export class AethelComponent implements OnInit {
     /**
      * Adds unique keys to the items in the array. This is needed for the table to keep track of the data and automatically collapse rows when the data changes.
      */
-    private addUniqueKeys(items: AethelListResult[]): AethelListResult[] {
-        return items.map((item, index) => ({
-            ...item,
-            key: `${index}-${item.lemma}-${item.word}-${item.type}`,
-        }));
+    private addUniqueKeys(results: AethelListResult[]): AethelListResult[] {
+        return results.map((result, index) => {
+            const combinedLemma = result.phrase.items
+                .map((item) => item.lemma)
+                .join(" ");
+            const combinedWord = result.phrase.items
+                .map((item) => item.word)
+                .join(" ");
+            return {
+                ...result,
+                key: `${index}-${combinedLemma}-${combinedWord}-${result.type}`,
+            };
+        });
     }
 }

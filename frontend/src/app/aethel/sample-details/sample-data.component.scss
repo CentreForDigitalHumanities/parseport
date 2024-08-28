@@ -1,0 +1,15 @@
+
+.sample-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.sample-item:not(:last-child) {
+    margin-bottom: 1rem;
+}
+
+.highlight {
+    font-weight: bold;
+}

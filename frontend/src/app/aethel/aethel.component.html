@@ -68,9 +68,9 @@
                     <span i18n>Type</span>
                     <p-sortIcon field="type"></p-sortIcon>
                 </th>
-                <th style="width: 10%" pSortableColumn="samples">
+                <th style="width: 10%" pSortableColumn="sampleCount">
                     <span i18n>Samples</span>
-                    <p-sortIcon field="samples"></p-sortIcon>
+                    <p-sortIcon field="sampleCount"></p-sortIcon>
                 </th>
             </tr>
         </ng-template>
@@ -93,10 +93,10 @@
                         ></fa-icon>
                     </button>
                 </td>
-                <td>{{ row.word }}</td>
-                <td>{{ row.lemma }}</td>
-                <td [innerHTML]="row.type | proof"></td>
-                <td>{{ row.samples.length }}</td>
+                <td>{{ combineWord(row) }}</td>
+                <td>{{ combineLemma(row) }}</td>
+                <td [innerHTML]="row.displayType | proof"></td>
+                <td>{{ row.sampleCount }}</td>
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
@@ -105,24 +105,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="rowexpansion" let-row>
-            @for (sample of row.samples; track $index) {
-            <tr class="expanded-row">
-                <td colspan="4">
-                    @for (phrase of sample.phrases; track phrase.index) {
-                        <span [class.highlight]="phrase.highlight">{{ phrase.display }} </span>
-                    }
-                </td>
-                <td class="button-container" colspan="1">
-                    <a
-                        [routerLink]="getSampleURL(sample.name)"
-                        class="button is-primary"
-                        i18n
-                    >
-                        Go to sample
-                    </a>
-                </td>
-            </tr>
-            }
+            <tr pp-sample-data class="expanded-row" [aethelResult]="row"></tr>
         </ng-template>
     </p-table>
 </div>
