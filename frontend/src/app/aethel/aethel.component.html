@@ -15,7 +15,7 @@
                     class="input"
                     [class.is-danger]="form.touched && form.invalid"
                     type="text"
-                    formControlName="aethelInput"
+                    [formControl]="form.controls.word"
                     placeholder="Enter a word or lemma..."
                     placeholder-i18n
                 />
@@ -42,7 +42,6 @@
 }
 
 @if (submitted | async) {
-<div class="table-container">
     <p-table
         [value]="rows"
         dataKey="key"
@@ -108,5 +107,4 @@
             <tr pp-sample-data class="expanded-row" [aethelResult]="row"></tr>
         </ng-template>
     </p-table>
-</div>
 }
