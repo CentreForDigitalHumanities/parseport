@@ -11,6 +11,7 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { isNonNull } from "../shared/operators/IsNonNull";
 import { StatusService } from "../shared/services/status.service";
+import { TablePageEvent } from "primeng/table";
 
 @Component({
     selector: "pp-aethel",
@@ -49,6 +50,20 @@ export class AethelComponent implements OnInit {
         private route: ActivatedRoute,
         private statusService: StatusService,
     ) {}
+
+    changePage(page: TablePageEvent): void {
+        if (
+            page.first === this.form.controls.skip.value &&
+            page.rows === this.form.controls.limit.value
+        ) {
+            return;
+        }
+        this.form.patchValue({
+            skip: page.first,
+            limit: page.rows,
+        });
+        this.submit();
+    }
 
     ngOnInit(): void {
         this.statusService
