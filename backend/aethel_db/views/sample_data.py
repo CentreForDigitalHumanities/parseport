@@ -89,10 +89,10 @@ class AethelSampleDataView(APIView):
 
         for sample in samples:
             for phrase_index, phrase in enumerate(sample.lexical_phrases):
-                word_match = word_input and match_word_with_phrase_exact(
+                word_match = match_word_with_phrase_exact(
                     phrase, word_input
                 )
-                type_match = type_input and match_type_with_phrase(phrase, type_input)
+                type_match = match_type_with_phrase(phrase, type_input)
 
                 if not (word_match and type_match):
                     continue
