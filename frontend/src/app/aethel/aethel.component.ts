@@ -95,8 +95,8 @@ export class AethelComponent implements OnInit {
             .subscribe((query) => {
                 const word = query["word"] ?? "";
                 const type = query["type"];
-                const skip = query["skip"] ?? 0;
-                const limit = query["limit"] ?? 10;
+                const skip = parseInt(query["skip"], 10) ?? 0;
+                const limit = parseInt(query["limit"], 10) ?? 10;
                 this.form.patchValue({ word, skip, limit });
                 this.apiService.input$.next({ word, type, skip, limit });
             });
