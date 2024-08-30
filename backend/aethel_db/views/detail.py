@@ -67,11 +67,9 @@ class AethelDetailResponse:
             AETHEL_DETAIL_STATUS_CODES[self.error] if self.error else status.HTTP_200_OK
         )
 
-        result_data = self.result.serialize() if self.result else None
-
         return JsonResponse(
             {
-                "result": result_data if self.result else None,
+                "result": self.result.serialize() if self.result else None,
                 "error": self.error,
             },
             status=status_code,
