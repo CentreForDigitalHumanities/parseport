@@ -8,7 +8,7 @@ from aethel_db.search import match_type_with_phrase, match_word_with_phrase
 from aethel_db.models import dataset
 
 from aethel.frontend import LexicalPhrase
-from aethel.mill.types import type_prefix, Type, type_repr
+from aethel.mill.types import type_prefix, Type, type_repr, parse_prefix
 
 
 @dataclass
@@ -102,17 +102,22 @@ class AethelListView(APIView):
         if word_input is not None and len(word_input) < 3:
             return AethelListResponse().json_response()
 
+        try:
+            parsed_type = parse_prefix(type_input) if type_input else None
+        except (ValueError, IndexError):
+            return AethelListResponse(error="Invalid type input.").json_response()
+
         response_object = AethelListResponse()
 
         for sample in dataset.samples:
             for phrase in sample.lexical_phrases:
                 word_match = word_input and match_word_with_phrase(phrase, word_input)
-                type_match = type_input and match_type_with_phrase(phrase, type_input)
+                type_match = parsed_type and match_type_with_phrase(phrase, parsed_type)
+
                 if not (word_match or type_match):
                     continue
 
                 result = response_object.get_or_create_result(
-                    # type_prefix returns a string representation of the type, with spaces between the elements.
                     phrase=phrase,
                     type=phrase.type,
                 )
