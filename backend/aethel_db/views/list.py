@@ -95,7 +95,7 @@ class AethelListResponse:
                 {
                     "results": [],
                     "totalCount": 0,
-                    "error": self.error,
+                    "error": self.error.value,
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
