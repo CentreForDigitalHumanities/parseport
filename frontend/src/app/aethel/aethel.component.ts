@@ -62,7 +62,7 @@ export class AethelComponent implements OnInit {
             skip: page.first,
             limit: page.rows,
         });
-        this.submit();
+        this.prepareQuery();
     }
 
     ngOnInit(): void {
@@ -95,8 +95,11 @@ export class AethelComponent implements OnInit {
             .subscribe((query) => {
                 const word = query["word"] ?? "";
                 const type = query["type"];
-                const skip = parseInt(query["skip"], 10) ?? 0;
-                const limit = parseInt(query["limit"], 10) ?? 10;
+                const skip = query["skip"] ? parseInt(query["skip"], 10) : 0;
+                const limit = query["limit"]
+                    ? parseInt(query["limit"], 10)
+                    : 10;
+
                 this.form.patchValue({ word, skip, limit });
                 this.apiService.input$.next({ word, type, skip, limit });
             });
@@ -110,7 +113,13 @@ export class AethelComponent implements OnInit {
         return row.phrase.items.map((item) => item.lemma).join(" ");
     }
 
-    public submit(): void {
+    public submitWord(): void {
+        // When the user submits a new word, go back to the first page.
+        this.form.controls.skip.setValue(0);
+        this.prepareQuery();
+    }
+
+    private prepareQuery(): void {
         this.form.markAllAsTouched();
         this.form.controls.word.updateValueAndValidity();
         const queryInput: AethelInput = this.form.getRawValue();
@@ -119,7 +128,7 @@ export class AethelComponent implements OnInit {
 
     private updateUrl(queryInput: AethelInput): void {
         // This does not actually refresh the page because it just adds parameters to the current route.
-        // It just updates the URL in the browser, triggering a new query.
+        // This triggers a new query.
         const url = this.router
             .createUrlTree([], {
                 relativeTo: this.route,

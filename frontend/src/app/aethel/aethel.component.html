@@ -6,7 +6,7 @@
 </p>
 
 @if (status$ | async) {
-    <form class="form" [formGroup]="form" (ngSubmit)="submit()">
+    <form class="form" [formGroup]="form" (ngSubmit)="submitWord()">
         <div class="field">
             <label for="aethel-input" class="label">Search:</label>
             <div class="aethel-input-container">
@@ -44,10 +44,10 @@
 @if (submitted | async) {
     <p-table
         [value]="rows"
-        [totalRecords]="totalRowCount"
-        [lazy]="true"
         dataKey="key"
+        [lazy]="true"
         [paginator]="true"
+        [totalRecords]="totalRowCount"
         [first]="form.controls.skip.value"
         [rows]="form.controls.limit.value"
         (onPage)="changePage($event)"
