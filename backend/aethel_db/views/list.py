@@ -9,7 +9,7 @@ from aethel_db.search import match_type_with_phrase, match_word_with_phrase
 from aethel_db.models import dataset
 
 from aethel.frontend import LexicalPhrase
-from aethel.mill.types import type_prefix, Type, type_repr
+from aethel.mill.types import type_prefix, Type, type_repr, parse_prefix
 
 
 @dataclass
@@ -26,6 +26,7 @@ class AethelListPhrase:
 class AethelListError(Enum):
     INVALID_LIMIT_OR_SKIP = "INVALID_LIMIT_OR_SKIP"
     WORD_TOO_SHORT = "WORD_TOO_SHORT"
+    CANNOT_PARSE_TYPE = "CANNOT_PARSE_TYPE"
 
 
 @dataclass
@@ -129,23 +130,29 @@ class AethelListView(APIView):
                 error=AethelListError.INVALID_LIMIT_OR_SKIP
             ).json_response()
 
+        response_object = AethelListResponse(skip=skip, limit=limit)
+
         # We only search for strings of 3 or more characters.
         if word_input is not None and len(word_input) < 3:
             return AethelListResponse(
                 error=AethelListError.WORD_TOO_SHORT
             ).json_response()
 
-        response_object = AethelListResponse(skip=skip, limit=limit)
+        try:
+            parsed_type = parse_prefix(type_input) if type_input else None
+        except IndexError or AttributeError:
+            response_object.error = AethelListError.CANNOT_PARSE_TYPE
+            return response_object.json_response()
+
 
         for sample in dataset.samples:
             for phrase in sample.lexical_phrases:
                 word_match = word_input and match_word_with_phrase(phrase, word_input)
-                type_match = type_input and match_type_with_phrase(phrase, type_input)
+                type_match = parsed_type and match_type_with_phrase(phrase, parsed_type)
                 if not (word_match or type_match):
                     continue
 
                 result = response_object.get_or_create_result(
-                    # type_prefix returns a string representation of the type, with spaces between the elements.
                     phrase=phrase,
                     type=phrase.type,
                 )
