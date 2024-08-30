@@ -140,7 +140,7 @@ class AethelListView(APIView):
 
         try:
             parsed_type = parse_prefix(type_input) if type_input else None
-        except IndexError or AttributeError:
+        except Exception:
             response_object.error = AethelListError.CANNOT_PARSE_TYPE
             return response_object.json_response()
 
