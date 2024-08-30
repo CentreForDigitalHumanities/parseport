@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from django.http import HttpRequest, JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
-from spindle.utils import serialize_phrases_with_infix_notation
+from spindle.utils import serialize_phrases
 from aethel.frontend import Sample
 
 from aethel_db.models import dataset
@@ -59,7 +59,7 @@ class AethelDetailResponse:
             name=sample.name,
             term=str(sample.proof.term),
             subset=sample.subset,
-            phrases=serialize_phrases_with_infix_notation(sample.lexical_phrases),
+            phrases=serialize_phrases(sample.lexical_phrases),
         )
 
     def json_response(self) -> JsonResponse:
