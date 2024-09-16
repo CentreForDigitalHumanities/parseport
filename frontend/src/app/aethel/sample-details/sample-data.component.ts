@@ -19,7 +19,7 @@ import { environment } from "src/environments/environment";
 export class SampleDataComponent implements OnInit {
     @Input({ required: true }) aethelResult: AethelListResult | null = null;
 
-    public samples = signal<AethelSampleDataResult[]>([]);
+    public limit = signal<number>(10);
     public loading = false;
 
     // Hides the "Load More" button when all samples have been loaded.
@@ -27,8 +27,14 @@ export class SampleDataComponent implements OnInit {
         if (!this.aethelResult) {
             return false;
         }
-        return this.samples().length >= this.aethelResult.sampleCount;
+        return this.limit() >= this.samples().length;
     });
+
+    public visibleSamples = computed(() => {
+        return this.samples().slice(0, this.limit());
+    })
+
+    private samples = signal<AethelSampleDataResult[]>([]);
 
     constructor(
         private destroyRef: DestroyRef,
@@ -36,10 +42,6 @@ export class SampleDataComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.loadSamples();
-    }
-
-    public loadSamples(): void {
         if (!this.aethelResult) {
             return;
         }
@@ -60,6 +62,10 @@ export class SampleDataComponent implements OnInit {
             });
     }
 
+    public loadMoreSamples(): void {
+        this.limit.update(limit => limit + 10);
+    }
+
     public getSampleURL(sampleName: string): string[] {
         return ["sample", sampleName.replace(".xml", "")];
     }
@@ -70,7 +76,6 @@ export class SampleDataComponent implements OnInit {
                 aethelResult.phrase.items.map((item) => item.word),
             ),
             type: aethelResult.type,
-            skip: this.samples().length.toString(),
         };
         return queryParams;
     }
