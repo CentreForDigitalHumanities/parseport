@@ -102,7 +102,9 @@ class AethelListResponse:
             )
 
         total_count = len(self.results)
-        paginated = list(self.results.values())[self.skip : self.skip + self.limit]
+        limit = min(self.limit, total_count)
+        skip = max(0, self.skip)
+        paginated = list(self.results.values())[skip : skip + limit]
         serialized = [result.serialize() for result in paginated]
 
         return JsonResponse(
@@ -130,13 +132,13 @@ class AethelListView(APIView):
                 error=AethelListError.INVALID_LIMIT_OR_SKIP
             ).json_response()
 
-        response_object = AethelListResponse(skip=skip, limit=limit)
-
         # We only search for strings of 3 or more characters.
         if word_input is not None and len(word_input) < 3:
             return AethelListResponse(
                 error=AethelListError.WORD_TOO_SHORT
             ).json_response()
+
+        response_object = AethelListResponse(skip=skip, limit=limit)
 
         try:
             parsed_type = parse_prefix(type_input) if type_input else None
