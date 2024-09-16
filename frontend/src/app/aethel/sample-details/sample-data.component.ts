@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Component, DestroyRef, Input, OnInit } from "@angular/core";
+import { Component, computed, DestroyRef, Input, OnInit, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Params } from "@angular/router";
 import {
@@ -19,8 +19,16 @@ import { environment } from "src/environments/environment";
 export class SampleDataComponent implements OnInit {
     @Input({ required: true }) aethelResult: AethelListResult | null = null;
 
-    public samples: AethelSampleDataResult[] = [];
+    public samples = signal<AethelSampleDataResult[]>([]);
     public loading = false;
+
+    // Hides the "Load More" button when all samples have been loaded.
+    public allSamplesLoaded = computed(() => {
+        if (!this.aethelResult) {
+            return false;
+        }
+        return this.samples().length >= this.aethelResult.sampleCount;
+    });
 
     constructor(
         private destroyRef: DestroyRef,
@@ -28,6 +36,10 @@ export class SampleDataComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.loadSamples();
+    }
+
+    public loadSamples(): void {
         if (!this.aethelResult) {
             return;
         }
@@ -43,7 +55,7 @@ export class SampleDataComponent implements OnInit {
             )
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((data) => {
-                this.samples = data.results;
+                this.samples.update(existing => [...existing, ...data.results]);
                 this.loading = false;
             });
     }
@@ -58,6 +70,7 @@ export class SampleDataComponent implements OnInit {
                 aethelResult.phrase.items.map((item) => item.word),
             ),
             type: aethelResult.type,
+            skip: this.samples().length.toString(),
         };
         return queryParams;
     }

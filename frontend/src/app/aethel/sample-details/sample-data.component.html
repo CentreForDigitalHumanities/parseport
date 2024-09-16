@@ -1,6 +1,6 @@
 <td colspan="5">
     <ul class="sample-list mb-2">
-        @for (sample of samples; track $index) {
+        @for (sample of samples(); track $index) {
         <li class="sample-item">
             <p>{{ $index + 1 }}</p>
             <p class="phrase-list mx-2">
