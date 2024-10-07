@@ -57,3 +57,5 @@
 
 <pp-export-buttons [loading$]="loading$" (exportResult)="exportResult($event, sample.sentence)" />
 }
+
+<pp-spindle-parse-result [textOutput]="textOutput$ | async"/>
