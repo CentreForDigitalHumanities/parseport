@@ -70,7 +70,7 @@ describe("SpindleComponent", () => {
     it("should start a download when export to PDF is clicked", () => {
         // Private method, so any is required.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const downloadSpy = spyOn<any>(component, "downloadFile");
+        const downloadSpy = spyOn<any>(apiService, "downloadFile");
 
         const fakeReturn: SpindleReturn = {
             error: null,
