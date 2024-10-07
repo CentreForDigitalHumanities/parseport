@@ -14,7 +14,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { AlertComponent } from "./shared/components/alert/alert.component";
 import { AlertContainerDirective } from "./shared/directives/alert-container.directive";
 import { AlertService } from "./shared/services/alert.service";
-import { ExportButtonComponent } from "./spindle/export-button/export-button.component";
+import { ExportButtonComponent } from "./shared/components/export-button/export-button.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { TableModule } from "primeng/table";
 import { AethelComponent } from "./aethel/aethel.component";
@@ -24,22 +24,19 @@ import { ReferencesComponent } from "./references/references.component";
 import { ProofPipe } from "./shared/pipes/proof.pipe";
 import { SampleComponent } from "./sample/sample.component";
 import { SampleDataComponent } from "./aethel/sample-details/sample-data.component";
+import { SharedModule } from "./shared/shared.module";
 
 @NgModule({
     declarations: [
-        AlertComponent,
-        AlertContainerDirective,
         AppComponent,
         FooterComponent,
         HomeComponent,
         MenuComponent,
         SpindleComponent,
-        ExportButtonComponent,
         SpindleAboutComponent,
         SpindleNotationComponent,
         ReferencesComponent,
         AethelComponent,
-        ProofPipe,
         SampleComponent,
         SampleDataComponent,
     ],
@@ -51,8 +48,8 @@ import { SampleDataComponent } from "./aethel/sample-details/sample-data.compone
         ReactiveFormsModule,
         FontAwesomeModule,
         TableModule,
+        SharedModule,
     ],
-    providers: [AlertService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
