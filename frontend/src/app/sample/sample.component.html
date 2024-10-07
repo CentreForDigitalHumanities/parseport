@@ -54,4 +54,6 @@
         </tr>
     </tbody>
 </table>
+
+<pp-export-buttons [loading$]="loading$" (exportResult)="exportResult($event, sample.sentence)" />
 }

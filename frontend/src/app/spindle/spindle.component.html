@@ -80,38 +80,7 @@
 
 <div class="mt-5" *ngIf="parsed">
     <h4 class="title is-4" i18n>Export results</h4>
-    <div class="button-container buttons">
-        <pp-export-button
-            buttonText="Export to LaTeX"
-            [isLoading]="(loading$ | async) === 'latex'"
-            (export)="export($event)"
-            mode="latex"
-            i18n-buttonText
-        />
-        <pp-export-button
-            buttonText="Export to PDF"
-            [isLoading]="(loading$ | async) === 'pdf'"
-            (export)="export($event)"
-            mode="pdf"
-            i18n-buttonText
-        />
-        <pp-export-button
-            buttonText="Open in Overleaf"
-            [isLoading]="(loading$ | async) === 'overleaf'"
-            (export)="export($event)"
-            textBelow="Requires an Overleaf account."
-            mode="overleaf"
-            i18n-buttonText
-            i18n-textBelow
-        />
-        <pp-export-button
-            buttonText="Export JSON"
-            [isLoading]="(loading$ | async) === 'proof'"
-            (export)="export($event)"
-            mode="proof"
-            i18n-buttonText
-        />
-    </div>
+    <pp-export-buttons [loading$]="loading$" (exportResult)="exportResult($event)" />
 
     <div class="output-container" *ngIf="textOutput">
         <div class="output-button-container">

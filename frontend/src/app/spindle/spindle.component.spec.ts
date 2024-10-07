@@ -6,7 +6,7 @@ import {
     HttpTestingController,
 } from "@angular/common/http/testing";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ExportButtonComponent } from "./export-button/export-button.component";
+import { ExportButtonComponent } from "../shared/components/export-button/export-button.component";
 import { RouterModule } from "@angular/router";
 import { SpindleApiService } from "../shared/services/spindle-api.service";
 import { SpindleReturn } from "../shared/types";
@@ -62,7 +62,7 @@ describe("SpindleComponent", () => {
             expect(input.mode).toEqual("pdf");
             expect(input.sentence).toEqual("test sentence 2");
         });
-        component.export("pdf");
+        component.exportResult("pdf");
         const request = httpTestingController.expectOne("/api/spindle/pdf");
         request.flush({});
     });
@@ -83,7 +83,7 @@ describe("SpindleComponent", () => {
         };
 
         component.spindleInput.setValue("test sentence 3");
-        component.export("pdf");
+        component.exportResult("pdf");
 
         const request = httpTestingController.expectOne("/api/spindle/pdf");
         expect(request.request.method).toEqual("POST");
@@ -107,7 +107,7 @@ describe("SpindleComponent", () => {
         };
 
         component.spindleInput.setValue("test sentence 4");
-        component.export("proof");
+        component.exportResult("proof");
 
         const request = httpTestingController.expectOne("/api/spindle/proof");
         expect(request.request.method).toEqual("POST");
