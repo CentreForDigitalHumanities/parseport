@@ -5,7 +5,7 @@ import { ErrorHandlerService } from "../shared/services/error-handler.service";
 import { AlertService } from "../shared/services/alert.service";
 import { AlertType } from "../shared/components/alert/alert.component";
 import { faDownload, faCopy } from "@fortawesome/free-solid-svg-icons";
-import { LexicalPhrase, SpindleMode } from "../shared/types";
+import { LexicalPhrase, ExportMode } from "../shared/types";
 import { SpindleApiService } from "../shared/services/spindle-api.service";
 import { Subject, filter, map, share, switchMap, takeUntil, timer } from "rxjs";
 import { StatusService } from "../shared/services/status.service";
@@ -37,8 +37,8 @@ export class SpindleComponent implements OnInit {
     spindleReady$ = timer(0, 5000).pipe(
         takeUntil(this.stopStatus$),
         switchMap(() => this.statusService.get()),
-        map(status => status.spindle),
-        share()
+        map((status) => status.spindle),
+        share(),
     );
 
     constructor(
@@ -46,14 +46,16 @@ export class SpindleComponent implements OnInit {
         private alertService: AlertService,
         private errorHandler: ErrorHandlerService,
         private destroyRef: DestroyRef,
-        private statusService: StatusService
+        private statusService: StatusService,
     ) {}
 
     ngOnInit(): void {
-        this.spindleReady$.pipe(
-            filter(ready => ready === true),
-            takeUntilDestroyed(this.destroyRef)
-        ).subscribe(() => this.stopStatus$.next());
+        this.spindleReady$
+            .pipe(
+                filter((ready) => ready === true),
+                takeUntilDestroyed(this.destroyRef),
+            )
+            .subscribe(() => this.stopStatus$.next());
 
         this.apiService.output$
             .pipe(takeUntilDestroyed(this.destroyRef))
@@ -100,14 +102,14 @@ export class SpindleComponent implements OnInit {
 
     parse(): void {
         this.clearResults();
-        this.export("term-table");
+        this.exportResult("term-table");
     }
 
     get parsed(): boolean {
         return this.term !== null && this.lexicalPhrases.length > 0;
     }
 
-    export(mode: SpindleMode): void {
+    exportResult(mode: ExportMode): void {
         this.spindleInput.markAsTouched();
         this.spindleInput.updateValueAndValidity();
         const userInput = this.spindleInput.value;

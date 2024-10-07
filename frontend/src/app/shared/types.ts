@@ -1,8 +1,8 @@
-export type SpindleMode = "latex" | "pdf" | "overleaf" | "term-table" | "proof";
+export type ExportMode = "latex" | "pdf" | "overleaf" | "term-table" | "proof";
 
 export interface SpindleInput {
     sentence: string;
-    mode: SpindleMode;
+    mode: ExportMode;
 }
 
 // This should be the same as the one in the backend.
@@ -49,11 +49,11 @@ export interface AethelListLexicalItem {
 }
 
 export interface AethelListPhrase {
-    items: AethelListLexicalItem[]
+    items: AethelListLexicalItem[];
 }
 
 export interface AethelListResult {
-    phrase: AethelListPhrase
+    phrase: AethelListPhrase;
     type: string;
     displayType: string;
     sampleCount: number;

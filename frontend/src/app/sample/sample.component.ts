@@ -2,10 +2,11 @@ import { Component } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { AethelApiService } from "../shared/services/aethel-api.service";
 import { map } from "rxjs";
-import { AethelMode, LexicalPhrase } from "../shared/types";
+import { AethelMode, ExportMode, LexicalPhrase } from "../shared/types";
 import { isNonNull } from "../shared/operators/IsNonNull";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Location } from "@angular/common";
+import { SpindleApiService } from "../shared/services/spindle-api.service";
 
 @Component({
     selector: "pp-sample",
@@ -14,7 +15,7 @@ import { Location } from "@angular/common";
 })
 export class SampleComponent {
     private sampleName = this.route.snapshot.params["sampleName"];
-    private sample$ = this.apiService.sampleResult$(this.sampleName);
+    private sample$ = this.aethelService.sampleResult$(this.sampleName);
     public sampleResult$ = this.sample$.pipe(
         map((response) => response?.result),
         isNonNull(),
@@ -24,9 +25,12 @@ export class SampleComponent {
         arrowLeft: faArrowLeft,
     };
 
+    public loading$ = this.spindleService.loading$;
+
     constructor(
         private route: ActivatedRoute,
-        private apiService: AethelApiService,
+        private spindleService: SpindleApiService,
+        private aethelService: AethelApiService,
         private router: Router,
         private location: Location,
     ) {}
@@ -34,6 +38,13 @@ export class SampleComponent {
     public searchAethel(phrase: LexicalPhrase, mode: AethelMode): void {
         const queryParams = this.formatQueryParams(phrase, mode);
         this.router.navigate(["/aethel"], { queryParams });
+    }
+
+    public exportResult(mode: ExportMode, sentence: string): void {
+        this.spindleService.input$.next({
+            mode,
+            sentence
+        })
     }
 
     public showButtons(items: LexicalPhrase["items"]): boolean {

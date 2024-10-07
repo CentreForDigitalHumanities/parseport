@@ -14,7 +14,7 @@ import {
 } from "rxjs";
 import { environment } from "src/environments/environment";
 import { ErrorHandlerService } from "./error-handler.service";
-import { SpindleInput, SpindleMode, SpindleReturn } from "../types";
+import { SpindleInput, ExportMode, SpindleReturn } from "../types";
 import { ParsePortDataService } from "./ParsePortDataService";
 
 @Injectable({
@@ -22,7 +22,7 @@ import { ParsePortDataService } from "./ParsePortDataService";
 })
 export class SpindleApiService
     implements
-        ParsePortDataService<SpindleInput, SpindleReturn, SpindleMode | null>
+        ParsePortDataService<SpindleInput, SpindleReturn, ExportMode | null>
 {
     input$ = new Subject<SpindleInput>();
 
@@ -58,7 +58,7 @@ export class SpindleApiService
         share(),
     );
 
-    loading$: Observable<SpindleMode | null> = merge(
+    loading$: Observable<ExportMode | null> = merge(
         this.throttledInput$.pipe(map((input) => input.mode)),
         this.output$.pipe(map(() => null)),
     );
