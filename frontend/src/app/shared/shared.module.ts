@@ -11,6 +11,8 @@ import { ErrorHandlerService } from "./services/error-handler.service";
 import { SpindleApiService } from "./services/spindle-api.service";
 import { StatusService } from "./services/status.service";
 import { CommonModule } from "@angular/common";
+import { SpindleParseResultComponent } from "./spindle-parse-result/spindle-parse-result.component";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 @NgModule({
     declarations: [
@@ -19,8 +21,9 @@ import { CommonModule } from "@angular/common";
         ExportButtonComponent,
         ExportButtonsComponent,
         ProofPipe,
+        SpindleParseResultComponent,
     ],
-    imports: [CommonModule],
+    imports: [CommonModule, FontAwesomeModule],
     providers: [
         AethelApiService,
         AlertService,
@@ -35,6 +38,7 @@ import { CommonModule } from "@angular/common";
         ExportButtonComponent,
         ExportButtonsComponent,
         ProofPipe,
+        SpindleParseResultComponent,
     ]
 })
 export class SharedModule {}

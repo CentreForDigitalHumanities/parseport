@@ -1,0 +1,30 @@
+<div class="output-container" *ngIf="textOutput">
+    <div class="output-button-container">
+        <button
+            class="button is-small download-file"
+            type="button"
+            (click)="downloadAsFile(textOutput.text, textOutput.extension)"
+        >
+            <span class="icon">
+                <fa-icon [icon]="faDownload"></fa-icon>
+            </span>
+            <span i18n>Download as file</span>
+        </button>
+        <button
+            class="button is-small clipboard-copy"
+            type="button"
+            (click)="copyToClipboard(textOutput.text)"
+        >
+            <span class="icon">
+                <fa-icon [icon]="faCopy"></fa-icon>
+            </span>
+            <span i18n>Copy text to clipboard</span>
+        </button>
+    </div>
+    <pre
+        name="text-output"
+        class="is-family-code"
+        [innerText]="textOutput.text"
+        disabled
+    ></pre>
+</div>

@@ -66,5 +66,41 @@ export class SpindleApiService
     constructor(
         private http: HttpClient,
         private errorHandler: ErrorHandlerService,
-    ) {}
+    ) { }
+
+    public downloadAsFile(
+        textData: string,
+        extension: "tex" | "json" | "pdf",
+    ): void {
+        const fileName = "spindleParseResult." + extension;
+        let url = "";
+        // PDF data (base64) does not need to be converted to a blob.
+        if (extension === "pdf") {
+            url = `data:application/pdf;base64,${textData}`;
+        } else {
+            const blob = new Blob([textData], {
+                type: `application/${extension}`,
+            });
+            url = window.URL.createObjectURL(blob);
+        }
+
+        this.downloadFile(fileName, url);
+
+        // Revoke the object URL after downloading.
+        if (extension !== "pdf") {
+            this.revokeObjectURL(url);
+        }
+    }
+
+    private downloadFile(fileName: string, url: string): void {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        link.click();
+        link.remove();
+    }
+
+    private revokeObjectURL(url: string): void {
+        window.URL.revokeObjectURL(url);
+    }
 }
