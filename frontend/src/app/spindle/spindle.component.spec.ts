@@ -10,6 +10,7 @@ import { ExportButtonComponent } from "../shared/components/spindle-export/expor
 import { RouterModule } from "@angular/router";
 import { SpindleApiService } from "../shared/services/spindle-api.service";
 import { SpindleReturn } from "../shared/types";
+import { SharedModule } from "../shared/shared.module";
 
 describe("SpindleComponent", () => {
     let component: SpindleComponent;
@@ -22,6 +23,7 @@ describe("SpindleComponent", () => {
             imports: [
                 HttpClientTestingModule,
                 ReactiveFormsModule,
+                SharedModule,
                 RouterModule.forRoot([]),
             ],
             declarations: [SpindleComponent, ExportButtonComponent],
