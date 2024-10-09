@@ -16,48 +16,47 @@
             explained under <a [routerLink]="['notation']">Notation</a>.
         </p>
         @if (spindleReady$ | async) {
-            <form class="form">
-                <div class="field">
-                    <label for="spindle-input" class="label">Input:</label>
-                    <input
-                        id="spindle-input"
-                        class="input"
-                        [class.is-danger]="
-                            spindleInput.touched && spindleInput.invalid
-                            "
-                        type="text"
-                        [formControl]="spindleInput"
-                        (keydown.enter)="$event.preventDefault(); parse()"
-                        placeholder="Enter a sentence..."
-                        placeholder-i18n
-                    />
-                    <p
-                        *ngIf="spindleInput.touched && spindleInput.invalid"
-                        class="help is-danger"
-                        i18n
-                    >
-                        This field is required.
-                    </p>
-                </div>
-            </form>
+        <form class="form">
+            <div class="field">
+                <label for="spindle-input" class="label">Input:</label>
+                <input
+                    id="spindle-input"
+                    class="input"
+                    [class.is-danger]="
+                        spindleInput.touched && spindleInput.invalid
+                    "
+                    type="text"
+                    [formControl]="spindleInput"
+                    (keydown.enter)="$event.preventDefault(); parse()"
+                    placeholder="Enter a sentence..."
+                    placeholder-i18n
+                />
+                <p
+                    *ngIf="spindleInput.touched && spindleInput.invalid"
+                    class="help is-danger"
+                    i18n
+                >
+                    This field is required.
+                </p>
+            </div>
+        </form>
         }
     </div>
 </div>
 
 @if (spindleReady$ | async) {
-    <div class="button-container buttons mb-3">
-        <pp-export-button
-            i18n-buttonText
-            buttonText="Parse"
-            [isLoading]="(loading$ | async) === 'term-table'"
-            (click)="parse()"
-        ></pp-export-button>
-    </div>
-}
-@else {
-    <p class="notification" i18n>
-        Spindle is temporarily unavailable.
-    </p>
+<div class="button-container buttons">
+    <pp-export-button
+        i18n-buttonText
+        buttonText="Parse"
+        [isLoading]="(loading$ | async) === 'term-table'"
+        (click)="parse()"
+    />
+</div>
+} @else {
+<p class="notification" i18n>
+    Spindle is temporarily unavailable.
+</p>
 }
 
 <div *ngIf="term && lexicalPhrases">
@@ -78,69 +77,8 @@
     </table>
 </div>
 
-<div class="mt-5" *ngIf="parsed">
-    <h4 class="title is-4" i18n>Export results</h4>
-    <div class="button-container buttons">
-        <pp-export-button
-            buttonText="Export to LaTeX"
-            [isLoading]="(loading$ | async) === 'latex'"
-            (export)="export($event)"
-            mode="latex"
-            i18n-buttonText
-        />
-        <pp-export-button
-            buttonText="Export to PDF"
-            [isLoading]="(loading$ | async) === 'pdf'"
-            (export)="export($event)"
-            mode="pdf"
-            i18n-buttonText
-        />
-        <pp-export-button
-            buttonText="Open in Overleaf"
-            [isLoading]="(loading$ | async) === 'overleaf'"
-            (export)="export($event)"
-            textBelow="Requires an Overleaf account."
-            mode="overleaf"
-            i18n-buttonText
-            i18n-textBelow
-        />
-        <pp-export-button
-            buttonText="Export JSON"
-            [isLoading]="(loading$ | async) === 'proof'"
-            (export)="export($event)"
-            mode="proof"
-            i18n-buttonText
-        />
-    </div>
-
-    <div class="output-container" *ngIf="textOutput">
-        <div class="output-button-container">
-            <button
-                class="button is-small download-file"
-                type="button"
-                (click)="downloadAsFile(textOutput.text, textOutput.extension)"
-            >
-                <span class="icon">
-                    <fa-icon [icon]="faDownload"></fa-icon>
-                </span>
-                <span i18n>Download as file</span>
-            </button>
-            <button
-                class="button is-small clipboard-copy"
-                type="button"
-                (click)="copyToClipboard(textOutput.text)"
-            >
-                <span class="icon">
-                    <fa-icon [icon]="faCopy"></fa-icon>
-                </span>
-                <span i18n>Copy text to clipboard</span>
-            </button>
-        </div>
-        <pre
-            name="text-output"
-            class="is-family-code"
-            [innerText]="textOutput.text"
-            disabled
-        ></pre>
-    </div>
-</div>
+<pp-spindle-export
+    [loading$]="loading$"
+    (exportResult)="exportResult($event)"
+    [textOutput]="textOutput"
+/>
