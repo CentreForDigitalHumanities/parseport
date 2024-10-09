@@ -55,7 +55,9 @@
     </tbody>
 </table>
 
-<pp-export-buttons [loading$]="loading$" (exportResult)="exportResult($event, sample.sentence)" />
+<section>
+    <h4 class="title is-4" i18n>Export results</h4>
+    <pp-export-buttons [loading$]="loading$" (exportResult)="exportResult($event, sample.sentence)" />
+    <pp-spindle-parse-result [textOutput]="textOutput"/>
+</section>
 }
-
-<pp-spindle-parse-result [textOutput]="textOutput$ | async"/>
