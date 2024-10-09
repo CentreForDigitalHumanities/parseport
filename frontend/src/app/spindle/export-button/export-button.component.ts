@@ -12,4 +12,8 @@ export class ExportButtonComponent {
     @Input() isLoading = false;
     @Input() buttonText = $localize`Export`;
     @Input() textBelow: string | null = null;
+
+    public getButtonClass(mode: SpindleMode | null): string {
+        return mode ? `button ${mode}-button` : "button";
+    }
 }

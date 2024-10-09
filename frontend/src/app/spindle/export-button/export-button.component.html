@@ -1,5 +1,5 @@
 <button
-    [class]="mode ? 'button ' + mode : 'button'"
+    [class]="getButtonClass(mode)"
     [class.is-loading]="isLoading"
     [class.with-text-below]="textBelow !== null"
     (click)="export.emit(mode ?? 'term-table')"
