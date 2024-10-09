@@ -6,7 +6,7 @@ import { LexicalPhrase, ExportMode } from "../shared/types";
 import { SpindleApiService } from "../shared/services/spindle-api.service";
 import { Subject, filter, map, share, switchMap, takeUntil, timer } from "rxjs";
 import { StatusService } from "../shared/services/status.service";
-import { TextOutput } from "../shared/spindle-parse-result/spindle-parse-result.component";
+import { TextOutput } from "../shared/components/spindle-parse-result/spindle-parse-result.component";
 
 @Component({
     selector: "pp-spindle",
