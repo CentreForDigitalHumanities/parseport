@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Component, DestroyRef, Input, OnInit } from "@angular/core";
+import { Component, computed, DestroyRef, Input, OnInit, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Params } from "@angular/router";
 import {
@@ -19,8 +19,22 @@ import { environment } from "src/environments/environment";
 export class SampleDataComponent implements OnInit {
     @Input({ required: true }) aethelResult: AethelListResult | null = null;
 
-    public samples: AethelSampleDataResult[] = [];
+    public limit = signal<number>(10);
     public loading = false;
+
+    // Hides the "Load More" button when all samples have been loaded.
+    public allSamplesLoaded = computed(() => {
+        if (!this.aethelResult) {
+            return false;
+        }
+        return this.limit() >= this.samples().length;
+    });
+
+    public visibleSamples = computed(() => {
+        return this.samples().slice(0, this.limit());
+    })
+
+    private samples = signal<AethelSampleDataResult[]>([]);
 
     constructor(
         private destroyRef: DestroyRef,
@@ -43,9 +57,13 @@ export class SampleDataComponent implements OnInit {
             )
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((data) => {
-                this.samples = data.results;
+                this.samples.update(existing => [...existing, ...data.results]);
                 this.loading = false;
             });
+    }
+
+    public loadMoreSamples(): void {
+        this.limit.update(limit => limit + 10);
     }
 
     public getSampleURL(sampleName: string): string[] {

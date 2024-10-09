@@ -1,9 +1,12 @@
 
 .sample-item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
+
+    a {
+        margin-left: auto;
+    }
 }
 
 .sample-item:not(:last-child) {
