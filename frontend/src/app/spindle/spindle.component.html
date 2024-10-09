@@ -73,7 +73,7 @@
             <td>
                 <span *ngFor="let item of phrase.items">{{ item.word }} </span>
             </td>
-            <td [innerHtml]="phrase.type | proof"></td>
+            <td [innerHtml]="phrase.displayType | proof"></td>
         </tr>
     </table>
 </div>
