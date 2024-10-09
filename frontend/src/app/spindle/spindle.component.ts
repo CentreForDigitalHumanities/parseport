@@ -86,10 +86,6 @@ export class SpindleComponent implements OnInit {
                         text: JSON.stringify(response.proof, null, 2),
                     };
                 }
-                if (response.term && response.lexical_phrases) {
-                    this.term = response.term;
-                    this.lexicalPhrases = response.lexical_phrases;
-                }
             });
     }
 
