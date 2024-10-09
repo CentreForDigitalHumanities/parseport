@@ -86,10 +86,7 @@ class AethelSampleDataView(APIView):
 
         word_input = json.loads(word_input)
 
-        try:
-            assert dataset is not None
-        except AssertionError:
-            # This should never happen.
+        if dataset is None:
             raise Exception("Dataset is not loaded.")
 
         # parse_prefix expects a type string with spaces.
