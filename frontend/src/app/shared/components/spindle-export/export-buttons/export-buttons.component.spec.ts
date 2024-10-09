@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ExportButtonsComponent } from "./export-buttons.component";
-import { SharedModule } from "../../shared.module";
+import { SharedModule } from "../../../shared.module";
 
 describe("ExportButtonsComponent", () => {
     let component: ExportButtonsComponent;

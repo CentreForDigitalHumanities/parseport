@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { SpindleParseResultComponent } from "./spindle-parse-result.component";
-import { SharedModule } from "../../shared.module";
+import { ExportTextComponent } from "./export-text.component";
+import { SharedModule } from "../../../shared.module";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
-describe("SpindleParseResultComponent", () => {
-    let component: SpindleParseResultComponent;
-    let fixture: ComponentFixture<SpindleParseResultComponent>;
+describe("ExportTextComponent", () => {
+    let component: ExportTextComponent;
+    let fixture: ComponentFixture<ExportTextComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [HttpClientTestingModule, SharedModule],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(SpindleParseResultComponent);
+        fixture = TestBed.createComponent(ExportTextComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

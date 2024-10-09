@@ -1,0 +1,5 @@
+<section class="mt-5">
+    <h4 class="title is-4" i18n>Export results</h4>
+    <pp-export-buttons [loading$]="loading$" (exportResult)="exportResult.emit($event)" />
+    <pp-export-text [textOutput]="textOutput"/>
+</section>

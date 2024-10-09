@@ -6,7 +6,7 @@ import {
     HttpTestingController,
 } from "@angular/common/http/testing";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ExportButtonComponent } from "../shared/components/export-button/export-button.component";
+import { ExportButtonComponent } from "../shared/components/spindle-export/export-button/export-button.component";
 import { RouterModule } from "@angular/router";
 import { SpindleApiService } from "../shared/services/spindle-api.service";
 import { SpindleReturn } from "../shared/types";

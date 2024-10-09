@@ -77,12 +77,8 @@
     </table>
 </div>
 
-<div class="mt-5" *ngIf="parsed">
-    <h4 class="title is-4" i18n>Export results</h4>
-    <pp-export-buttons
-        [loading$]="loading$"
-        (exportResult)="exportResult($event)"
-    />
-
-    <pp-spindle-parse-result [textOutput]="textOutput" />
-</div>
+<pp-spindle-export
+    [loading$]="loading$"
+    (exportResult)="exportResult($event)"
+    [textOutput]="textOutput"
+/>

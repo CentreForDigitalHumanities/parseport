@@ -30,7 +30,11 @@
     <tbody>
         <tr *ngFor="let phrase of sample.phrases; index as i">
             <td>
-                <span class="proof"><var>c<sub>{{ i }}</sub></var></span>
+                <span class="proof"
+                    ><var
+                        >c<sub>{{ i }}</sub></var
+                    ></span
+                >
             </td>
             <td>
                 <span *ngFor="let item of phrase.items">{{ item.word }} </span>
@@ -40,24 +44,33 @@
             </td>
             <td>
                 @if (showButtons(phrase.items)) {
-                    <button class="button search-button is-info" (click)="searchAethel(phrase, 'word')">
-                        Word
-                    </button>
-                    <button class="button search-button is-info" (click)="searchAethel(phrase, 'type')">
-                        Type
-                    </button>
-                    <button class="button search-button is-info" (click)="searchAethel(phrase, 'word-and-type')">
-                        Word and type
-                    </button>
+                <button
+                    class="button search-button is-info"
+                    (click)="searchAethel(phrase, 'word')"
+                >
+                    Word
+                </button>
+                <button
+                    class="button search-button is-info"
+                    (click)="searchAethel(phrase, 'type')"
+                >
+                    Type
+                </button>
+                <button
+                    class="button search-button is-info"
+                    (click)="searchAethel(phrase, 'word-and-type')"
+                >
+                    Word and type
+                </button>
                 }
             </td>
         </tr>
     </tbody>
 </table>
 
-<section>
-    <h4 class="title is-4" i18n>Export results</h4>
-    <pp-export-buttons [loading$]="loading$" (exportResult)="exportResult($event, sample.sentence)" />
-    <pp-spindle-parse-result [textOutput]="textOutput"/>
-</section>
+<pp-spindle-export
+    [loading$]="loading$"
+    (exportResult)="exportResult($event, sample.sentence)"
+    [textOutput]="textOutput"
+/>
 }

@@ -7,7 +7,7 @@ import { isNonNull } from "../shared/operators/IsNonNull";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Location } from "@angular/common";
 import { SpindleApiService } from "../shared/services/spindle-api.service";
-import { TextOutput } from "../shared/components/spindle-parse-result/spindle-parse-result.component";
+import { TextOutput } from "../shared/components/spindle-export/export-text/export-text.component";
 import { ErrorHandlerService } from "../shared/services/error-handler.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 

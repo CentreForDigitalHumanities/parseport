@@ -1,8 +1,8 @@
 import { NgModule } from "@angular/core";
 import { AlertComponent } from "./components/alert/alert.component";
 import { AlertContainerDirective } from "./directives/alert-container.directive";
-import { ExportButtonComponent } from "./components/export-button/export-button.component";
-import { ExportButtonsComponent } from "./components/export-buttons/export-buttons.component";
+import { ExportButtonComponent } from "./components/spindle-export/export-button/export-button.component";
+import { ExportButtonsComponent } from "./components/spindle-export/export-buttons/export-buttons.component";
 import { ProofPipe } from "./pipes/proof.pipe";
 import { AethelApiService } from "./services/aethel-api.service";
 import { AlertService } from "./services/alert.service";
@@ -11,8 +11,9 @@ import { ErrorHandlerService } from "./services/error-handler.service";
 import { SpindleApiService } from "./services/spindle-api.service";
 import { StatusService } from "./services/status.service";
 import { CommonModule } from "@angular/common";
-import { SpindleParseResultComponent } from "./components/spindle-parse-result/spindle-parse-result.component";
+import { ExportTextComponent } from "./components/spindle-export/export-text/export-text.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { SpindleExportComponent } from "./components/spindle-export/spindle-export.component";
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
         ExportButtonComponent,
         ExportButtonsComponent,
         ProofPipe,
-        SpindleParseResultComponent,
+        ExportTextComponent,
+        SpindleExportComponent,
     ],
     imports: [CommonModule, FontAwesomeModule],
     providers: [
@@ -35,10 +37,9 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
     exports: [
         AlertComponent,
         AlertContainerDirective,
-        ExportButtonComponent,
-        ExportButtonsComponent,
         ProofPipe,
-        SpindleParseResultComponent,
+        SpindleExportComponent,
+        ExportButtonComponent,
     ],
 })
 export class SharedModule {}

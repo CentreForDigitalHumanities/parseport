@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ExportMode } from "../../types";
+import { ExportMode } from "../../../types";
 import { Observable } from "rxjs";
 
 @Component({
