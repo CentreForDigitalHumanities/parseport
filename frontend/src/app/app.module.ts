@@ -24,6 +24,7 @@ import { ReferencesComponent } from "./references/references.component";
 import { ProofPipe } from "./shared/pipes/proof.pipe";
 import { SampleComponent } from "./sample/sample.component";
 import { SampleDataComponent } from "./aethel/sample-details/sample-data.component";
+import { AboutComponent } from "./about/about.component";
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import { SampleDataComponent } from "./aethel/sample-details/sample-data.compone
         ProofPipe,
         SampleComponent,
         SampleDataComponent,
+        AboutComponent
     ],
     imports: [
         AppRoutingModule,

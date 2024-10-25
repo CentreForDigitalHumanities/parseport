@@ -7,9 +7,7 @@ describe("MinimalistParserBrowserComponent", () => {
     let fixture: ComponentFixture<MinimalistParserBrowserComponent>;
 
     beforeEach(async () => {
-        await TestBed.configureTestingModule({
-            imports: [MinimalistParserBrowserComponent],
-        }).compileComponents();
+        await TestBed.configureTestingModule({}).compileComponents();
 
         fixture = TestBed.createComponent(MinimalistParserBrowserComponent);
         component = fixture.componentInstance;
