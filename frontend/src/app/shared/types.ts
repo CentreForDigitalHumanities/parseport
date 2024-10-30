@@ -20,9 +20,10 @@ type LexicalItem = {
     lemma: string;
 };
 
-export type LexicalPhrase = {
+export type AethelDetailPhrase = {
     items: LexicalItem[];
     type: string;
+    displayType: string;
 };
 
 // Should correspond with SpindleResponse dataclass in backend.
@@ -32,7 +33,7 @@ export interface SpindleReturn {
     pdf: string | null;
     redirect: string | null;
     term: string | null;
-    lexical_phrases: LexicalPhrase[];
+    lexical_phrases: AethelDetailPhrase[];
     proof: Record<string, unknown> | null;
 }
 
@@ -41,6 +42,8 @@ export type AethelMode = "word" | "type" | "word-and-type";
 export interface AethelInput {
     word?: string;
     type?: string;
+    limit?: number;
+    skip?: number;
 }
 
 export interface AethelListLexicalItem {
@@ -61,6 +64,7 @@ export interface AethelListResult {
 
 export interface AethelList {
     results: AethelListResult[];
+    totalCount: number;
     error: string | null;
 }
 
@@ -76,7 +80,7 @@ export interface AethelDetailResult {
     name: string;
     term: string;
     subset: string;
-    phrases: LexicalPhrase[];
+    phrases: AethelDetailPhrase[];
 }
 
 export interface AethelDetail {

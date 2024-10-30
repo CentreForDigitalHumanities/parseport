@@ -2,7 +2,7 @@ import { Component, DestroyRef, OnInit } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { AethelApiService } from "../shared/services/aethel-api.service";
 import { map } from "rxjs";
-import { AethelMode, ExportMode, LexicalPhrase } from "../shared/types";
+import { AethelDetailPhrase, AethelMode, ExportMode } from "../shared/types";
 import { isNonNull } from "../shared/operators/IsNonNull";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Location } from "@angular/common";
@@ -78,7 +78,7 @@ export class SampleComponent implements OnInit {
             });
     }
 
-    public searchAethel(phrase: LexicalPhrase, mode: AethelMode): void {
+    public searchAethel(phrase: AethelDetailPhrase, mode: AethelMode): void {
         const queryParams = this.formatQueryParams(phrase, mode);
         this.router.navigate(["/aethel"], { queryParams });
     }
@@ -90,7 +90,7 @@ export class SampleComponent implements OnInit {
         });
     }
 
-    public showButtons(items: LexicalPhrase["items"]): boolean {
+    public showButtons(items: AethelDetailPhrase["items"]): boolean {
         // Buttons are hidden if the phrase contains too few characters.
         const combined = items.map((item) => item.word).join(" ");
         return combined.length > 2;
@@ -100,7 +100,10 @@ export class SampleComponent implements OnInit {
         this.location.back();
     }
 
-    private formatQueryParams(phrase: LexicalPhrase, mode: AethelMode): Params {
+    private formatQueryParams(
+        phrase: AethelDetailPhrase,
+        mode: AethelMode,
+    ): Params {
         const queryParams: Params = {};
         if (mode === "word" || mode === "word-and-type") {
             queryParams["word"] = phrase.items

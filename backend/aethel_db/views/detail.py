@@ -1,10 +1,10 @@
 from enum import Enum
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 
 from django.http import HttpRequest, JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
-from spindle.utils import serialize_phrases_with_infix_notation
+from spindle.utils import serialize_phrases
 from aethel.frontend import Sample
 
 from aethel_db.models import dataset
@@ -16,7 +16,23 @@ class AethelDetailResult:
     name: str
     term: str
     subset: str
-    phrases: list[dict]
+    phrases: list[dict[str, str]]
+
+    def serialize(self):
+        return {
+            "sentence": self.sentence,
+            "name": self.name,
+            "term": self.term,
+            "subset": self.subset,
+            "phrases": [
+                {
+                    "type": phrase["type"],
+                    "displayType": phrase["display_type"],
+                    "items": phrase["items"],
+                }
+                for phrase in self.phrases
+            ],
+        }
 
 
 class AethelDetailError(Enum):
@@ -43,18 +59,17 @@ class AethelDetailResponse:
             name=sample.name,
             term=str(sample.proof.term),
             subset=sample.subset,
-            phrases=serialize_phrases_with_infix_notation(sample.lexical_phrases),
+            phrases=serialize_phrases(sample.lexical_phrases),
         )
 
     def json_response(self) -> JsonResponse:
-        result = asdict(self.result) if self.result else None
         status_code = (
             AETHEL_DETAIL_STATUS_CODES[self.error] if self.error else status.HTTP_200_OK
         )
 
         return JsonResponse(
             {
-                "result": result,
+                "result": self.result.serialize() if self.result else None,
                 "error": self.error,
             },
             status=status_code,

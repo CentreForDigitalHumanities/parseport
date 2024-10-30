@@ -10,15 +10,16 @@ import {
 import {
     AethelDetail,
     AethelDetailError,
-    LexicalPhrase,
+    AethelDetailPhrase,
 } from "../shared/types";
 import { By } from "@angular/platform-browser";
 import { SharedModule } from "../shared/shared.module";
 import { CommonModule } from "@angular/common";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
-const fakePhrase: LexicalPhrase = {
+const fakePhrase: AethelDetailPhrase = {
     type: "cheese->tosti",
+    displayType: "cheese -> tosti",
     items: [
         {
             word: "cheeses",

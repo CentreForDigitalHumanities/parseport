@@ -2,7 +2,7 @@ import { Component, DestroyRef, OnInit } from "@angular/core";
 import { FormControl, Validators } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ErrorHandlerService } from "../shared/services/error-handler.service";
-import { LexicalPhrase, ExportMode } from "../shared/types";
+import { AethelDetailPhrase, ExportMode } from "../shared/types";
 import { SpindleApiService } from "../shared/services/spindle-api.service";
 import { Subject, filter, map, share, switchMap, takeUntil, timer } from "rxjs";
 import { StatusService } from "../shared/services/status.service";
@@ -19,7 +19,7 @@ export class SpindleComponent implements OnInit {
     });
     term: string | null = null;
     textOutput: TextOutput | null = null;
-    lexicalPhrases: LexicalPhrase[] = [];
+    lexicalPhrases: AethelDetailPhrase[] = [];
     loading$ = this.apiService.loading$;
 
     stopStatus$ = new Subject<void>();

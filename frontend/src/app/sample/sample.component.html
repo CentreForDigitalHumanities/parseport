@@ -40,7 +40,7 @@
                 <span *ngFor="let item of phrase.items">{{ item.word }} </span>
             </td>
             <td>
-                <span class="proof" [innerHtml]="phrase.type | proof"></span>
+                <span class="proof" [innerHtml]="phrase.displayType | proof"></span>
             </td>
             <td>
                 @if (showButtons(phrase.items)) {
