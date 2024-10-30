@@ -22,14 +22,13 @@ from aethel.frontend import (
     serial_proof_to_json,
 )
 
-from spindle.utils import serialize_phrases_with_infix_notation
+from spindle.utils import serialize_phrases
 
 http = urllib3.PoolManager()
 
 
 # Output mode
 Mode = Literal["latex", "pdf", "overleaf", "term-table", "proof"]
-
 
 
 class SpindleErrorSource(Enum):
@@ -52,6 +51,11 @@ class SpindleResponse:
 
     def json_response(self) -> JsonResponse:
         # TODO: set HTTP error code when error is not None
+
+        # Convert display_type to displayType for frontend.
+        for phrase in self.lexical_phrases:
+            phrase["displayType"] = phrase.pop("display_type")
+
         return JsonResponse(
             {
                 "latex": self.latex,
@@ -193,7 +197,7 @@ class SpindleView(View):
     def term_table_response(self, parsed: ParserResponse) -> JsonResponse:
         """Return the term and the lexical phrases as a JSON response."""
 
-        phrases = serialize_phrases_with_infix_notation(parsed.lexical_phrases)
+        phrases = serialize_phrases(parsed.lexical_phrases)
         return SpindleResponse(
             term=str(parsed.proof.term),
             lexical_phrases=phrases,
@@ -210,10 +214,10 @@ def spindle_status():
     try:
         r = http.request(
             method="GET",
-            url=settings.SPINDLE_URL + '/status/',
+            url=settings.SPINDLE_URL + "/status/",
             headers={"Content-Type": "application/json"},
             timeout=1,
-            retries=False
+            retries=False,
         )
         return r.status < 400
     except Exception:
