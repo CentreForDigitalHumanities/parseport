@@ -90,7 +90,7 @@ class AethelSampleDataView(APIView):
             raise Exception("Dataset is not loaded.")
 
         # parse_prefix expects a type string with spaces.
-        type_input = Type.parse_prefix(type_input, debug=True)
+        type_input = Type.parse_prefix(type_input)
         by_type = dataset.by_type(str(type_input))  # re-serialize type to match index
         by_word = dataset.by_words(word_input)
         by_name = {sample.name: sample for sample in by_type + by_word}
