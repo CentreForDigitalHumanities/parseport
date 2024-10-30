@@ -1,20 +1,24 @@
-import { Component } from "@angular/core";
+import { Component, DestroyRef, OnInit } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { AethelApiService } from "../shared/services/aethel-api.service";
 import { map } from "rxjs";
-import { AethelMode, AethelDetailPhrase } from "../shared/types";
+import { AethelDetailPhrase, AethelMode, ExportMode } from "../shared/types";
 import { isNonNull } from "../shared/operators/IsNonNull";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Location } from "@angular/common";
+import { SpindleApiService } from "../shared/services/spindle-api.service";
+import { TextOutput } from "../shared/components/spindle-export/export-text/export-text.component";
+import { ErrorHandlerService } from "../shared/services/error-handler.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
     selector: "pp-sample",
     templateUrl: "./sample.component.html",
     styleUrl: "./sample.component.scss",
 })
-export class SampleComponent {
+export class SampleComponent implements OnInit {
     private sampleName = this.route.snapshot.params["sampleName"];
-    private sample$ = this.apiService.sampleResult$(this.sampleName);
+    private sample$ = this.aethelService.sampleResult$(this.sampleName);
     public sampleResult$ = this.sample$.pipe(
         map((response) => response?.result),
         isNonNull(),
@@ -24,16 +28,66 @@ export class SampleComponent {
         arrowLeft: faArrowLeft,
     };
 
+    public loading$ = this.spindleService.loading$;
+
+    public textOutput: TextOutput | null = null;
+
     constructor(
+        private destroyRef: DestroyRef,
         private route: ActivatedRoute,
-        private apiService: AethelApiService,
+        private spindleService: SpindleApiService,
+        private aethelService: AethelApiService,
+        private errorHandler: ErrorHandlerService,
         private router: Router,
         private location: Location,
     ) {}
 
+    ngOnInit(): void {
+        this.spindleService.output$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((response) => {
+                // HTTP error
+                if (!response) {
+                    return;
+                }
+                if (response.error) {
+                    this.errorHandler.handleSpindleError(response.error);
+                    return;
+                }
+                if (response.latex) {
+                    this.textOutput = {
+                        extension: "tex",
+                        text: response.latex,
+                    };
+                }
+                if (response.redirect) {
+                    // Opens a new tab.
+                    window.open(response.redirect, "_blank");
+                }
+                if (response.pdf) {
+                    const base64 = response.pdf;
+                    this.spindleService.downloadAsFile(base64, "pdf");
+                }
+                if (response.proof) {
+                    this.textOutput = {
+                        extension: "json",
+                        // The additional arguments are for pretty-printing.
+                        text: JSON.stringify(response.proof, null, 2),
+                    };
+                }
+            });
+    }
+
     public searchAethel(phrase: AethelDetailPhrase, mode: AethelMode): void {
         const queryParams = this.formatQueryParams(phrase, mode);
         this.router.navigate(["/aethel"], { queryParams });
+    }
+
+    public exportResult(mode: ExportMode, sentence: string): void {
+        this.spindleService.input$.next({
+            mode,
+            sentence,
+        });
     }
 
     public showButtons(items: AethelDetailPhrase["items"]): boolean {

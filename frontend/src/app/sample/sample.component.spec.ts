@@ -13,7 +13,8 @@ import {
     AethelDetailPhrase,
 } from "../shared/types";
 import { By } from "@angular/platform-browser";
-import { ProofPipe } from "../shared/pipes/proof.pipe";
+import { SharedModule } from "../shared/shared.module";
+import { CommonModule } from "@angular/common";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 const fakePhrase: AethelDetailPhrase = {
@@ -39,10 +40,12 @@ describe("SampleComponent", () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [SampleComponent, ProofPipe],
+            declarations: [SampleComponent],
             imports: [
                 HttpClientTestingModule,
+                SharedModule,
                 FontAwesomeModule,
+                CommonModule,
                 RouterModule.forRoot(routes),
             ],
             providers: [
