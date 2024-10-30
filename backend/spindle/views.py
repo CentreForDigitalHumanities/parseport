@@ -53,13 +53,8 @@ class SpindleResponse:
         # TODO: set HTTP error code when error is not None
 
         # Convert display_type to displayType for frontend.
-        camelized = [
-            {
-                **{k: v for k, v in phrase.items() if k != "display_type"},
-                "displayType": phrase["display_type"],
-            }
-            for phrase in self.lexical_phrases
-        ]
+        for phrase in self.lexical_phrases:
+            phrase["displayType"] = phrase.pop("display_type")
 
         return JsonResponse(
             {
@@ -68,7 +63,7 @@ class SpindleResponse:
                 "redirect": self.redirect,
                 "error": self.error.value if self.error else None,
                 "term": self.term,
-                "lexical_phrases": camelized,
+                "lexical_phrases": self.lexical_phrases,
                 "proof": self.proof,
             }
         )
