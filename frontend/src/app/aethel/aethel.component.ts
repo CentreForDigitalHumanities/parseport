@@ -24,6 +24,9 @@ export class AethelComponent implements OnInit {
             nonNullable: true,
             validators: [Validators.minLength(3)],
         }),
+        type: new FormControl<string>("", {
+            nonNullable: true,
+        }),
         limit: new FormControl<number>(10, {
             nonNullable: true,
         }),
@@ -50,20 +53,6 @@ export class AethelComponent implements OnInit {
         private route: ActivatedRoute,
         private statusService: StatusService,
     ) {}
-
-    changePage(page: TablePageEvent): void {
-        if (
-            page.first === this.form.controls.skip.value &&
-            page.rows === this.form.controls.limit.value
-        ) {
-            return;
-        }
-        this.form.patchValue({
-            skip: page.first,
-            limit: page.rows,
-        });
-        this.prepareQuery();
-    }
 
     ngOnInit(): void {
         this.statusService
@@ -100,9 +89,23 @@ export class AethelComponent implements OnInit {
                     ? parseInt(query["limit"], 10)
                     : 10;
 
-                this.form.patchValue({ word, skip, limit });
+                this.form.patchValue({ word, type, skip, limit });
                 this.apiService.input$.next({ word, type, skip, limit });
             });
+    }
+
+    public changePage(page: TablePageEvent): void {
+        if (
+            page.first === this.form.controls.skip.value &&
+            page.rows === this.form.controls.limit.value
+        ) {
+            return;
+        }
+        this.form.patchValue({
+            skip: page.first,
+            limit: page.rows,
+        });
+        this.prepareQuery();
     }
 
     public combineWord(row: AethelListResult): string {
@@ -116,6 +119,7 @@ export class AethelComponent implements OnInit {
     public submitWord(): void {
         // When the user submits a new word, go back to the first page.
         this.form.controls.skip.setValue(0);
+        this.form.controls.type.setValue("");
         this.prepareQuery();
     }
 
@@ -127,17 +131,33 @@ export class AethelComponent implements OnInit {
     }
 
     private updateUrl(queryInput: AethelInput): void {
-        // This does not actually refresh the page because it just adds parameters to the current route.
-        // This triggers a new query.
+        // This does not actually refresh the page because it just adds
+        // parameters to the current route. This triggers a new query.
         const url = this.router
             .createUrlTree([], {
                 relativeTo: this.route,
-                queryParams: {
-                    ...queryInput,
-                },
+                queryParams: this.formatQueryParams(queryInput),
             })
             .toString();
         this.router.navigateByUrl(url);
+    }
+
+    private formatQueryParams(queryInput: AethelInput): AethelInput {
+        const queryParams: AethelInput = {};
+
+        // Only include word and type in the URL if they are not null,
+        // undefined or an empty string.
+        if (queryInput.word && queryInput.word !== "") {
+            queryParams.word = queryInput.word;
+        }
+        if (queryInput.type && queryInput.type !== "") {
+            queryParams.type = queryInput.type;
+        }
+
+        queryParams.limit = queryInput.limit;
+        queryParams.skip = queryInput.skip;
+
+        return queryParams;
     }
 
     /**
