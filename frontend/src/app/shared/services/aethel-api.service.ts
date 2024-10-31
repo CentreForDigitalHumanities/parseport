@@ -52,7 +52,7 @@ export class AethelApiService
             }
 
             return this.http
-                .get<AethelList | null>(`${environment.apiUrl}aethel/`, {
+                .get<AethelList | null>(`${environment.apiUrl}aethel`, {
                     headers,
                     params,
                 })
