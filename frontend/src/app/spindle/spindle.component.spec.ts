@@ -6,10 +6,11 @@ import {
     HttpTestingController,
 } from "@angular/common/http/testing";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ExportButtonComponent } from "./export-button/export-button.component";
+import { ExportButtonComponent } from "../shared/components/spindle-export/export-button/export-button.component";
 import { RouterModule } from "@angular/router";
 import { SpindleApiService } from "../shared/services/spindle-api.service";
 import { SpindleReturn } from "../shared/types";
+import { SharedModule } from "../shared/shared.module";
 
 describe("SpindleComponent", () => {
     let component: SpindleComponent;
@@ -22,6 +23,7 @@ describe("SpindleComponent", () => {
             imports: [
                 HttpClientTestingModule,
                 ReactiveFormsModule,
+                SharedModule,
                 RouterModule.forRoot([]),
             ],
             declarations: [SpindleComponent, ExportButtonComponent],
@@ -62,7 +64,7 @@ describe("SpindleComponent", () => {
             expect(input.mode).toEqual("pdf");
             expect(input.sentence).toEqual("test sentence 2");
         });
-        component.export("pdf");
+        component.exportResult("pdf");
         const request = httpTestingController.expectOne("/api/spindle/pdf");
         request.flush({});
     });
@@ -70,7 +72,7 @@ describe("SpindleComponent", () => {
     it("should start a download when export to PDF is clicked", () => {
         // Private method, so any is required.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const downloadSpy = spyOn<any>(component, "downloadFile");
+        const downloadSpy = spyOn<any>(apiService, "downloadFile");
 
         const fakeReturn: SpindleReturn = {
             error: null,
@@ -83,7 +85,7 @@ describe("SpindleComponent", () => {
         };
 
         component.spindleInput.setValue("test sentence 3");
-        component.export("pdf");
+        component.exportResult("pdf");
 
         const request = httpTestingController.expectOne("/api/spindle/pdf");
         expect(request.request.method).toEqual("POST");
@@ -107,7 +109,7 @@ describe("SpindleComponent", () => {
         };
 
         component.spindleInput.setValue("test sentence 4");
-        component.export("proof");
+        component.exportResult("proof");
 
         const request = httpTestingController.expectOne("/api/spindle/proof");
         expect(request.request.method).toEqual("POST");

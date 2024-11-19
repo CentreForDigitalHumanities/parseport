@@ -11,36 +11,28 @@ import { MenuComponent } from "./menu/menu.component";
 import { HomeComponent } from "./home/home.component";
 import { SpindleComponent } from "./spindle/spindle.component";
 import { ReactiveFormsModule } from "@angular/forms";
-import { AlertComponent } from "./shared/components/alert/alert.component";
-import { AlertContainerDirective } from "./shared/directives/alert-container.directive";
-import { AlertService } from "./shared/services/alert.service";
-import { ExportButtonComponent } from "./spindle/export-button/export-button.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { TableModule } from "primeng/table";
 import { AethelComponent } from "./aethel/aethel.component";
 import { SpindleAboutComponent } from "./spindle/spindle-about/spindle-about.component";
 import { SpindleNotationComponent } from "./spindle/spindle-notation/spindle-notation.component";
 import { ReferencesComponent } from "./references/references.component";
-import { ProofPipe } from "./shared/pipes/proof.pipe";
 import { SampleComponent } from "./sample/sample.component";
 import { SampleDataComponent } from "./aethel/sample-details/sample-data.component";
 import { AboutComponent } from "./about/about.component";
+import { SharedModule } from "./shared/shared.module";
 
 @NgModule({
     declarations: [
-        AlertComponent,
-        AlertContainerDirective,
         AppComponent,
         FooterComponent,
         HomeComponent,
         MenuComponent,
         SpindleComponent,
-        ExportButtonComponent,
         SpindleAboutComponent,
         SpindleNotationComponent,
         ReferencesComponent,
         AethelComponent,
-        ProofPipe,
         SampleComponent,
         SampleDataComponent,
         AboutComponent
@@ -53,8 +45,8 @@ import { AboutComponent } from "./about/about.component";
         ReactiveFormsModule,
         FontAwesomeModule,
         TableModule,
+        SharedModule,
     ],
-    providers: [AlertService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
