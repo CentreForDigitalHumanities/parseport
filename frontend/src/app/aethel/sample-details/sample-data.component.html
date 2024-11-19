@@ -1,11 +1,9 @@
 <td colspan="5">
-    @if (loading) {
-    <p i18n>Loading samples...</p>
-    } @else {
-    <ul class="sample-list">
-        @for (sample of samples; track $index) {
+    <ul class="sample-list mb-2">
+        @for (sample of visibleSamples(); track $index) {
         <li class="sample-item">
-            <p class="phrase-list">
+            <p>{{ $index + 1 }}</p>
+            <p class="phrase-list mx-2">
                 @for (phrase of sample.phrases; track phrase.index) {
                 <span [class.highlight]="phrase.highlight"
                     >{{ phrase.display }}
@@ -14,7 +12,7 @@
             </p>
             <a
                 [routerLink]="getSampleURL(sample.name)"
-                class="button is-primary ml-2"
+                class="button is-primary"
                 i18n
             >
                 Go to sample
@@ -22,5 +20,16 @@
         </li>
         }
     </ul>
+    @if (loading) {
+        <p i18n>Loading samples...</p>
+    }
+    @else if (!allSamplesLoaded()) {
+    <button
+        class="button button-primary"
+        type="button"
+        (click)="loadMoreSamples()"
+    >
+        Load more
+    </button>
     }
 </td>

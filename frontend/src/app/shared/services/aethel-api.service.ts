@@ -44,9 +44,15 @@ export class AethelApiService
             if (input.type) {
                 params = params.set("type", input.type);
             }
+            if (input.limit) {
+                params = params.set("limit", input.limit.toString());
+            }
+            if (input.skip) {
+                params = params.set("skip", input.skip.toString());
+            }
 
             return this.http
-                .get<AethelList | null>(`${environment.apiUrl}aethel/`, {
+                .get<AethelList | null>(`${environment.apiUrl}aethel`, {
                     headers,
                     params,
                 })

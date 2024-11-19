@@ -1,6 +1,6 @@
 {
     "name": "parseport",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Dutch sentence parser for Spindle + Æthel (and maybe others in the future).",
     "author": "UU Centre for Digital Humanities - Research Software Lab",
     "license": "BSD-3-Clause",

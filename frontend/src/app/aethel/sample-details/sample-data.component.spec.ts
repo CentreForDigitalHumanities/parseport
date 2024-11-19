@@ -62,7 +62,7 @@ describe("SampleDataComponent", () => {
         expect(req.request.method).toBe("GET");
         req.flush(mockResponse);
 
-        expect(component.samples).toEqual(mockResponse.results);
+        expect(component['samples']()).toEqual(mockResponse.results);
         expect(component.loading).toBeFalse();
     });
 

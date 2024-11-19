@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AethelListResult } from "../shared/types";
+import { AethelInput, AethelListResult } from "../shared/types";
 import { AethelApiService } from "../shared/services/aethel-api.service";
 import { Subject, distinctUntilChanged, map } from "rxjs";
 import {
@@ -11,6 +11,7 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { isNonNull } from "../shared/operators/IsNonNull";
 import { StatusService } from "../shared/services/status.service";
+import { TablePageEvent } from "primeng/table";
 
 @Component({
     selector: "pp-aethel",
@@ -19,11 +20,22 @@ import { StatusService } from "../shared/services/status.service";
 })
 export class AethelComponent implements OnInit {
     public form = new FormGroup({
-        aethelInput: new FormControl<string>("", {
+        word: new FormControl<string>("", {
+            nonNullable: true,
             validators: [Validators.minLength(3)],
+        }),
+        type: new FormControl<string>("", {
+            nonNullable: true,
+        }),
+        limit: new FormControl<number>(10, {
+            nonNullable: true,
+        }),
+        skip: new FormControl<number>(0, {
+            nonNullable: true,
         }),
     });
     public rows: AethelListResult[] = [];
+    public totalRowCount = 0;
     public loading$ = this.apiService.loading$;
     public submitted = this.apiService.output$.pipe(map(() => true));
 
@@ -32,7 +44,7 @@ export class AethelComponent implements OnInit {
         chevronDown: faChevronDown,
     };
 
-    status$ = new Subject();
+    public status$ = new Subject<boolean>();
 
     constructor(
         private apiService: AethelApiService,
@@ -59,6 +71,7 @@ export class AethelComponent implements OnInit {
                     // TODO: handle error!
                 }
                 this.rows = this.addUniqueKeys(response.results);
+                this.totalRowCount = response.totalCount;
             });
 
         // Whenever the query parameter changes, we run a new query.
@@ -69,13 +82,30 @@ export class AethelComponent implements OnInit {
                 takeUntilDestroyed(this.destroyRef),
             )
             .subscribe((query) => {
-                const word = query["word"];
+                const word = query["word"] ?? "";
                 const type = query["type"];
-                if (word) {
-                    this.form.controls.aethelInput.setValue(word);
-                }
-                this.apiService.input$.next({ word, type });
+                const skip = query["skip"] ? parseInt(query["skip"], 10) : 0;
+                const limit = query["limit"]
+                    ? parseInt(query["limit"], 10)
+                    : 10;
+
+                this.form.patchValue({ word, type, skip, limit });
+                this.apiService.input$.next({ word, type, skip, limit });
             });
+    }
+
+    public changePage(page: TablePageEvent): void {
+        if (
+            page.first === this.form.controls.skip.value &&
+            page.rows === this.form.controls.limit.value
+        ) {
+            return;
+        }
+        this.form.patchValue({
+            skip: page.first,
+            limit: page.rows,
+        });
+        this.prepareQuery();
     }
 
     public combineWord(row: AethelListResult): string {
@@ -86,26 +116,48 @@ export class AethelComponent implements OnInit {
         return row.phrase.items.map((item) => item.lemma).join(" ");
     }
 
-    public submit(): void {
-        this.form.markAllAsTouched();
-        this.form.controls.aethelInput.updateValueAndValidity();
-        const query = this.form.controls.aethelInput.value;
-        if (!query) {
-            return;
-        }
-        this.updateUrl(query);
+    public submitWord(): void {
+        // When the user submits a new word, go back to the first page.
+        this.form.controls.skip.setValue(0);
+        this.form.controls.type.setValue("");
+        this.prepareQuery();
     }
 
-    private updateUrl(query: string): void {
-        // This does not actually refresh the page because it just adds parameters to the current route.
-        // It just updates the URL in the browser, triggering a new query.
+    private prepareQuery(): void {
+        this.form.markAllAsTouched();
+        this.form.controls.word.updateValueAndValidity();
+        const queryInput: AethelInput = this.form.getRawValue();
+        this.updateUrl(queryInput);
+    }
+
+    private updateUrl(queryInput: AethelInput): void {
+        // This does not actually refresh the page because it just adds
+        // parameters to the current route. This triggers a new query.
         const url = this.router
             .createUrlTree([], {
                 relativeTo: this.route,
-                queryParams: { word: query },
+                queryParams: this.formatQueryParams(queryInput),
             })
             .toString();
         this.router.navigateByUrl(url);
+    }
+
+    private formatQueryParams(queryInput: AethelInput): AethelInput {
+        const queryParams: AethelInput = {};
+
+        // Only include word and type in the URL if they are not null,
+        // undefined or an empty string.
+        if (queryInput.word && queryInput.word !== "") {
+            queryParams.word = queryInput.word;
+        }
+        if (queryInput.type && queryInput.type !== "") {
+            queryParams.type = queryInput.type;
+        }
+
+        queryParams.limit = queryInput.limit;
+        queryParams.skip = queryInput.skip;
+
+        return queryParams;
     }
 
     /**
