@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "revproxy",
     "corsheaders",
     "aethel_db",
+    "minimalist_parser",
 ]
 
 MIDDLEWARE = [
