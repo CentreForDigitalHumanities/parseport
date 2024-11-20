@@ -14,6 +14,8 @@ import { CommonModule } from "@angular/common";
 import { ExportTextComponent } from "./components/spindle-export/export-text/export-text.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { SpindleExportComponent } from "./components/spindle-export/spindle-export.component";
+import { MpApiService } from "./services/mp-api.service";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
     declarations: [
@@ -25,7 +27,7 @@ import { SpindleExportComponent } from "./components/spindle-export/spindle-expo
         ExportTextComponent,
         SpindleExportComponent,
     ],
-    imports: [CommonModule, FontAwesomeModule],
+    imports: [CommonModule, FontAwesomeModule, ReactiveFormsModule],
     providers: [
         AethelApiService,
         AlertService,
@@ -33,6 +35,7 @@ import { SpindleExportComponent } from "./components/spindle-export/spindle-expo
         ErrorHandlerService,
         SpindleApiService,
         StatusService,
+        MpApiService,
     ],
     exports: [
         AlertComponent,
@@ -40,6 +43,9 @@ import { SpindleExportComponent } from "./components/spindle-export/spindle-expo
         ProofPipe,
         SpindleExportComponent,
         ExportButtonComponent,
+        CommonModule,
+        ReactiveFormsModule,
+        FontAwesomeModule,
     ],
 })
 export class SharedModule {}

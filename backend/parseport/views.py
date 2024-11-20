@@ -33,7 +33,10 @@ class StatusView(APIView):
             dict(
                 aethel=aethel_status(),
                 spindle=status_check('spindle'),
-                mp=status_check('minimalist_parser'),
-                vulcan=status_check('vulcan'),
+                mp=True,
+                vulcan=True,
+                # When the minimalist_parser and vulcan services are up and running, uncomment the following lines.
+                # mp=status_check('minimalist_parser'),
+                # vulcan=status_check('vulcan'),
             )
         )
