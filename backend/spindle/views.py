@@ -23,8 +23,7 @@ from aethel.frontend import (
 )
 
 from spindle.utils import serialize_phrases
-
-http = urllib3.PoolManager()
+from parseport.http_client import http_client
 
 
 # Output mode
@@ -105,7 +104,7 @@ class SpindleView(View):
     def send_to_parser(self, text: str) -> Optional[ParserResponse]:
         """Send request to downstream (natural language) parser"""
         # Sending data to Spindle container.
-        spindle_response = http.request(
+        spindle_response = http_client.request(
             method="POST",
             url=settings.SPINDLE_URL,
             body=json.dumps({"input": text}),
@@ -163,7 +162,7 @@ class SpindleView(View):
 
     def pdf_response(self, latex: str) -> JsonResponse:
         """Forward LaTeX code to LaTeX service. Return PDF"""
-        latex_response = http.request(
+        latex_response = http_client.request(
             method="POST",
             url=settings.LATEX_SERVICE_URL,
             body=latex,
@@ -208,17 +207,3 @@ class SpindleView(View):
         return SpindleResponse(
             proof=serial_proof_to_json(serialize_proof(parsed.proof))
         ).json_response()
-
-
-def spindle_status():
-    try:
-        r = http.request(
-            method="GET",
-            url=settings.SPINDLE_URL + "/status/",
-            headers={"Content-Type": "application/json"},
-            timeout=1,
-            retries=False,
-        )
-        return r.status < 400
-    except Exception:
-        return False
