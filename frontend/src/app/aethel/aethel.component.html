@@ -5,7 +5,7 @@
     start.
 </p>
 
-@if (status$ | async) {
+@if (statusOk$ | async) {
     <form class="form" [formGroup]="form" (ngSubmit)="submitWord()">
         <div class="field">
             <label for="aethel-input" class="label">Search:</label>

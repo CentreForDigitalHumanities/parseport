@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.urls import path, include
 from django.contrib import admin
 from django.views.generic import RedirectView
@@ -35,6 +36,7 @@ urlpatterns = [
     path("api/status/", StatusView.as_view(), name="status"),
     path("api/spindle/<str:mode>", SpindleView.as_view(), name="spindle"),
     path("api/aethel/", include("aethel_db.urls")),
+    path("api/mp/", include("minimalist_parser.urls")),
     path(
         "api-auth/",
         include(

@@ -6,15 +6,17 @@ import { environment } from "src/environments/environment";
 interface Status {
     aethel: boolean;
     spindle: boolean;
+    mp: boolean;
+    vulcan: boolean;
 }
 
 @Injectable({
-    providedIn: "root"
+    providedIn: "root",
 })
-export class StatusService{
+export class StatusService {
     constructor(private http: HttpClient) {}
 
-    get(): Observable<Status> {
+    public getStatus$(): Observable<Status> {
         return this.http.get<Status>(`${environment.apiUrl}status/`);
     }
 }

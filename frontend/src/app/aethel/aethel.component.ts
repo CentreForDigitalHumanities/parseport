@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AethelInput, AethelListResult } from "../shared/types";
 import { AethelApiService } from "../shared/services/aethel-api.service";
-import { Subject, distinctUntilChanged, map } from "rxjs";
+import { distinctUntilChanged, map } from "rxjs";
 import {
     faChevronDown,
     faChevronRight,
@@ -44,7 +44,9 @@ export class AethelComponent implements OnInit {
         chevronDown: faChevronDown,
     };
 
-    public status$ = new Subject<boolean>();
+    public statusOk$ = this.statusService.getStatus$().pipe(
+        map((status) => status.aethel),
+    );
 
     constructor(
         private apiService: AethelApiService,
@@ -55,11 +57,6 @@ export class AethelComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.statusService
-            .get()
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((status) => this.status$.next(status.aethel));
-
         this.apiService.output$
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((response) => {
