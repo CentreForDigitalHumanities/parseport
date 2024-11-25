@@ -13,6 +13,7 @@ services:
     ng-dev:
         image: pp-ng-dev
         container_name: pp-ng
+        restart: no
         profiles: ["dev"]
         build:
             context: ./frontend
@@ -58,6 +59,7 @@ services:
     dj-dev:
         <<: *dj-prod
         image: pp-dj-dev
+        restart: no
         profiles: ["dev"]
         environment:
             - DJANGO_DEBUG=1
@@ -85,6 +87,7 @@ services:
     spindle-dev:
         <<: *spindle-prod
         image: pp-spindle-dev
+        restart: no
         profiles: ["dev"]
         command: flask run --host 0.0.0.0 --port 32768
         ports:
@@ -110,6 +113,7 @@ services:
     latex-dev:
         <<: *latex-prod
         image: pp-latex-dev
+        restart: no
         profiles: ["dev"]
         command: flask run --host 0.0.0.0 --port 32769
         ports:
