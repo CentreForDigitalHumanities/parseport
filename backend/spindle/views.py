@@ -1,7 +1,5 @@
 import base64
 import json
-import logging
-import urllib3
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Literal, Optional, List
@@ -11,6 +9,7 @@ from django.conf import settings
 from django.http import HttpRequest, JsonResponse
 from django.views import View
 
+from parseport.logger import logger
 from aethel.frontend import (
     LexicalPhrase,
     Proof,
@@ -98,7 +97,7 @@ class SpindleView(View):
 
         # Only if the query param is not a valid mode
         # This should never happen.
-        logging.warn("Received unexpected mode.")
+        logger.warning("Received unexpected mode.")
         return SpindleResponse(error=SpindleErrorSource.GENERAL).json_response()
 
     def send_to_parser(self, text: str) -> Optional[ParserResponse]:
@@ -112,7 +111,7 @@ class SpindleView(View):
         )
 
         if spindle_response.status != 200:
-            logging.warn(
+            logger.warning(
                 "Received non-200 response from Spindle server for input %s", text
             )
             return None
@@ -120,7 +119,7 @@ class SpindleView(View):
         try:
             spindle_response_json = spindle_response.json()
         except json.JSONDecodeError as e:
-            logging.warn("Spindle response is not JSON parseable: %s", e.msg)
+            logger.warning("Spindle response is not JSON parseable: %s", e.msg)
             return None
 
         try:
@@ -135,7 +134,7 @@ class SpindleView(View):
                 ],
             )
         except:
-            logging.exception(
+            logger.exception(
                 "Spindle response does not contain valid 'results': %s",
                 json.dumps(spindle_response_json),
             )
@@ -147,11 +146,11 @@ class SpindleView(View):
         try:
             parsed_json = json.loads(request_body)
         except json.JSONDecodeError:
-            logging.warn("Input is not JSON parseable: %s", request_body)
+            logger.warning("Input is not JSON parseable: %s", request_body)
             return None
 
         if not "input" in parsed_json or not isinstance(parsed_json["input"], str):
-            logging.warn("Key input with value of type string not found:", request_body)
+            logger.warning("Key input with value of type string not found:", request_body)
             return None
 
         return parsed_json["input"]
@@ -170,7 +169,7 @@ class SpindleView(View):
         )
 
         if latex_response.status != 200:
-            logging.warn(
+            logger.warning(
                 "Received non-200 response from LaTeX server for input %s", latex
             )
             return SpindleResponse(error=SpindleErrorSource.LATEX).json_response()
@@ -178,7 +177,7 @@ class SpindleView(View):
         try:
             pdf = latex_response.data
         except KeyError:
-            logging.warn(
+            logger.warning(
                 "LaTeX response does not contain valid 'data': %s", latex_response
             )
             return SpindleResponse(error=SpindleErrorSource.LATEX).json_response()
