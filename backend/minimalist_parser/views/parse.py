@@ -45,6 +45,8 @@ class MPParseView(View):
         if parsed is None:
             return MGParserResponse(error=MGParserErrorSource.MG_PARSER).json_response()
 
+        # TODO: send parsed data to Vulcan.
+
         return MGParserResponse(ok=True).json_response()
 
     def send_to_parser(self, text: str) -> Optional[str]:
