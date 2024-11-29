@@ -124,7 +124,7 @@ if DEBUG:
 
 SPINDLE_URL = f"http://pp-spindle:32768/"
 LATEX_SERVICE_URL = f"http://pp-latex:32769/"
-MINIMALIST_PARSER_URL = f"http://pp-minimalist-parser:32770/"
+MINIMALIST_PARSER_URL = f"http://pp-mg-parser:32770/"
 VULCAN_URL = f"http://pp-vulcan:32771/"
 
 data_subset_path = "./aethel_db/data/aethel_subset.pickle"
