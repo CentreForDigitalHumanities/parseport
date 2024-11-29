@@ -1,9 +1,9 @@
 <td colspan="5">
-    <ul class="sample-list mb-2">
+    <ul class="sample-list mb-2 mx-2">
         @for (sample of visibleSamples(); track $index) {
         <li class="sample-item">
             <p>{{ $index + 1 }}</p>
-            <p class="phrase-list mx-2">
+            <p class="phrase-list mx-3">
                 @for (phrase of sample.phrases; track phrase.index) {
                 <span [class.highlight]="phrase.highlight"
                     >{{ phrase.display }}

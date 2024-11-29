@@ -37,6 +37,7 @@
                     class="navbar-item"
                     [routerLink]="['/spindle']"
                     routerLinkActive="is-active"
+                    [routerLinkActiveOptions]="{ exact: true }"
                     i18n
                 >
                     Spindle
@@ -53,7 +54,7 @@
 
                 <a
                     class="navbar-item"
-                    [routerLink]="['/about']"
+                    [routerLink]="['/', 'spindle', 'about']"
                     routerLinkActive="is-active"
                     i18n
                 >
@@ -62,7 +63,16 @@
 
                 <a
                     class="navbar-item"
-                    [routerLink]="['/refs']"
+                    [routerLink]="['/', 'spindle', 'notation']"
+                    routerLinkActive="is-active"
+                    i18n
+                >
+                    Notation
+                </a>
+
+                <a
+                    class="navbar-item"
+                    [routerLink]="['/' , 'references']"
                     routerLinkActive="is-active"
                     i18n
                 >
