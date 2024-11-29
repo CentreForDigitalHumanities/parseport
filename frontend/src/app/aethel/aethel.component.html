@@ -1,114 +1,127 @@
 <h2 class="title is-2" i18n>Æthel</h2>
 
-<p class="field" i18n>
-    Welcome to Æthel. Search for a word or lemma in the input field below to
-    start.
+<p i18n>
+    Æthel is a semantic compositionality dataset for Dutch. It consists of a
+    lexicon of supertags for about 900k words in context, together with
+    validated derivations for some 70k sample sentences, associating them with
+    programs (lambda terms) for their meaning composition. Æthel’s types and
+    derivations are obtained by means of an extraction algorithm applied to the
+    syntactic analyses of LASSY Small, the gold standard corpus of written
+    Dutch.
+</p>
+
+<p i18n>
+    More info can be found under <a href="/aethel/references">About</a> and
+    <a href="/aethel/references">References</a>. The notations are explained
+    under Notation.
+</p>
+
+<p i18n>
+    You can use the interface below to search for a word or lemma. Once you have
+    retrieved a sample, you can inspect it to isolate and look into a word, a
+    type, or a word-type pair. You can then look for other words that occur with
+    the same type, or other occurrences of the same word-type pair.
 </p>
 
 @if (status$ | async) {
-    <form class="form" [formGroup]="form" (ngSubmit)="submitWord()">
-        <div class="field">
-            <label for="aethel-input" class="label">Search:</label>
-            <div class="aethel-input-container">
-                <input
-                    id="aethel-input"
-                    class="input"
-                    [class.is-danger]="form.touched && form.invalid"
-                    type="text"
-                    [formControl]="form.controls.word"
-                    placeholder="Enter a word or lemma..."
-                    placeholder-i18n
-                />
-                <button
-                    type="submit"
-                    class="button is-primary"
-                    [class.is-loading]="loading$ | async"
-                >
-                    <span i18n>Search</span>
-                </button>
-            </div>
-            @if (form.touched && form.invalid) {
-            <p class="is-size-7 has-text-danger" i18n>
-                Please enter at least three characters.
-            </p>
-            }
+<form class="form" [formGroup]="form" (ngSubmit)="submitWord()">
+    <div class="field">
+        <label for="aethel-input" class="label">Search:</label>
+        <div class="aethel-input-container">
+            <input
+                id="aethel-input"
+                class="input"
+                [class.is-danger]="form.touched && form.invalid"
+                type="text"
+                [formControl]="form.controls.word"
+                placeholder="Enter a word or lemma..."
+                placeholder-i18n
+            />
+            <button
+                type="submit"
+                class="button is-primary"
+                [class.is-loading]="loading$ | async"
+            >
+                <span i18n>Search</span>
+            </button>
         </div>
-    </form>
-}
-@else {
-    <p class="notification" i18n>
-        The Æthel dataset is temporarily unavailable.
-    </p>
-}
-
-@if (submitted | async) {
-    <p-table
-        [value]="rows"
-        dataKey="key"
-        [lazy]="true"
-        [paginator]="true"
-        [totalRecords]="totalRowCount"
-        [first]="form.controls.skip.value"
-        [rows]="form.controls.limit.value"
-        (onPage)="changePage($event)"
-        [rowsPerPageOptions]="[10, 25, 50]"
-        [showCurrentPageReport]="true"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        currentPageReportTemplate-i18n
-    >
-        <ng-template pTemplate="header" styleClass="p-datatable-striped">
-            <tr>
-                <th style="width: 10%"></th>
-                <th style="width: 20%" pSortableColumn="word">
-                    <span i18n>Word</span>
-                    <p-sortIcon field="word"></p-sortIcon>
-                </th>
-                <th style="width: 20%" pSortableColumn="lemma">
-                    <span i18n>Lemma</span>
-                    <p-sortIcon field="lemma"></p-sortIcon>
-                </th>
-                <th style="width: 20%" pSortableColumn="type">
-                    <span i18n>Type</span>
-                    <p-sortIcon field="type"></p-sortIcon>
-                </th>
-                <th style="width: 10%" pSortableColumn="sampleCount">
-                    <span i18n>Samples</span>
-                    <p-sortIcon field="sampleCount"></p-sortIcon>
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-row let-expanded="expanded">
-            <tr>
-                <td>
-                    <button
-                        class="button is-small expand-button"
-                        type="button"
-                        pButton
-                        pRipple
-                        [pRowToggler]="row"
-                    >
-                        <fa-icon
-                            [icon]="
-                                expanded === true
-                                    ? icons.chevronDown
-                                    : icons.chevronRight
-                            "
-                        ></fa-icon>
-                    </button>
-                </td>
-                <td>{{ combineWord(row) }}</td>
-                <td>{{ combineLemma(row) }}</td>
-                <td [innerHTML]="row.displayType | proof"></td>
-                <td>{{ row.sampleCount }}</td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="emptymessage">
-            <tr>
-                <td class="no-results" colspan="5" i18n>No results found.</td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="rowexpansion" let-row>
-            <tr pp-sample-data class="expanded-row" [aethelResult]="row"></tr>
-        </ng-template>
-    </p-table>
+        @if (form.touched && form.invalid) {
+        <p class="is-size-7 has-text-danger" i18n>
+            Please enter at least three characters.
+        </p>
+        }
+    </div>
+</form>
+} @else {
+<p class="notification" i18n>The Æthel dataset is temporarily unavailable.</p>
+} @if (submitted | async) {
+<p-table
+    [value]="rows"
+    dataKey="key"
+    [lazy]="true"
+    [paginator]="true"
+    [totalRecords]="totalRowCount"
+    [first]="form.controls.skip.value"
+    [rows]="form.controls.limit.value"
+    (onPage)="changePage($event)"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    currentPageReportTemplate-i18n
+>
+    <ng-template pTemplate="header" styleClass="p-datatable-striped">
+        <tr>
+            <th style="width: 10%"></th>
+            <th style="width: 20%" pSortableColumn="word">
+                <span i18n>Word</span>
+                <p-sortIcon field="word"></p-sortIcon>
+            </th>
+            <th style="width: 20%" pSortableColumn="lemma">
+                <span i18n>Lemma</span>
+                <p-sortIcon field="lemma"></p-sortIcon>
+            </th>
+            <th style="width: 20%" pSortableColumn="type">
+                <span i18n>Type</span>
+                <p-sortIcon field="type"></p-sortIcon>
+            </th>
+            <th style="width: 10%" pSortableColumn="sampleCount">
+                <span i18n>Samples</span>
+                <p-sortIcon field="sampleCount"></p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row let-expanded="expanded">
+        <tr>
+            <td>
+                <button
+                    class="button is-small expand-button"
+                    type="button"
+                    pButton
+                    pRipple
+                    [pRowToggler]="row"
+                >
+                    <fa-icon
+                        [icon]="
+                            expanded === true
+                                ? icons.chevronDown
+                                : icons.chevronRight
+                        "
+                    ></fa-icon>
+                </button>
+            </td>
+            <td>{{ combineWord(row) }}</td>
+            <td>{{ combineLemma(row) }}</td>
+            <td [innerHTML]="row.displayType | proof"></td>
+            <td>{{ row.sampleCount }}</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td class="no-results" colspan="5" i18n>No results found.</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-row>
+        <tr pp-sample-data class="expanded-row" [aethelResult]="row"></tr>
+    </ng-template>
+</p-table>
 }
