@@ -44,11 +44,7 @@ const routes: Routes = [
         ]
     },
     {
-        path: 'about',
-        component: HomeComponent,
-    },
-    {
-        path: 'refs',
+        path: 'references',
         component: ReferencesComponent,
     },
     {
