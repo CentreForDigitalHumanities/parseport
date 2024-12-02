@@ -128,7 +128,7 @@ services:
         restart: unless-stopped
         environment:
             - MG_PARSER_PORT=32770
-            - FLASK_DEBUG=0
+            - MG_PARSER_DEBUG=0
         command: >
             gunicorn -w 1 -b 0.0.0.0:32770 'app:create_app()'
             --capture-output
@@ -145,10 +145,41 @@ services:
         restart: no
         profiles: ["dev"]
         environment:
-            - FLASK_DEBUG=1
+            - MG_PARSER_DEBUG=1
         command: flask run --host 0.0.0.0 --port 32770
         ports:
             - "32770:32770"
+
+    vulcan-prod: &vulcan-prod
+        image: pp-vulcan-prod
+        container_name: pp-vulcan
+        build:
+            context: ../vulcan-parseport
+        profiles: ["prod"]
+        restart: unless-stopped
+        environment:
+            - VULCAN_DEBUG=0
+            - VULCAN_PORT=32771
+        command: >
+            gunicorn -w 1 -b 0.0.0.0:32771 'app:create_app()'
+            --capture-output
+            --access-logfile /logs/access_log
+            --error-logfile /logs/error_log
+        expose:
+            - "32771"
+        volumes:
+            - ../../log/vulcan:/logs
+
+    vulcan-dev:
+        <<: *vulcan-prod
+        image: pp-vulcan-dev
+        restart: no
+        profiles: ["dev"]
+        environment:
+            - VULCAN_DEBUG=1
+        command: flask run --host 0.0.0.0 --port 32771
+        ports:
+            - "32771:32771"
 
 
 networks:
