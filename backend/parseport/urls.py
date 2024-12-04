@@ -44,4 +44,5 @@ urlpatterns = [
             namespace="rest_framework",
         ),
     ),
+    path("vulcan/", include("vulcan.urls")),
 ]
