@@ -14,7 +14,7 @@ import { CommonModule } from "@angular/common";
 import { ExportTextComponent } from "./components/spindle-export/export-text/export-text.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { SpindleExportComponent } from "./components/spindle-export/spindle-export.component";
-import { MpApiService } from "./services/mp-api.service";
+import { MGParserAPIService } from "./services/mg-parser-api.service";
 import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
@@ -35,7 +35,7 @@ import { ReactiveFormsModule } from "@angular/forms";
         ErrorHandlerService,
         SpindleApiService,
         StatusService,
-        MpApiService,
+        MGParserAPIService,
     ],
     exports: [
         AlertComponent,
