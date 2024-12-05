@@ -1,4 +1,16 @@
-const sio = io();
+// Apart from removing console.log statements, and the change below, the JS
+// files are unchanged compared to those in the original Vulcan repo.
+
+// Original:
+// const sio = io();
+
+// Modified:
+const sio = io({
+    query: {
+        id: window.location.pathname.split("/").pop()
+    }
+});
+
 // sio.eio.pingTimeout = 120000; // 2 minutes
 // sio.eio.pingInterval = 20000;  // 20 seconds
 
@@ -158,12 +170,12 @@ d3.select("#clearSearchButton")
     });
 
 sio.on('connect', () => {
-    console.log('connected');
+    // console.log('connected');
     initializeSearchFilters()
 });
 
 sio.on('disconnect', () => {
-  console.log('disconnected');
+//   console.log('disconnected');
 });
 
 sio.on('set_show_node_names', (data) => {
