@@ -178,9 +178,13 @@ services:
         profiles: ["dev"]
         environment:
             - VULCAN_DEBUG=1
-        command: gunicorn -k eventlet -w 1 -b 0.0.0.0:32771 'app:create_app()'
+        command: >
+            gunicorn -k eventlet -w 1 -b 0.0.0.0:32771 'app:create_app()'
+            --reload
         ports:
             - "32771:32771"
+        volumes:
+            - ../vulcan-parseport/app:/app
 
 
 networks:
