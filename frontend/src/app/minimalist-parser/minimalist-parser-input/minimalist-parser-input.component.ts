@@ -5,6 +5,7 @@ import { map } from "rxjs";
 import { ErrorHandlerService } from "src/app/shared/services/error-handler.service";
 import { MGParserAPIService } from "src/app/shared/services/mg-parser-api.service";
 import { StatusService } from "src/app/shared/services/status.service";
+import { environment } from "src/environments/environment";
 
 @Component({
     selector: "pp-minimalist-parser-input",
@@ -42,10 +43,14 @@ export class MinimalistParserInputComponent implements OnInit {
                     this.errorHandler.handleMGParserError(response.error);
                 }
                 if (response.id) {
-                    // TODO: Use dynamic, env-based URL instead.
-                    window.location.href = `http://localhost:5000/vulcan/${response.id}`;
+                    this.navigateToVulcan(response.id);
                 }
             });
+    }
+
+    private navigateToVulcan(id: string): void {
+        const origin = window.location.origin;
+        window.location.href = `${origin}${environment.vulcanUrl}${id}`;
     }
 
     public parse(): void {
