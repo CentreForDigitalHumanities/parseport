@@ -14,9 +14,7 @@ asgiref==3.7.2
     #   django-cors-headers
 beautifulsoup4==4.12.2
     # via django-livereload-server
-colorama==0.4.6
-    # via pytest
-django==4.2.3
+django==4.2.17
     # via
     #   -r requirements.in
     #   django-cors-headers
@@ -66,7 +64,5 @@ tornado==6.3.2
     # via django-livereload-server
 typing-extensions==4.7.1
     # via asgiref
-tzdata==2023.4
-    # via django
 urllib3==2.0.4
     # via django-revproxy
