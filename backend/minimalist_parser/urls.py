@@ -1,5 +1,5 @@
 from django.urls import path
 
-from minimalist_parser.views.parse import MPParseView
+from minimalist_parser.views.parse import MGParserView
 
-urlpatterns = [path("parse", MPParseView.as_view(), name="mp-parse")]
+urlpatterns = [path("parse", MGParserView.as_view(), name="mp-parse")]

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "aethel_db",
     "minimalist_parser",
+    "vulcan",
 ]
 
 MIDDLEWARE = [
