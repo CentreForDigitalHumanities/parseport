@@ -3,9 +3,13 @@ td {
 
     .button-wrapper {
         display: flex;
-        justify-content: flex-start;
+        justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         gap: 0.5rem;
+
+        button {
+            flex: 1;
+        }
     }
 }

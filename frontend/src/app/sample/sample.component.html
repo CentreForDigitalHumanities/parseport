@@ -1,81 +1,92 @@
-<button class="button" (click)="goBack()" i18n>
-    <fa-icon [icon]="icons.arrowLeft" class="mr-2" />
-    Back to search
-</button>
+<div class="content">
+    <button class="button" (click)="goBack()" i18n>
+        <fa-icon [icon]="icons.arrowLeft" class="mr-2" />
+        Back to search
+    </button>
+    <div class="columns is-centered">
+        <div class="column is-two-thirds">
+            @if (sampleResult$ | async; as sample;) {
+            <p class="mb-0" i18n>Sample sentence</p>
+            <h1 class="mt-0 mb-6">{{ sample.sentence }}</h1>
 
-@if (sampleResult$ | async; as sample;) {
-<section class="hero">
-    <div class="hero-body">
-        <p class="subtitle" i18n>Sample sentence</p>
-        <p class="title">{{ sample.sentence }}</p>
-    </div>
-</section>
-
-<section class="message is-dark">
-    <div class="message-header">
-        <p>Term analysis</p>
-    </div>
-    <div class="message-body" [innerHTML]="sample.term | proof"></div>
-</section>
-
-<table class="table is-fullwidth">
-    <thead>
-        <tr>
-            <th i18n>#</th>
-            <th i18n>Phrase</th>
-            <th i18n>Type</th>
-            <th i18n>Search in Æthel</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let phrase of sample.phrases; index as i">
-            <td>
-                <span class="proof"
-                    ><var
-                        >c<sub>{{ i }}</sub></var
-                    ></span
-                >
-            </td>
-            <td>
-                <span *ngFor="let item of phrase.items">{{ item.word }} </span>
-            </td>
-            <td>
-                <span
-                    class="proof"
-                    [innerHtml]="phrase.displayType | proof"
-                ></span>
-            </td>
-            <td>
-                @if (showButtons(phrase.items)) {
-                <div class="button-wrapper">
-                    <button
-                        class="button search-button is-info"
-                        (click)="searchAethel(phrase, 'word')"
-                    >
-                        Word
-                    </button>
-                    <button
-                        class="button search-button is-info"
-                        (click)="searchAethel(phrase, 'type')"
-                    >
-                        Type
-                    </button>
-                    <button
-                        class="button search-button is-info"
-                        (click)="searchAethel(phrase, 'word-and-type')"
-                    >
-                        Word and type
-                    </button>
+            <section class="message is-dark">
+                <div class="message-header">
+                    <p>Term analysis</p>
                 </div>
-                }
-            </td>
-        </tr>
-    </tbody>
-</table>
+                <div
+                    class="message-body"
+                    [innerHTML]="sample.term | proof"
+                ></div>
+            </section>
 
-<pp-spindle-export
-    [loading$]="loading$"
-    (exportResult)="exportResult($event, sample.sentence)"
-    [textOutput]="textOutput"
-/>
-}
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th i18n>#</th>
+                        <th i18n>Phrase</th>
+                        <th i18n>Type</th>
+                        <th i18n>Search in Æthel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let phrase of sample.phrases; index as i">
+                        <td>
+                            <span class="proof"
+                                ><var
+                                    >c<sub>{{ i }}</sub></var
+                                ></span
+                            >
+                        </td>
+                        <td>
+                            <span *ngFor="let item of phrase.items"
+                                >{{ item.word }}
+                            </span>
+                        </td>
+                        <td>
+                            <span
+                                class="proof"
+                                [innerHtml]="phrase.displayType | proof"
+                            ></span>
+                        </td>
+                        <td>
+                            @if (showButtons(phrase.items)) {
+                            <div class="button-wrapper">
+                                <button
+                                    class="button is-info"
+                                    (click)="searchAethel(phrase, 'word')"
+                                    i18n
+                                >
+                                    Word
+                                </button>
+                                <button
+                                    class="button is-info"
+                                    (click)="searchAethel(phrase, 'type')"
+                                    i18n
+                                >
+                                    Type
+                                </button>
+                                <button
+                                    class="button is-info"
+                                    (click)="
+                                        searchAethel(phrase, 'word-and-type')
+                                    "
+                                    i18n
+                                >
+                                    Word and type
+                                </button>
+                            </div>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <pp-spindle-export
+                [loading$]="loading$"
+                (exportResult)="exportResult($event, sample.sentence)"
+                [textOutput]="textOutput"
+            />
+            }
+        </div>
+    </div>
+</div>

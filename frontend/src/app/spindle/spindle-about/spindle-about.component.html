@@ -1,73 +1,125 @@
 <div class="content">
-    <h1>About</h1>
-    Spindle (“Spindle Parses Into Dependency Enhanced Lambda Expressions”) is a neurosymbolic parser for Dutch.
+    <div class="columns is-centered">
+        <div class="column spaced-text is-two-thirds">
+            <h1 i18n>About Spindle and Æthel</h1>
+            <p i18n>
+                Spindle (“Spindle Parses Into Dependency Enhanced Lambda
+                Expressions”) is a neurosymbolic parser for Dutch. Spindle is
+                trained on Æthel (“Automatically Extracted Theorems from Lassy”), a
+                large dataset of machine-verified derivations extracted from LASSY
+                Small, the gold standard treebank of written Dutch.
+            </p>
 
-    <h3>What am I seeing?</h3>
-    <p>
-        Spindle outputs are abstract syntactic derivations in the implication-only fragment of intuitionistic linear logic (LP), extended with a family of residuated pairs of modal operators (LP◇,□).
-    </p>
+            <h2 i18n>What am I seeing?</h2>
+            <p i18n>
+                Spindle outputs and Æthel samples are abstract syntactic derivations
+                in the implication-only fragment of intuitionistic linear logic
+                (LP), extended with a family of residuated pairs of modal operators
+                (LP◇,□).
+            </p>
 
-    <p>
-        This might sound scary, but it's really not that bad.
-        In practice, you give Spindle a Dutch sentence, and it tells you how it has been composed, explicating:
-    </p>
-        <ol>
-            <li>The (possibly higher-order) function-argument relations between constituent words and phrases</li>
-            <li>The dependencies between a "head" an the elemens dependent on it, which can be either complements or adjuncts.</li>
-        </ol>
+            <p i18n>
+                This might sound scary, but it's really not that bad. In practice,
+                you give Spindle a Dutch sentence, and it tells you how it has been
+                composed, explicating:
+            </p>
+            <ol>
+                <li i18n>
+                    The (possibly higher-order) function-argument relations between
+                    constituent words and phrases
+                </li>
+                <li i18n>
+                    The dependencies between a "head" an the elemens dependent on
+                    it, which can be either complements or adjuncts.
+                </li>
+            </ol>
 
-    <p>
-        Which phrases can combine and how is fully determined by the formulas (aka types) assigned to the words that make them up. Logical implications in these formulas denote functions, the modalities (indexed with dependency labels) encode grammatical roles. Words combine to form larger phrases by virtue of a fixed set of inference rules for the type-forming operations.
-    </p>
-    <p>
-        A <em>parse</em> of a phrase is then nothing more and nothing less than a <em>proof</em>: a sequence of valid derivation steps leading from axioms—the formulas/types assigned to the elementary building blocks, i.e. words—to the well-formed complex expression that constitutes the eventual phrase.
-        You might have encountered this idea in the literature as the <strong>parsing as deduction</strong> paradigm.
-    </p>
+            <p i18n>
+                Which phrases can combine and how is fully determined by the
+                formulas (aka types) assigned to the words that make them up.
+                Logical implications in these formulas denote functions, the
+                modalities (indexed with dependency labels) encode grammatical
+                roles. Words combine to form larger phrases by virtue of a fixed set
+                of inference rules for the type-forming operations.
+            </p>
+            <p i18n>
+                A <em>parse</em> of a phrase is then nothing more and nothing less
+                than a <em>proof</em>: a sequence of valid derivation steps leading
+                from axioms—the formulas/types assigned to the elementary building
+                blocks, i.e. words—to the well-formed complex expression that
+                constitutes the eventual phrase. You might have encountered this
+                idea in the literature as the
+                <strong>parsing as deduction</strong> paradigm.
+            </p>
 
-    <p>
-        The interesting bit is that intuitionistic proofs also are compositional meaning instructions (or functional programs), courtesy of the Curry-Howard-de Bruijn correspondence.
-        What this means is that the proofs produced by Spindle are also <em>meaning recipes</em> (more formally λ-terms); these you can actually execute provided you have the basic ingredients—meanings for the constants/words—and a concrete interpretation for the recipe instructions, i.e. the inference steps.
-    </p>
+            <p i18n>
+                The interesting bit is that intuitionistic proofs also are
+                compositional meaning instructions (or functional programs),
+                courtesy of the Curry-Howard-de Bruijn correspondence. What this
+                means is that the proofs produced by Spindle are also
+                <em>meaning recipes</em> (more formally λ-terms); these you can
+                actually execute provided you have the basic ingredients—meanings
+                for the constants/words—and a concrete interpretation for the recipe
+                instructions, i.e. the inference steps.
+            </p>
 
-    <h5>Does this mean that Spindle is never mistaken?</h5>
+            <h5>Does this mean that Spindle is never mistaken?</h5>
+            <p i18n>
+                No. Spindle can be (and frequently is) wrong. Sometimes it can't
+                come up with a proof, in which case it knows it's wrong and openly
+                admits it. Other times it does come up with a proof, but the proof
+                does not capture the sentence's actual structure (either because
+                some word got the wrong formula, or because a logically correct but
+                linguistically implausible inference path has been followed).
+                Fortunately, every so often, Spindle is also correct: it returns a
+                proof that should appease both linguists and logicians.
+            </p>
 
-    <p>
-        No. Spindle can be (and frequently is) wrong. Sometimes it can't come up with a proof, in which case it knows it's wrong and openly admits it. Other times it does come up with a proof, but the proof does not capture the sentence's actual structure (either because some word got the wrong formula, or because a logically correct but linguistically implausible inference path has been followed). Fortunately, every so often, Spindle is also correct: it returns a proof that should appease both linguists and logicians.
-    </p>
+            <h2 i18n>How does this even work?</h2>
+            <p i18n>
+                This works thanks to a sophisticated interplay between a logical
+                core (a miniature type checker) and two machine learning components.
+            </p>
+            <p i18n>
+                Machine learning component (1) is a supertagger: it takes a Dutch
+                text (a sequence of words) as input and converts it into a sequence
+                of formulas of LP◇,□;
+            </p>
+            <p i18n>
+                Machine learning component (2) is a greedy theorem prover that uses
+                the extracted formulas and their representations in order to resolve
+                the entire proof in a single step (without ever backtracking). The
+                output of the machine learning components is an (unverified)
+                <em>candidate</em> proof; it is passed to the type checker which
+                either accepts it (in which case you get to see it), or rejects it
+                (in which case you do not).
+            </p>
 
-    <h3>How does this even work?</h3>
-    <p>
-        This works thanks to a sophisticated interplay between a logical core (a miniature type checker) and two machine learning components.
-    </p>
-        <p>
-        Machine learning component (1) is a supertagger: it takes a Dutch text (a sequence of words) as input and converts it into a sequence of formulas of LP◇,□;
-        </p>
-        <p>
-        Machine learning component (2) is a greedy theorem prover that uses the extracted formulas and their representations in order to resolve the entire proof in a single step (without ever backtracking).
-        The output of the machine learning components is an (unverified) <em>candidate</em> proof; it is passed to the type checker which either accepts it (in which case you get to see it), or rejects it (in which case you do not).
-    </p>
+            <h5 i18n>Ok, how does this really work?</h5>
+            <p i18n>
+                Please check out the literature at the relevant links section.
+            </p>
 
-    <h5>Ok, how does this really work?</h5>
+            <h2 i18n>Credits</h2>
+            <p i18n>
+                Spindle has been designed and developed as a part of the PhD thesis
+                of Konstantinos Kogkalidis.
+            </p>
+            <p i18n>
+                The online interface is due to the Research Software Lab, Centre of
+                Digital Humanities at Utrecht University.
+            </p>
+            <p i18n>
+                Funding was provided by the NWO project “A composition calculus for
+                vector-based semantic modelling with a localization for Dutch”
+                (grant nr. 360-89-070).
+            </p>
 
-    <p>
-        Please check out the literature at the relevant links section.
-    </p>
-
-
-    <h3>Credits</h3>
-    <p>
-        Spindle has been designed and developed as a part of the PhD thesis of Konstantinos Kogkalidis.
-    </p>
-    <p>
-        The online interface is due to the Research Software Lab, Centre of Digital Humanities at Utrecht University.
-    </p>
-    <p>
-        Funding was provided by the NWO project “A composition calculus for vector-based semantic modelling with a localization for Dutch” (grant nr. 360-89-070).
-    </p>
-
-    <h3>Contact</h3>
-    <p>
-        For comments/complaints you can contact konstantinos(funny-a-symbol)riseup(sentence-end-marker)net
-    </p>
-
+            <h2 i18n>Contact</h2>
+            <p i18n>
+                For comments/complaints you can contact
+                konstantinos(funny-a-symbol)riseup(sentence-end-marker)net
+            </p>
+        </div>
+    </div>
 </div>
