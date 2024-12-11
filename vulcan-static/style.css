@@ -1,14 +1,37 @@
 .svg-container {
-  display: inline-block;
-  position: relative;
-  /*width: 100%;*/
-  /*padding-bottom: 100%;*/
-  vertical-align: top;
-  /*overflow: visible;*/
+    display: inline-block;
+    position: relative;
+    /*width: 100%;*/
+    /*padding-bottom: 100%;*/
+    vertical-align: top;
+    /*overflow: visible;*/
 }
 .svg-content-responsive {
-  display: inline-block;
-  position: absolute;
-  top: 10px;
-  left: 0;
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+
+/* Added by CDH */
+
+body {
+    padding: 3rem 3rem;
+}
+
+.header {
+    font-size: 2em;
+    color: hsl(0, 0%, 21%);
+    font-weight: 600;
+    line-height: 1.125;
+    font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    margin-bottom: 3rem;
+}
+
+.button-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
