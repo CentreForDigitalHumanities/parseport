@@ -1,21 +1,25 @@
-<h2 class="title is-2" i18n>Spindle</h2>
+<div class="content">
+    <div class="columns is-centered">
+        <div class="column is-two-thirds">
+            <h1 i18n>Spindle</h1>
 
-<div class="columns">
-    <div class="column intro is-two-thirds">
-        <p i18n>Spindle is a neurosymbolic typelogical parser for Dutch.</p>
-        <p i18n>
-            Upon entering a Dutch phrase, Spindle returns its analysis in the
-            form of a lambda term that records the steps of its derivation.
-            Derivations are driven by the type formulas assigned to words. These
-            formulas determine how words combine into larger phrases.
-        </p>
-        <p i18n>
-            More info and can be found under
-            <a [routerLink]="['about']">About</a> and
-            <a [routerLink]="['/refs']">References</a>. The notations used are
-            explained under <a [routerLink]="['notation']">Notation</a>.
-        </p>
-        @if (spindleReady$ | async) {
+            <p i18n>Spindle is a neurosymbolic typelogical parser for Dutch.</p>
+
+            <p i18n>
+                Upon entering a Dutch phrase, Spindle returns its analysis in the
+                form of a lambda term that records the steps of its derivation.
+                Derivations are driven by the type formulas assigned to words. These
+                formulas determine how words combine into larger phrases.
+            </p>
+
+            <p i18n>
+                More info and can be found under
+                <a [routerLink]="['about']">About</a> and
+                <a [routerLink]="['/', 'references']">References</a>. The notations used are
+                explained under <a [routerLink]="['notation']">Notation</a>.
+            </p>
+
+            @if (spindleReady$ | async) {
             <form class="form">
                 <div class="field">
                     <label for="spindle-input" class="label">Input:</label>
@@ -24,7 +28,7 @@
                         class="input"
                         [class.is-danger]="
                             spindleInput.touched && spindleInput.invalid
-                            "
+                        "
                         type="text"
                         [formControl]="spindleInput"
                         (keydown.enter)="$event.preventDefault(); parse()"
@@ -40,107 +44,49 @@
                     </p>
                 </div>
             </form>
-        }
-    </div>
-</div>
+            }
 
-@if (spindleReady$ | async) {
-    <div class="button-container buttons mb-3">
-        <pp-export-button
-            i18n-buttonText
-            buttonText="Parse"
-            [isLoading]="(loading$ | async) === 'term-table'"
-            (click)="parse()"
-        ></pp-export-button>
-    </div>
-}
-@else {
-    <p class="notification" i18n>
-        Spindle is temporarily unavailable.
-    </p>
-}
+            @if (spindleReady$ | async) {
+                <div class="button-container buttons">
+                    <pp-export-button
+                        class="mt-4"
+                        i18n-buttonText
+                        buttonText="Parse"
+                        [isLoading]="(loading$ | async) === 'term-table'"
+                        (click)="parse()"
+                    />
+                </div>
+                } @else {
+                <p class="notification" i18n>Spindle is temporarily unavailable.</p>
+                }
 
-<div *ngIf="term && lexicalPhrases">
-    <h4 i18n>Term:</h4>
-    <div class="block is-size-4" [innerHTML]="term | proof"></div>
-    <table class="table">
-        <tr *ngFor="let phrase of lexicalPhrases; index as i">
-            <td>
-                <span class="proof">
-                    <var>c<sub>{{ i }}</sub></var>
-                </span>
-            </td>
-            <td>
-                <span *ngFor="let item of phrase.items">{{ item.word }} </span>
-            </td>
-            <td [innerHtml]="phrase.type | proof"></td>
-        </tr>
-    </table>
-</div>
+                <div *ngIf="term && lexicalPhrases">
+                    <h4 i18n>Term:</h4>
+                    <div class="block is-size-4" [innerHTML]="term | proof"></div>
+                    <table class="table">
+                        <tr *ngFor="let phrase of lexicalPhrases; index as i">
+                            <td>
+                                <span class="proof">
+                                    <var
+                                        >c<sub>{{ i }}</sub></var
+                                    >
+                                </span>
+                            </td>
+                            <td>
+                                <span *ngFor="let item of phrase.items">{{ item.word }} </span>
+                            </td>
+                            <td [innerHtml]="phrase.displayType | proof"></td>
+                        </tr>
+                    </table>
+                </div>
 
-<div class="mt-5" *ngIf="parsed">
-    <h4 class="title is-4" i18n>Export results</h4>
-    <div class="button-container buttons">
-        <pp-export-button
-            buttonText="Export to LaTeX"
-            [isLoading]="(loading$ | async) === 'latex'"
-            (export)="export($event)"
-            mode="latex"
-            i18n-buttonText
-        />
-        <pp-export-button
-            buttonText="Export to PDF"
-            [isLoading]="(loading$ | async) === 'pdf'"
-            (export)="export($event)"
-            mode="pdf"
-            i18n-buttonText
-        />
-        <pp-export-button
-            buttonText="Open in Overleaf"
-            [isLoading]="(loading$ | async) === 'overleaf'"
-            (export)="export($event)"
-            textBelow="Requires an Overleaf account."
-            mode="overleaf"
-            i18n-buttonText
-            i18n-textBelow
-        />
-        <pp-export-button
-            buttonText="Export JSON"
-            [isLoading]="(loading$ | async) === 'proof'"
-            (export)="export($event)"
-            mode="proof"
-            i18n-buttonText
-        />
-    </div>
-
-    <div class="output-container" *ngIf="textOutput">
-        <div class="output-button-container">
-            <button
-                class="button is-small download-file"
-                type="button"
-                (click)="downloadAsFile(textOutput.text, textOutput.extension)"
-            >
-                <span class="icon">
-                    <fa-icon [icon]="faDownload"></fa-icon>
-                </span>
-                <span i18n>Download as file</span>
-            </button>
-            <button
-                class="button is-small clipboard-copy"
-                type="button"
-                (click)="copyToClipboard(textOutput.text)"
-            >
-                <span class="icon">
-                    <fa-icon [icon]="faCopy"></fa-icon>
-                </span>
-                <span i18n>Copy text to clipboard</span>
-            </button>
+                <pp-spindle-export
+                    [loading$]="loading$"
+                    (exportResult)="exportResult($event)"
+                    [textOutput]="textOutput"
+                />
         </div>
-        <pre
-            name="text-output"
-            class="is-family-code"
-            [innerText]="textOutput.text"
-            disabled
-        ></pre>
     </div>
 </div>
+
+

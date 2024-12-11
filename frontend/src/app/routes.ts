@@ -53,7 +53,7 @@ const routes: Routes = [
         component: HomeComponent,
     },
     {
-        path: 'refs',
+        path: 'references',
         component: ReferencesComponent,
     },
     {

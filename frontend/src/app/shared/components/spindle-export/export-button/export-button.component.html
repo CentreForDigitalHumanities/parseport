@@ -2,7 +2,7 @@
     [class]="getButtonClass(mode)"
     [class.is-loading]="isLoading"
     [class.with-text-below]="textBelow !== null"
-    (click)="export.emit(mode ?? 'term-table')"
+    (click)="exportResult.emit(mode ?? 'term-table')"
     type="button"
 >
     <span *ngIf="mode" class="icon">

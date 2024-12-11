@@ -1,3 +1,15 @@
-.search-button:not(:last-child) {
-    margin-right: .5rem;
+td {
+    vertical-align: middle;
+
+    .button-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        button {
+            flex: 1;
+        }
+    }
 }

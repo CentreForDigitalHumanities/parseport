@@ -1,46 +1,74 @@
 <div class="content">
-    <h1>Notation</h1>
-    <dl>
-        <dt>
-            Types
-        </dt>
-        <dd>atomic: <span class="mono">T</span>; complex: given types <var>A</var>, <var>B</var> we have
-            <table>
-                <tr>
-                    <td><var>A</var> ⊸ <var>B</var></td><td>linear implication</td>
-                </tr>
-                <tr>
-                    <td>♢<var><sub>d</sub> A</var></td><td>diamond with dependency label <var>d</var></td>
-                </tr>
-                <tr>
-                    <td>□<var><sub>d</sub> A</var></td><td>box with dependency label <var>d</var></td>
-                </tr>
-            </table>
-        </dd>
-    </dl>
-    <dl>
-        <dt>Terms</dt>
-        <dd>atomic: <span class="mono">c</span> constants (i.e. words), <var>x</var> variables; complex: given terms <var>M</var>, <var>N</var> we have
-            <table>
-                <tr>
-                    <td><var>M N</var></td><td>⊸ elimination, function application</td>
-                </tr>
-                <tr>
-                    <td>λ<var>x.M</var></td><td>⊸ introduction, abstraction</td>
-                </tr>
-                <tr>
-                    <td>▽<var><sup>d</sup> M</var></td><td>diamond elimination</td>
-                </tr>
-                <tr>
-                    <td>△<var><sup>d</sup> M</var></td><td>diamond introduction</td>
-                </tr>
-                <tr>
-                    <td>▼<var><sup>d</sup> M</var></td><td>box elimination</td>
-                </tr>
-                <tr>
-                    <td>▲<var><sup>d</sup> M</var></td><td>box introduction</td>
-                </tr>
-            </table>
-        </dd>
-    </dl>
+    <div class="columns is-centered">
+        <div class="column is-two-thirds">
+            <h1>Notation</h1>
+            <dl>
+                <dt>Types</dt>
+                <dd>
+                    atomic: <span class="mono">T</span>; complex: given types
+                    <var>A</var>, <var>B</var> we have
+                    <table>
+                        <tr>
+                            <td><var>A</var> ⊸ <var>B</var></td>
+                            <td>linear implication</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ♢<var><sub>d</sub> A</var>
+                            </td>
+                            <td>diamond with dependency label <var>d</var></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                □<var><sub>d</sub> A</var>
+                            </td>
+                            <td>box with dependency label <var>d</var></td>
+                        </tr>
+                    </table>
+                </dd>
+            </dl>
+            <dl>
+                <dt>Terms</dt>
+                <dd>
+                    atomic: <span class="mono">c</span> constants (i.e. words),
+                    <var>x</var> variables; complex: given terms <var>M</var>,
+                    <var>N</var> we have
+                    <table>
+                        <tr>
+                            <td><var>M N</var></td>
+                            <td>⊸ elimination, function application</td>
+                        </tr>
+                        <tr>
+                            <td>λ<var>x.M</var></td>
+                            <td>⊸ introduction, abstraction</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ▽<var><sup>d</sup> M</var>
+                            </td>
+                            <td>diamond elimination</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                △<var><sup>d</sup> M</var>
+                            </td>
+                            <td>diamond introduction</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ▼<var><sup>d</sup> M</var>
+                            </td>
+                            <td>box elimination</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ▲<var><sup>d</sup> M</var>
+                            </td>
+                            <td>box introduction</td>
+                        </tr>
+                    </table>
+                </dd>
+            </dl>
+        </div>
+    </div>
 </div>

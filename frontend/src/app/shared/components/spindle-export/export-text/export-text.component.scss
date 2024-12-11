@@ -1,0 +1,17 @@
+.output-container {
+    position: relative;
+
+    .output-button-container {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    pre {
+        max-width: 100%;
+        overflow: auto;
+    }
+}
