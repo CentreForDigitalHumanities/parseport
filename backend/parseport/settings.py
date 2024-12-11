@@ -125,6 +125,6 @@ SPINDLE_URL = f"http://pp-spindle:32768/"
 LATEX_SERVICE_URL = f"http://pp-latex:32769/"
 
 data_subset_path = "./aethel_db/data/aethel_subset.pickle"
-full_dataset_path = "/data/aethel.pickle"
+full_dataset_path = "./aethel_db/data/aethel.pickle"
 
 DATASET_PATH = data_subset_path if DEBUG else full_dataset_path
