@@ -7,6 +7,7 @@ import { SpindleAboutComponent } from './spindle/spindle-about/spindle-about.com
 import { SpindleNotationComponent } from './spindle/spindle-notation/spindle-notation.component';
 import { ReferencesComponent } from './references/references.component';
 import { SampleComponent } from './sample/sample.component';
+import { MinimalistParserComponent } from './minimalist-parser/minimalist-parser.component';
 
 const routes: Routes = [
     {
@@ -42,6 +43,14 @@ const routes: Routes = [
                 component: AethelComponent
             }
         ]
+    },
+    {
+        path: 'minimalist-parser',
+        component: MinimalistParserComponent
+    },
+    {
+        path: 'about',
+        component: HomeComponent,
     },
     {
         path: 'references',
