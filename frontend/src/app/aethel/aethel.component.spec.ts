@@ -10,6 +10,7 @@ import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { routes } from "../routes";
 import { of } from "rxjs";
 import { AethelApiService } from "../shared/services/aethel-api.service";
+import { TableModule } from "primeng/table";
 
 describe("AethelComponent", () => {
     let component: AethelComponent;
@@ -26,6 +27,7 @@ describe("AethelComponent", () => {
                 HttpClientTestingModule,
                 ReactiveFormsModule,
                 CommonModule,
+                TableModule,
                 RouterModule.forRoot(routes),
             ],
         }).compileComponents();
