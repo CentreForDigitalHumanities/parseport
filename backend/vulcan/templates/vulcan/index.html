@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html class="theme-light">
     <head>
-        <title>Graph visualization</title>
+        <title>Vulcan visualisation | ParsePort</title>
 
-        {% comment %} <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
-        /> {% endcomment %}
         <link
             rel="stylesheet"
             type="text/css"
@@ -23,11 +19,11 @@
         <h1 class="header">VULCAN visualization</h1>
         <div id="headerId"></div>
         <div class="button-wrapper">
-            <button id="previousButton" class="button is-primary" type="button">
-                &lt;Previous
+            <button id="previousButton" class="button" type="button">
+                &lt; Previous
             </button>
-            <button id="nextButton" class="button is-primary" type="button">
-                Next&gt;
+            <button id="nextButton" class="button" type="button">
+                Next &gt;
             </button>
             <!--input text field with width 50 and right alignment-->
             <!--restricting to numbers as per
@@ -42,20 +38,20 @@
                 onkeypress="
         return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
             />
-            <div style="display: inline" id="corpusPositionText"></div>
-            <button id="searchButton" class="button is-primary" type="button">
+            <div class="position-wrapper">
+                <div id="corpusPositionText"></div>
+            </div>
+            <button id="searchButton" class="button" type="button">
                 Search
             </button>
             <button
                 id="clearSearchButton"
-                class="button is-primary"
+                class="button"
                 type="button"
             >
                 Clear Search
             </button>
         </div>
-
-        <p>We can put additional text here</p>
 
         <div id="chartId"></div>
 

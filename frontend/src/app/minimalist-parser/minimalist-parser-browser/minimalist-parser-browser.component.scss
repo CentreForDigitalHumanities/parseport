@@ -1,0 +1,8 @@
+.with-text-below {
+    display: flex;
+    align-items: center;
+
+    .text-below {
+        bottom: -2em;
+    }
+}

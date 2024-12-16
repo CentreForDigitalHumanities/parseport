@@ -4,7 +4,7 @@
 
 .button-text {
     &.with-icon {
-        margin-left: .5em;
+        margin-left: 0.5em;
     }
 
     &.invisible {
@@ -14,17 +14,6 @@
 
 .logo {
     max-height: 75%;
-}
-
-.with-text-below {
-    position: relative;
-
-    .text-below {
-        position: absolute;
-        font-size: .75em;
-        bottom: -1.5em;
-        color: gray;
-    }
 }
 
 .latex-button {
@@ -37,12 +26,12 @@
 }
 
 .overleaf-button {
-    background-color: #47A141;
+    background-color: #47a141;
     color: white;
 }
 
 .pdf-button {
-    background-color: #FF0000;
+    background-color: #ff0000;
     color: white;
 }
 

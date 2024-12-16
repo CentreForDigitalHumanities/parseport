@@ -9,13 +9,19 @@
             </p>
 
             @if (statusOk$ | async) {
-            <button type="button" class="button is-primary" (click)="navigateToVulcan()" i18n>
-                Start browsing
+            <button
+                type="button"
+                class="button is-primary with-text-below"
+                (click)="navigateToVulcan()"
+            >
+                <span i18n>Start browsing</span>
+                <fa-icon size="sm" class="ml-3" [icon]="icons.openInNewTab" />
+                <span class="text-below" i18n>This will open a new tab.</span>
             </button>
             } @else {
-                <p class="notification mt-6" i18n>
-                    The Vulcan visualization tool is temporarily unavailable.
-                </p>
+            <p class="notification mt-6" i18n>
+                The Vulcan visualization tool is temporarily unavailable.
+            </p>
             }
         </div>
     </div>

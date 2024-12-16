@@ -1,11 +1,10 @@
-@import 'variables';
-@import 'bulma/bulma';
-@import 'primeicons/primeicons.css';
-@import 'primeng/resources/themes/fluent-light/theme.css';
-@import 'primeng/resources/primeng.css';
+@import "variables";
+@import "bulma/bulma";
+@import "primeicons/primeicons.css";
+@import "primeng/resources/themes/fluent-light/theme.css";
+@import "primeng/resources/primeng.css";
 
 @media print {
-
     .is-hidden-print,
     .is-hidden-print * {
         display: none !important;
@@ -18,16 +17,16 @@
     .ui-table .ui-table-thead,
     .ui-table .ui-table-tbody,
     .ui-table .ui-table-tfoot {
-
-        >tr>th,
-        >tr>td {
+        > tr > th,
+        > tr > td {
             border: solid 1px $dark !important;
         }
     }
 }
 
 // PrimeNG table styling
-.p-datatable-thead > tr > th, td {
+.p-datatable-thead > tr > th,
+td {
     padding: 0.75rem 0.75rem;
 }
 
@@ -42,21 +41,33 @@
 }
 
 var {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: "Times New Roman", Times, serif;
 }
 
 // Used by the Proof Pipe.
 // Because the pipe replaces innerHTML, it uses global styles.
 .proof {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: "Times New Roman", Times, serif;
 
     var {
         font-family: monospace;
         font-style: normal;
     }
 
-    sup, .term {
+    sup,
+    .term {
         font-style: italic;
     }
 }
 
+// For buttons with subtext
+.with-text-below {
+    position: relative;
+
+    .text-below {
+        position: absolute;
+        font-size: 0.75em;
+        bottom: -1.5em;
+        color: gray;
+    }
+}

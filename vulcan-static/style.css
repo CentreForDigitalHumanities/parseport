@@ -17,6 +17,9 @@
 
 body {
     padding: 3rem 3rem;
+    font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 
 .header {
@@ -34,4 +37,32 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
+    height: 2rem;
+}
+
+.button-wrapper button {
+    padding: 0.5rem 1rem;
+}
+
+.button-wrapper input {
+    height: 100%;
+}
+
+.position-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.button {
+    background-color: #00d1b2;
+    border-color: transparent;
+    color: #fff;
+    border-radius: 4px;
+    box-shadow: none;
+    line-height: 1.5;
+    user-select: none;
+}
+
+.button:hover {
+    background-color: #00c4a7;
 }
