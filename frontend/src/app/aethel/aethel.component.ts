@@ -109,12 +109,7 @@ export class AethelComponent implements OnInit {
         }
         this.datatable.sortField =
             currentSortValue === "" ? null : currentSortValue.replace("-", "");
-        this.datatable.sortOrder =
-            currentSortValue === ""
-                ? 1
-                : currentSortValue.startsWith("-")
-                ? -1
-                : 1;
+        this.datatable.sortOrder = currentSortValue.startsWith("-") ? -1 : 1;
     }
 
     public changePage(page: TablePageEvent): void {
