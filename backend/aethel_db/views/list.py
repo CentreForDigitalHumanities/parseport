@@ -56,6 +56,7 @@ class AethelListResponse:
 
     results: dict[tuple[str, str, str], AethelListResult] = field(default_factory=dict)
     error: AethelListError | None = None
+    sort: str | None = None
     limit: int = 10
     skip: int = 0
 
@@ -90,6 +91,43 @@ class AethelListResponse:
         )
         return self.results.setdefault(key, new_result)
 
+    def _sort_results(self, results: list[dict]) -> list[dict]:
+        if self.sort is None:
+            return results
+
+        descending = self.sort.startswith("-")
+        sort_key = self.sort.lstrip("-")
+
+        def combine_word(phrase: dict) -> str:
+            return " ".join([item["word"].lower() for item in phrase["items"]])
+
+        def combine_lemma(phrase: dict) -> str:
+            return " ".join([item["lemma"].lower() for item in phrase["items"]])
+
+        match sort_key:
+            case "sampleCount":
+                sorted_list = sorted(
+                    results, key=lambda x: x["sampleCount"], reverse=descending
+                )
+            case "word":
+                sorted_list = sorted(
+                    results, key=lambda x: combine_word(x["phrase"]), reverse=descending
+                )
+            case "lemma":
+                sorted_list = sorted(
+                    results,
+                    key=lambda x: combine_lemma(x["phrase"]),
+                    reverse=descending,
+                )
+            case "type":
+                sorted_list = sorted(
+                    results, key=lambda x: x["displayType"], reverse=descending
+                )
+            case _:
+                sorted_list = results
+
+        return sorted_list
+
     def json_response(self) -> JsonResponse:
         if self.error:
             return JsonResponse(
@@ -106,10 +144,11 @@ class AethelListResponse:
         skip = max(0, self.skip)
         paginated = list(self.results.values())[skip : skip + limit]
         serialized = [result.serialize() for result in paginated]
+        sorted = self._sort_results(serialized)
 
         return JsonResponse(
             {
-                "results": serialized,
+                "results": sorted,
                 "totalCount": total_count,
                 "error": self.error,
             },
@@ -123,6 +162,7 @@ class AethelListView(APIView):
         type_input = self.request.query_params.get("type", None)
         limit = self.request.query_params.get("limit", 10)
         skip = self.request.query_params.get("skip", 0)
+        sort = self.request.query_params.get("sort", None)
 
         try:
             limit = int(limit)
@@ -138,14 +178,13 @@ class AethelListView(APIView):
                 error=AethelListError.WORD_TOO_SHORT
             ).json_response()
 
-        response_object = AethelListResponse(skip=skip, limit=limit)
+        response_object = AethelListResponse(sort=sort, skip=skip, limit=limit)
 
         try:
             parsed_type = parse_prefix(type_input) if type_input else None
         except Exception:
             response_object.error = AethelListError.CANNOT_PARSE_TYPE
             return response_object.json_response()
-
 
         for sample in dataset.samples:
             for phrase in sample.lexical_phrases:

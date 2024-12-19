@@ -50,9 +50,12 @@ export class AethelApiService
             if (input.skip) {
                 params = params.set("skip", input.skip.toString());
             }
+            if (input.sort) {
+                params = params.set("sort", input.sort);
+            }
 
             return this.http
-                .get<AethelList | null>(`${environment.apiUrl}aethel`, {
+                .get<AethelList | null>(`${environment.apiUrl}aethel/`, {
                     headers,
                     params,
                 })

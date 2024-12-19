@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from "@angular/core";
+import { Component, DestroyRef, OnInit, ViewChild } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AethelInput, AethelListResult } from "../shared/types";
@@ -11,7 +11,8 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { isNonNull } from "../shared/operators/IsNonNull";
 import { StatusService } from "../shared/services/status.service";
-import { TablePageEvent } from "primeng/table";
+import { Table, TablePageEvent } from "primeng/table";
+import { SortEvent } from "primeng/api";
 
 @Component({
     selector: "pp-aethel",
@@ -19,6 +20,8 @@ import { TablePageEvent } from "primeng/table";
     styleUrl: "./aethel.component.scss",
 })
 export class AethelComponent implements OnInit {
+    @ViewChild("datatable") datatable?: Table;
+
     public form = new FormGroup({
         word: new FormControl<string>("", {
             nonNullable: true,
@@ -33,11 +36,14 @@ export class AethelComponent implements OnInit {
         skip: new FormControl<number>(0, {
             nonNullable: true,
         }),
+        sort: new FormControl<string>("", {
+            nonNullable: true,
+        }),
     });
     public rows: AethelListResult[] = [];
     public totalRowCount = 0;
     public loading$ = this.apiService.loading$;
-    public submitted = this.apiService.output$.pipe(map(() => true));
+    public submitted$ = this.apiService.output$.pipe(map(() => true));
 
     public icons = {
         chevronRight: faChevronRight,
@@ -72,6 +78,7 @@ export class AethelComponent implements OnInit {
                 }
                 this.rows = this.addUniqueKeys(response.results);
                 this.totalRowCount = response.totalCount;
+                this.initializeSort();
             });
 
         // Whenever the query parameter changes, we run a new query.
@@ -88,10 +95,21 @@ export class AethelComponent implements OnInit {
                 const limit = query["limit"]
                     ? parseInt(query["limit"], 10)
                     : 10;
+                const sort = query["sort"] ?? "";
 
-                this.form.patchValue({ word, type, skip, limit });
-                this.apiService.input$.next({ word, type, skip, limit });
+                this.form.patchValue({ word, type, skip, limit, sort });
+                this.apiService.input$.next({ word, type, skip, limit, sort });
             });
+    }
+
+    private initializeSort(): void {
+        const currentSortValue = this.form.controls.sort.value;
+        if (!this.datatable) {
+            return;
+        }
+        this.datatable.sortField =
+            currentSortValue === "" ? null : currentSortValue.replace("-", "");
+        this.datatable.sortOrder = currentSortValue.startsWith("-") ? -1 : 1;
     }
 
     public changePage(page: TablePageEvent): void {
@@ -120,6 +138,16 @@ export class AethelComponent implements OnInit {
         // When the user submits a new word, go back to the first page.
         this.form.controls.skip.setValue(0);
         this.form.controls.type.setValue("");
+        this.prepareQuery();
+    }
+
+    public sortData(sortEvent: SortEvent): void {
+        const { field: newField, order: newOrder } = sortEvent;
+        if (!newField || !newOrder) {
+            return;
+        }
+        const prefix = newOrder === 1 ? "" : "-";
+        this.form.controls.sort.setValue(`${prefix}${newField}`);
         this.prepareQuery();
     }
 
@@ -152,6 +180,9 @@ export class AethelComponent implements OnInit {
         }
         if (queryInput.type && queryInput.type !== "") {
             queryParams.type = queryInput.type;
+        }
+        if (queryInput.sort && queryInput.sort !== "") {
+            queryParams.sort = queryInput.sort;
         }
 
         queryParams.limit = queryInput.limit;

@@ -44,6 +44,7 @@ export interface AethelInput {
     type?: string;
     limit?: number;
     skip?: number;
+    sort?: string;
 }
 
 export interface AethelListLexicalItem {
