@@ -126,16 +126,6 @@ This will set up several development systems, i.e.:
 
 This is just a preliminary script to get you started, check `bootstrap.log` in the parseport directory to see which of these steps you need to complete manually.
 
-### Installation for ARM-chips (Macbooks M1+)
-When installing this application, ARM-chip user need to additionally run:
-```shell
-brew install cmake llvm libomp
-```
-You will need to have homebrew installed to run this. These are the additional packages required to install pytorch on ARM-chips. 
-
-
-
-
 Running the application in [development mode][8] (hit ctrl-C to stop):
 
 ```console
@@ -145,6 +135,13 @@ $ yarn start
 This will run the backend and frontend applications, as well as their unittests, and watch all source files for changes. You can visit the frontend on http://localhost:8000/, the browsable backend API on http://localhost:8000/api/ and the backend admin on http://localhost:8000/admin/. On every change, unittests rerun, frontend code rebuilds and open browser tabs refresh automatically (livereload).
 
 [8]: #development-mode-vs-production-mode
+
+### Installation for ARM-chips (Macbooks M1+)
+When installing this application, ARM-chip user need to additionally run:
+```shell
+brew install cmake llvm libomp
+```
+You will need to have homebrew installed to run this. These are the additional packages required to install pytorch on ARM-chips. 
 
 ### Recommended order of development
 
