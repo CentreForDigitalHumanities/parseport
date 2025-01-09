@@ -1,15 +1,26 @@
 // Apart from removing console.log statements, and the change below, the JS
 // files are unchanged compared to those in the original Vulcan repo.
 
-// Original:
+// ****************** Start of modified code ******************
 // const sio = io();
-
-// Modified:
 const sio = io({
     query: {
         id: window.location.pathname.split("/").pop()
     }
 });
+
+/**
+ * Replace the identifier at the end of the current path and navigate there.
+ */
+sio.on('route_to_layout', (identifier) => {
+    const newPath = window.location.pathname
+        .split('/')
+        .slice(0, -1)
+        .concat(identifier)
+        .join('/');
+    window.location.href = newPath;
+})
+// ****************** End of modified code ******************
 
 // sio.eio.pingTimeout = 120000; // 2 minutes
 // sio.eio.pingInterval = 20000;  // 20 seconds
