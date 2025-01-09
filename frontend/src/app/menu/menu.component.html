@@ -23,7 +23,7 @@
             [ngClass]="{ 'is-active': burgerActive }"
             [@slideInOut]="burgerShow"
         >
-            <div class="navbar-start">
+            <ul class="navbar-start">
                 <a
                     class="navbar-item"
                     [routerLink]="['/home']"
@@ -33,52 +33,145 @@
                     Home
                 </a>
 
-                <a
-                    class="navbar-item"
-                    [routerLink]="['/spindle']"
-                    routerLinkActive="is-active"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    i18n
-                >
-                    Spindle
-                </a>
+                <li class="navbar-item has-dropdown is-hoverable">
+                    <a
+                        class="navbar-link"
+                        [routerLink]="['/spindle']"
+                        routerLinkActive="is-active"
+                        i18n
+                    >
+                        Spindle/Æthel
+                    </a>
+
+                    <ul class="navbar-dropdown">
+                        <li>
+                            <a
+                                class="navbar-item"
+                                [routerLink]="['/spindle']"
+                                routerLinkActive="is-active"
+                                [routerLinkActiveOptions]="{ exact: true }"
+                                i18n
+                            >
+                                Spindle
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="navbar-item"
+                                [routerLink]="['/aethel']"
+                                routerLinkActive="is-active"
+                                i18n
+                            >
+                                Æthel
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="navbar-item"
+                                [routerLink]="['/spindle/about']"
+                                routerLinkActive="is-active"
+                                i18n
+                            >
+                                About
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="navbar-item"
+                                [routerLink]="['/spindle/notation']"
+                                routerLinkActive="is-active"
+                                i18n
+                            >
+                                Notation
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="navbar-item"
+                                [routerLink]="['/spindle/references']"
+                                routerLinkActive="is-active"
+                                i18n
+                            >
+                                References
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="navbar-item has-dropdown is-hoverable">
+                    <a
+                        class="navbar-link"
+                        [routerLink]="['/minimalist-parser']"
+                        routerLinkActive="is-active"
+                        i18n
+                    >
+                        Minimalist Parser
+                    </a>
+
+                    <ul class="navbar-dropdown">
+                        <li>
+                            <a
+                                class="navbar-item"
+                                [routerLink]="['/minimalist-parser']"
+                                routerLinkActive="is-active"
+                                [routerLinkActiveOptions]="{ exact: true }"
+                                i18n
+                            >
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="navbar-item"
+                                [routerLink]="['/minimalist-parser/parse']"
+                                routerLinkActive="is-active"
+                                i18n
+                            >
+                                Parse sentence
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="navbar-item"
+                                [routerLink]="['/minimalist-parser/browse']"
+                                routerLinkActive="is-active"
+                                i18n
+                            >
+                                Browse parsed corpus
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="navbar-item"
+                                [routerLink]="['/minimalist-parser/about']"
+                                routerLinkActive="is-active"
+                                i18n
+                            >
+                                About
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="navbar-item"
+                                [routerLink]="['/minimalist-parser/references']"
+                                routerLinkActive="is-active"
+                                i18n
+                            >
+                                References
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                 <a
                     class="navbar-item"
-                    [routerLink]="['/aethel']"
-                    routerLinkActive="is-active"
-                    i18n
-                >
-                    Æthel
-                </a>
-
-                <a
-                    class="navbar-item"
-                    [routerLink]="['/', 'spindle', 'about']"
+                    [routerLink]="['/', 'about']"
                     routerLinkActive="is-active"
                     i18n
                 >
                     About
                 </a>
-
-                <a
-                    class="navbar-item"
-                    [routerLink]="['/', 'spindle', 'notation']"
-                    routerLinkActive="is-active"
-                    i18n
-                >
-                    Notation
-                </a>
-
-                <a
-                    class="navbar-item"
-                    [routerLink]="['/' , 'references']"
-                    routerLinkActive="is-active"
-                    i18n
-                >
-                    References
-                </a>
-            </div>
+            </ul>
         </div>
     </div>
 </nav>
