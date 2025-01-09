@@ -2,15 +2,43 @@
 
 <p i18n>Please enter a sentence below to begin.</p>
 
+@if (statusOk$ | async) {
 <section class="section">
     <div class="field">
-        <label for="minimalist-parser-input" class="label" i18n>
-            Enter a sentence
-        </label>
-        <div class="control">
-            <input id="minimalist-parser-input" type="text" class="input" placeholder="Enter a sentence" i18n-placeholder>
-        </div>
+        <form class="form" [formGroup]="form" (ngSubmit)="parse()">
+            <label for="minimalist-parser-input" class="label" i18n>
+                Enter a sentence
+            </label>
+            <div class="control-wrapper">
+                <div class="control">
+                    <input
+                        id="minimalist-parser-input"
+                        type="text"
+                        class="input"
+                        [class.is-danger]="form.touched && form.invalid"
+                        [formControl]="form.controls.mpInput"
+                        placeholder="Enter a sentence"
+                        i18n-placeholder
+                    />
+                </div>
+                <button
+                    type="submit"
+                    class="button is-primary"
+                    [class.is-loading]="loading$ | async"
+                >
+                    <span i18n>Submit</span>
+                </button>
+            </div>
+            @if (form.touched && form.invalid) {
+            <p class="is-size-7 has-text-danger" i18n>
+                Please enter a sentence first.
+            </p>
+            }
+        </form>
     </div>
 </section>
-
-
+} @else {
+<p class="notification mt-6" i18n>
+    The Minimalist Parser is temporarily unavailable.
+</p>
+}
