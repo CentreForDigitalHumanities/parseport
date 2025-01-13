@@ -89,6 +89,18 @@ services:
         command: flask run --host 0.0.0.0 --port 32768
         ports:
             - "32768:32768"
+    
+    spindle-dev-m1:
+        <<: *spindle-prod
+        image: pp-spindle-dev-m1
+        profiles: ["dev-m1"]
+        build:
+            context: ../spindle-server
+            args:
+                - ARM=$ARM
+        command: flask run --host 0.0.0.0 --port 32768
+        ports:
+            - "32768:32768"
 
     latex-prod: &latex-prod
         image: pp-latex-prod

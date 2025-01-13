@@ -14,6 +14,11 @@ In addition, you need to add a configuration file named `.env` to the root direc
 DJANGO_SECRET_KEY=...
 ```
 
+In addition, if you are using a machine with an ARM-chip, you will need to add the following to the `.env` file:
+```
+ARM="True"
+```
+
 In overview, your file structure should be as follows.
 
 ```
