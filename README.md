@@ -137,6 +137,7 @@ This will run the backend and frontend applications, as well as their unittests,
 [8]: #development-mode-vs-production-mode
 
 ### Installation for ARM-chips (Macbooks M1+)
+
 When installing this application, ARM-chip user need to additionally run:
 ```shell
 brew install cmake llvm libomp
