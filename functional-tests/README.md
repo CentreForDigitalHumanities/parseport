@@ -99,7 +99,7 @@ WebKitGTK
 To run the suite with an instance of the application that runs elsewhere, pass the address of the home page of the application on the command line. The address should include the scheme and the path with a trailing `/`. For example:
 
 ```console
-$ pytest --base-address http://localhost:5000/
+$ pytest --base-address http://localhost:5001/
 $ pytest --base-address https://www.parseport.com/app/
 ```
 
@@ -109,7 +109,7 @@ If you want the base address to always default to something other than `http://l
 [pytest]
 webdriver =
     Safari
-addopts = --base-address http://localhost:5000/
+addopts = --base-address http://localhost:5001/
 ```
 
 
