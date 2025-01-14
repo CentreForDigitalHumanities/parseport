@@ -33,7 +33,6 @@ sio.on("route_to_layout", (identifier) => {
  *
  */
 sio.on("activate_search_filters", (search_filters) => {
-    console.log("Activating search filters: ", search_filters);
     if (!search_filters || search_filters.length === 0) {
         return;
     }
