@@ -1,25 +1,73 @@
-// Apart from removing console.log statements, and the change below, the JS
-// files are unchanged compared to those in the original Vulcan repo.
-
 // ****************** Start of modified code ******************
 // const sio = io();
 const sio = io({
     query: {
-        id: window.location.pathname.split("/").pop()
-    }
+        id: window.location.pathname.split("/").pop(),
+    },
 });
 
 /**
  * Replace the identifier at the end of the current path and navigate there.
  */
-sio.on('route_to_layout', (identifier) => {
+sio.on("route_to_layout", (identifier) => {
     const newPath = window.location.pathname
-        .split('/')
+        .split("/")
         .slice(0, -1)
         .concat(identifier)
-        .join('/');
+        .join("/");
     window.location.href = newPath;
-})
+});
+
+/**
+ * Replace or initialize existing filters and add filters from the server.
+ *
+ * SearchFilter objects (backend) need to be converted to FilterInfo objects (frontend).
+ *
+ * The FilterInfo constructor takes the following arguments:
+ * - corpus_slice_name: specifies the name of the graph to filter (e.g. 'gold string')
+ * - outer_layer_id: specifies the object type to perform the search on (e.g. tokens, graphs, nodes)
+ *     -> See vulcan.search.search_registry.OUTER_SEARCH_LAYERS for a full list.
+ * - unique_inner_layer_ids: a list of strings specifying the type of filter operations applied (equality check, regex, etc.)
+ *     -> See vulcan.search.search_registry.INNER_SEARCH_LAYERS for a full list.
+ * - inner_layer_inputs: a mapping (object) from each unique_inner_layer_id to a search argument/parameter for that layer.
+ *
+ */
+sio.on("activate_search_filters", (search_filters) => {
+    console.log("Activating search filters: ", search_filters);
+    if (!search_filters || search_filters.length === 0) {
+        return;
+    }
+
+    clearSearchFiltersIfEmpty();
+
+    const filterInfos = search_filters.map((filter) => {
+        // Silly, but expected by the FilterInfo constructor.
+        const uniqueInnerLayerIds = filter["inner_search_layer_names"].map(
+            (name) => makeUniqueInnerLayerID(name)
+        );
+
+        // Construct a map where the keys are the unique inner layer IDs and
+        // the values are the corresponding search arguments.
+        // This works because we the lists of layerIds and arguments are
+        // guaranteed to have the same length, and the i-th element of each
+        // list corresponds to the i-th layer of the search filter.
+        const argumentMap = uniqueInnerLayerIds.reduce((obj, key, index) => {
+            obj[key] = filter["inner_search_layer_arguments"][index];
+            return obj;
+        }, {});
+
+        const filterInfo = new FilterInfo(
+            filter["corpus_slice_name"],
+            filter["outer_search_layer_name"],
+            uniqueInnerLayerIds,
+            argumentMap
+        );
+
+        return filterInfo;
+    });
+    filterInfos.forEach((filterInfo) => addSearchFilter(filterInfo));
+});
+
 // ****************** End of modified code ******************
 
 // sio.eio.pingTimeout = 120000; // 2 minutes
