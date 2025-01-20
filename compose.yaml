@@ -13,6 +13,7 @@ services:
     ng-dev:
         image: pp-ng-dev
         container_name: pp-ng
+        restart: no
         profiles: ["dev"]
         build:
             context: ./frontend
@@ -58,6 +59,7 @@ services:
     dj-dev:
         <<: *dj-prod
         image: pp-dj-dev
+        restart: no
         profiles: ["dev"]
         environment:
             - DJANGO_DEBUG=1
@@ -85,6 +87,7 @@ services:
     spindle-dev:
         <<: *spindle-prod
         image: pp-spindle-dev
+        restart: no
         profiles: ["dev"]
         command: flask run --host 0.0.0.0 --port 32768
         ports:
@@ -110,10 +113,43 @@ services:
     latex-dev:
         <<: *latex-prod
         image: pp-latex-dev
+        restart: no
         profiles: ["dev"]
         command: flask run --host 0.0.0.0 --port 32769
         ports:
             - "32769:32769"
+
+    mg-parser-prod: &mg-parser-prod
+        image: pp-mg-parser-prod
+        container_name: pp-mg-parser
+        build:
+            context: ../mg-parser-server
+        profiles: ["prod"]
+        restart: unless-stopped
+        environment:
+            - MG_PARSER_PORT=32770
+            - FLASK_DEBUG=0
+        command: >
+            gunicorn -w 1 -b 0.0.0.0:32770 'app:create_app()'
+            --capture-output
+            --access-logfile /logs/access_log
+            --error-logfile /logs/error_log
+        expose:
+            - "32770"
+        volumes:
+            - ../../log/mg-parser:/logs
+
+    mg-parser-dev:
+        <<: *mg-parser-prod
+        image: pp-mg-parser-dev
+        restart: no
+        profiles: ["dev"]
+        environment:
+            - FLASK_DEBUG=1
+        command: flask run --host 0.0.0.0 --port 32770
+        ports:
+            - "32770:32770"
+
 
 networks:
     parseport:
