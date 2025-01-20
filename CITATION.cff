@@ -1,0 +1,54 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: ParsePort
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Alexander
+    family-names: Vertegaal
+    email: a.j.j.vertegaal@uu.nl
+    affiliation: Utrecht University Centre for Digital Humanities
+    orcid: 'https://orcid.org/0000-0002-5182-6801'
+  - given-names: Ben
+    family-names: Bonfil
+    email: b.bonfil@uu.nl
+    affiliation: Utrecht University Centre for Digital Humanities
+  - given-names: Mees
+    name-particle: van
+    family-names: Stiphout
+    email: mees.vanstiphout@uu.nl
+    affiliation: Utrecht University Centre for Digital Humanities
+  - given-names: Tijmen C.
+    family-names: Baarda
+    email: t.c.baarda@uu.nl
+    affiliation: Utrecht University Centre for Digital Humanities
+    orcid: 'https://orcid.org/0000-0002-2577-4948'
+  - given-names: Konstantinos
+    family-names: Kogkalidis
+    email: kokos.kogkalidis@aalto.fi
+    orcid: 'https://orcid.org/0009-0008-1535-9717'
+  - given-names: Michael
+    family-names: Moortgat
+    email: m.j.moortgat@uu.nl
+    affiliation: Utrecht University Institute for Language Sciences
+    orcid: 'https://orcid.org/0000-0003-3568-9920'
+repository-code: 'https://github.com/CentreForDigitalHumanities/parseport'
+url: 'https://parseport.hum.uu.nl/home'
+abstract: >-
+  ParsePort is a web interface for NLP-related (natural
+  language processing) parsers and associated pre-parsed
+  text corpora, developed at Utrecht University.
+keywords:
+  - parseport
+  - nlp
+  - natural language processing
+  - parser
+  - spindle
+  - minimalist grammar
+  - vulcan
+  - type-logical grammar
+license: BSD-3-Clause
