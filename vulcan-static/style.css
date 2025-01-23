@@ -1,14 +1,52 @@
 .svg-container {
-  display: inline-block;
-  position: relative;
-  /*width: 100%;*/
-  /*padding-bottom: 100%;*/
-  vertical-align: top;
-  /*overflow: visible;*/
+    display: inline-block;
+    position: relative;
+    /*width: 100%;*/
+    /*padding-bottom: 100%;*/
+    vertical-align: top;
+    /*overflow: visible;*/
 }
 .svg-content-responsive {
-  display: inline-block;
-  position: absolute;
-  top: 10px;
-  left: 0;
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+
+html {
+    font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+strong.navbar-item {
+    font-weight: 700;
+}
+
+.vulcan-container {
+    margin: 0 2em;
+}
+
+.vulcan-title {
+    margin: 2em 0;
+    color: hsl(0, 0%, 21%);
+    font-weight: 600;
+    line-height: 1.125;
+}
+
+.button-bar {
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 1em;
+}
+
+.corpus-position-container {
+    display: flex;
+    align-items: center;
+}
+
+.vulcan-title {
+    font-size: 2em;
+    margin-bottom: 1em;
 }
