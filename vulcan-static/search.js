@@ -638,6 +638,7 @@ function drawSearchNowButton() {
             performSearch(true)
         })
         .attr("class", "searchNowButton")
+        .attr("class", "button")
     // make the button stand out a bit more
     searchNowButton.style("background-color", "white")
     searchNowButton.style("border-color", "black")
