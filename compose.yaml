@@ -162,7 +162,7 @@ services:
             - VULCAN_DEBUG=0
             - VULCAN_PORT=32771
         command: >
-            gunicorn -w 1 -b 0.0.0.0:32771 'app:create_app()'
+            gunicorn -k eventlet -w 1 -b 0.0.0.0:32771 'app:create_app()'
             --capture-output
             --access-logfile /logs/access_log
             --error-logfile /logs/error_log
