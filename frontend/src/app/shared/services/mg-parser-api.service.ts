@@ -14,16 +14,15 @@ import {
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { ErrorHandlerService } from "./error-handler.service";
+import { MGParserInput, MGParserLoading, MGParserOutput } from "../types";
 
-type MPInput = string;
-type MPOutput = string;
-type MPLoading = boolean;
 
 @Injectable({
     providedIn: "root",
 })
-export class MpApiService
-    implements ParsePortDataService<MPInput, MPOutput, MPLoading>
+export class MGParserAPIService
+    implements
+        ParsePortDataService<MGParserInput, MGParserOutput, MGParserLoading>
 {
     public input$ = new Subject<string>();
 
@@ -35,7 +34,7 @@ export class MpApiService
     public output$ = this.throttledInput$.pipe(
         switchMap((input) =>
             this.http
-                .post<MPOutput | null>(
+                .post<MGParserOutput | null>(
                     `${environment.apiUrl}mp/parse`,
                     { input },
                     {
@@ -50,6 +49,8 @@ export class MpApiService
                             error,
                             $localize`An error occurred while handling your input.`,
                         );
+                        // Returning null instead of EMPTY (which completes)
+                        // because the outer observable should be notified
                         return of(null);
                     }),
                 ),

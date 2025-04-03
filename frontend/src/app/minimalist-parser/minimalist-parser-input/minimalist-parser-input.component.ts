@@ -2,8 +2,10 @@ import { Component, DestroyRef, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { map } from "rxjs";
-import { MpApiService } from "src/app/shared/services/mp-api.service";
+import { ErrorHandlerService } from "src/app/shared/services/error-handler.service";
+import { MGParserAPIService } from "src/app/shared/services/mg-parser-api.service";
 import { StatusService } from "src/app/shared/services/status.service";
+import { environment } from "src/environments/environment";
 
 @Component({
     selector: "pp-minimalist-parser-input",
@@ -25,8 +27,9 @@ export class MinimalistParserInputComponent implements OnInit {
 
     constructor(
         private destroyRef: DestroyRef,
-        private apiService: MpApiService,
+        private apiService: MGParserAPIService,
         private statusService: StatusService,
+        private errorHandler: ErrorHandlerService,
     ) {}
 
     ngOnInit(): void {
@@ -36,8 +39,18 @@ export class MinimalistParserInputComponent implements OnInit {
                 if (!response) {
                     return;
                 }
-                // Do something with the response.
+                if (response.error) {
+                    this.errorHandler.handleMGParserError(response.error);
+                }
+                if (response.id) {
+                    this.navigateToVulcan(response.id);
+                }
             });
+    }
+
+    private navigateToVulcan(id: string): void {
+        const origin = window.location.origin;
+        window.location.href = `${origin}${environment.vulcanUrl}${id}`;
     }
 
     public parse(): void {

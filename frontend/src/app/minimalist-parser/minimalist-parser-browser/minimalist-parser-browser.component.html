@@ -1,3 +1,22 @@
-<h1 class="title" i18n>Minimalist Parser</h1>
+<div class="content">
+    <div class="columns is-centered">
+        <div class="column is-two-thirds">
+            <h1 i18n>Minimalist Parser</h1>
 
-<i i18n>Coming soon: browse a pre-parsed corpus. </i>
+            <p i18n>
+                Click the button below to browse through a pre-parsed corpus
+                consisting of 100 sentences taken from the Wall Street Journal.
+            </p>
+
+            @if (statusOk$ | async) {
+            <button type="button" class="button is-primary" (click)="navigateToVulcan()" i18n>
+                Start browsing
+            </button>
+            } @else {
+                <p class="notification mt-6" i18n>
+                    The Vulcan visualization tool is temporarily unavailable.
+                </p>
+            }
+        </div>
+    </div>
+</div>

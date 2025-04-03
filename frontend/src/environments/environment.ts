@@ -8,6 +8,7 @@ export const environment = {
     // URL path prefix for assets
     assets: "assets",
     apiUrl: "/api/",
+    vulcanUrl: "/vulcan/",
     buildTime,
     version,
     sourceUrl,

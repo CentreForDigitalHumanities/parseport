@@ -1,16 +1,16 @@
 import { TestBed } from "@angular/core/testing";
 
-import { MpApiService } from "./mp-api.service";
+import { MGParserAPIService } from "./mg-parser-api.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
-describe("MpApiService", () => {
-    let service: MpApiService;
+describe("MGParserAPIService", () => {
+    let service: MGParserAPIService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
         });
-        service = TestBed.inject(MpApiService);
+        service = TestBed.inject(MGParserAPIService);
     });
 
     it("should be created", () => {

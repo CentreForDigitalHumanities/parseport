@@ -34,8 +34,6 @@ class StatusView(APIView):
                 aethel=aethel_status(),
                 spindle=status_check('spindle'),
                 mp=status_check('minimalist_parser'),
-                vulcan=True,
-                # When Vulcan is up and running, uncomment the following line.
-                # vulcan=status_check('vulcan'),
+                vulcan=status_check('vulcan'),
             )
         )
