@@ -2,7 +2,7 @@ version: "3"
 
 services:
     nginx:
-        container_name: nginx
+        container_name: pp-nginx
         restart: unless-stopped
         image: nginx:latest
         volumes:
@@ -42,7 +42,7 @@ services:
         restart: unless-stopped
         environment:
             - DJANGO_DEBUG=0
-            - DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
+            - DJANGO_SECRET_KEY=$DJANGO_KEY
         command: >
             gunicorn -b 0.0.0.0:8000 wsgi:application
             --pythonpath=parseport
@@ -64,7 +64,7 @@ services:
         profiles: ["dev"]
         environment:
             - DJANGO_DEBUG=1
-            - DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
+            - DJANGO_SECRET_KEY=$DJANGO_KEY
         command: python manage.py runserver 0.0.0.0:8000
 
     spindle-prod: &spindle-prod
@@ -128,8 +128,8 @@ services:
         profiles: ["prod"]
         restart: unless-stopped
         environment:
-            - MG_PARSER_PORT=32770
-            - MG_PARSER_DEBUG=0
+            - FLASK_DEBUG=0
+            - MG_PARSER_SECRET_KEY=$MG_PARSER_KEY
         command: >
             gunicorn -w 1 -b 0.0.0.0:32770 'app:create_app()'
             --capture-output
@@ -146,7 +146,8 @@ services:
         restart: no
         profiles: ["dev"]
         environment:
-            - MG_PARSER_DEBUG=1
+            - FLASK_DEBUG=1
+            - MG_PARSER_SECRET_KEY=$MG_PARSER_KEY
         command: flask run --host 0.0.0.0 --port 32770
         ports:
             - "32770:32770"
@@ -160,7 +161,7 @@ services:
         restart: unless-stopped
         environment:
             - VULCAN_DEBUG=0
-            - VULCAN_PORT=32771
+            - VULCAN_SECRET_KEY=$VULCAN_KEY
         command: >
             gunicorn -w 1 -b 0.0.0.0:32771 'app:create_app()'
             --capture-output
@@ -178,6 +179,7 @@ services:
         profiles: ["dev"]
         environment:
             - VULCAN_DEBUG=1
+            - VULCAN_SECRET_KEY=$VULCAN_KEY
         command: >
             gunicorn -k eventlet -w 1 -b 0.0.0.0:32771 'app:create_app()'
             --reload
@@ -185,7 +187,6 @@ services:
             - "32771:32771"
         volumes:
             - ../vulcan-parseport/app:/app
-
 
 networks:
     parseport:
