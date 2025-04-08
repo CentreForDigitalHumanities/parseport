@@ -71,12 +71,35 @@ const EMPTY_SELECTION_TEXT = "-- Select --"
 let searchFilters
 let searchFilterRects
 
+// ****************** Start of modified code ******************
+// function initializeSearchFilters() {
+//     searchFilters = []
+//     searchFilterRects = []
+//     addEmptySearchFilter()
+//     // addDebuggingSearchFilters()
+// }
+
+/**
+ * Initialize the search filters and search filter rectangles if they have
+ * not been initialized already.
+ */
 function initializeSearchFilters() {
-    searchFilters = []
-    searchFilterRects = []
-    addEmptySearchFilter()
+    clearSearchFiltersIfEmpty()
+    if (searchFilters.length === 0) {
+        addEmptySearchFilter()
+    }
     // addDebuggingSearchFilters()
 }
+
+function clearSearchFiltersIfEmpty() {
+    if (!searchFilters) {
+        searchFilters = []
+    }
+    if (!searchFilterRects) {
+        searchFilterRects = []
+    }
+}
+// ****************** End of modified code ******************
 
 function addDebuggingSearchFilters() {
     let uniqueid3 = makeUniqueInnerLayerID("NodeContentEquals")
@@ -560,6 +583,10 @@ function getInnerLayer(sliceName, outerLayerID, innerLayerID) {
 
 function onSearchIconClick() {
     if (!searchWindowVisible) {
+        // ****************** Start of modified code ******************
+        initializeSearchFilters()
+        // ****************** End of modified code ******************
+
         createSearchWindowContainer();
 
         createSearchWindowCanvas();
