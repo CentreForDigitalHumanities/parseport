@@ -1,46 +1,175 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html data-theme="light">
+    <head>
+        <title>Graph visualization</title>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="/vulcan-static/style.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+        />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+        <script
+            type="text/javascript"
+            src="https://d3js.org/d3.v5.min.js"
+        ></script>
+    </head>
 
-    <title>Graph visualization</title>
+    <body>
+        <nav
+            class="navbar is-dark"
+            role="navigation"
+            aria-label="main navigation"
+        >
+            <div class="container">
+                <div class="navbar-brand">
+                    <strong class="navbar-item"> ParsePort </strong>
+                </div>
 
-    <link rel="stylesheet" type="text/css" href="/vulcan-static/style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
-    <script type=text/javascript src="https://d3js.org/d3.v5.min.js"></script>
+                <div class="navbar-menu">
+                    <ul class="navbar-start">
+                        {% comment %} Do these hrefs work on the server? 🤷‍♂️ {% endcomment %}
+                        <a class="navbar-item" href="/home">
+                            Home
+                        </a>
 
-  </head>
+                        <li class="navbar-item has-dropdown is-hoverable">
+                            <a class="navbar-link" href="/spindle">
+                                Spindle/Æthel
+                            </a>
 
-  <body>
+                            <ul class="navbar-dropdown">
+                                <li>
+                                    <a class="navbar-item" href="/spindle">
+                                        Spindle
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="navbar-item" href="/aethel">
+                                        Æthel
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="navbar-item" href="/spindle/about">
+                                        About
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="navbar-item" href="/spindle/notation">
+                                        Notation
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="navbar-item" href="/spindle/references">
+                                        References
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
-    <h2>VULCAN visualization</h2>
-    <div id="headerId">
-    <button id="previousButton">&lt;Previous</button>
-    <button id="nextButton">Next&gt;</button>
-    <!--input text field with width 50 and right alignment-->
-    <!--restricting to numbers as per
-    https://stackoverflow.com/questions/13952686/how-to-make-html-input-tag-only-accept-numerical-values
-     (somewhere a bit down)-->
-    <input style="text-align: right" type="text" size="5" id="corpusPositionInput" value="0"
-    onkeypress="
-    return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
-    <div style="display: inline;" id="corpusPositionText"></div>
-    <button id="searchButton" style="margin-left: 30px">Search</button>
-    <button id="clearSearchButton" style="margin-left: 5px">Clear Search</button>
-    </div>
+                        <li class="navbar-item has-dropdown is-hoverable">
+                            <a class="navbar-link" href="/minimalist-parser">
+                                Minimalist Parser
+                            </a>
 
-    <div id="chartId"></div>
+                            <ul class="navbar-dropdown">
+                                <li>
+                                    <a class="navbar-item" href="/minimalist-parser">
+                                        Home
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="navbar-item" href="/minimalist-parser/parse">
+                                        Parse sentence
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="navbar-item" href="/minimalist-parser/browse">
+                                        Browse parsed corpus
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="navbar-item" href="/minimalist-parser/about">
+                                        About
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="navbar-item" href="/minimalist-parser/references">
+                                        References
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
+                        <a class="navbar-item" href="/about">
+                            About
+                        </a>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
+        <div class="vulcan-container">
+            <h1 class="vulcan-title">VULCAN visualization</h1>
+            <div id="headerId" class="button-bar">
+                <button id="previousButton" class="button">&lt; Previous</button>
+                <button id="nextButton" class="button">Next &gt;</button>
+                <!--input text field with width 50 and right alignment-->
+                <!--restricting to numbers as per
+            https://stackoverflow.com/questions/13952686/how-to-make-html-input-tag-only-accept-numerical-values
+            (somewhere a bit down)-->
+                <input
+                    style="text-align: right"
+                    type="text"
+                    size="5"
+                    id="corpusPositionInput"
+                    value="0"
+                    onkeypress="
+            return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
+                />
+                <div class="corpus-position-container"><button id="corpusPositionText" class="corpus-position"></button></div>
+                <button id="searchButton" class="button">Search</button>
+                <button id="clearSearchButton" class="button">
+                    Clear Search
+                </button>
+            </div>
+            <div id="chartId"></div>
+        </div>
 
-    <script type="application/javascript" src="/vulcan-static/definitions.js"></script>
-    <script type="application/javascript" src="/vulcan-static/node.js"></script>
-    <script type="application/javascript" src="/vulcan-static/graph.js"></script>
-    <script type="application/javascript" src="/vulcan-static/table.js"></script>
-    <script type="application/javascript" src="/vulcan-static/label_alternatives.js"></script>
-    <script type="application/javascript" src="/vulcan-static/mouseover_texts.js"></script>
-    <script type="application/javascript" src="/vulcan-static/search.js"></script>
-    <script type="application/javascript" src="/vulcan-static/baseScript.js"></script>
-
-
-  </body>
+        <script
+            type="application/javascript"
+            src="/vulcan-static/definitions.js"
+        ></script>
+        <script
+            type="application/javascript"
+            src="/vulcan-static/node.js"
+        ></script>
+        <script
+            type="application/javascript"
+            src="/vulcan-static/graph.js"
+        ></script>
+        <script
+            type="application/javascript"
+            src="/vulcan-static/table.js"
+        ></script>
+        <script
+            type="application/javascript"
+            src="/vulcan-static/label_alternatives.js"
+        ></script>
+        <script
+            type="application/javascript"
+            src="/vulcan-static/mouseover_texts.js"
+        ></script>
+        <script
+            type="application/javascript"
+            src="/vulcan-static/search.js"
+        ></script>
+        <script
+            type="application/javascript"
+            src="/vulcan-static/baseScript.js"
+        ></script>
+    </body>
 </html>
