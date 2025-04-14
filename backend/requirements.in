@@ -3,7 +3,7 @@ djangorestframework
 django-livereload-server
 django-revproxy>=0.10.0
 nltk # Needed to unpickle MG Parser response
-psycopg2 --no-binary psycopg2
+psycopg2>=2.9.10
 pytest
 pytest-django
 pytest-xdist

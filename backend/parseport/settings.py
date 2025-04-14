@@ -129,6 +129,6 @@ MINIMALIST_PARSER_URL = f"http://pp-mg-parser:32770/"
 VULCAN_URL = f"http://pp-vulcan:32771/"
 
 data_subset_path = "./aethel_db/data/aethel_subset.pickle"
-full_dataset_path = "/data/aethel.pickle"
+full_dataset_path = "./aethel_db/data/aethel.pickle"
 
 DATASET_PATH = data_subset_path if DEBUG else full_dataset_path

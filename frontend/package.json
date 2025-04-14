@@ -1,6 +1,6 @@
 {
   "name": "parseport",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "scripts": {
     "start": "yarn serve",
     "build": "ng build",
@@ -41,12 +41,12 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.0",
-    "@angular-eslint/builder": "17.3.0",
-    "@angular-eslint/eslint-plugin": "17.3.0",
-    "@angular-eslint/eslint-plugin-template": "17.3.0",
-    "@angular-eslint/schematics": "17.3.0",
-    "@angular-eslint/template-parser": "17.3.0",
-    "@angular/cli": "~17.3.1",
+    "@angular-eslint/builder": "^17.3.0",
+    "@angular-eslint/eslint-plugin": "^17.3.0",
+    "@angular-eslint/eslint-plugin-template": "^17.3.0",
+    "@angular-eslint/schematics": "^17.3.0",
+    "@angular-eslint/template-parser": "^17.3.0",
+    "@angular/cli": "^17.3.1",
     "@angular/compiler-cli": "^17.3.1",
     "@angular/localize": "17.3.1",
     "@types/jasmine": "~4.3.0",

@@ -68,7 +68,7 @@ This application can be run in both `production` and `development` mode. Either 
 
 | Name              | Description                                       |
 |-------------------|---------------------------------------------------|
-| `nginx`           | Entry point and reverse proxy, exposes port 5000. |
+| `pp-nginx`           | Entry point and reverse proxy, exposes port 5000. |
 | `pp-ng`           | The frontend server (Angular).                    |
 | `pp-dj`           | The backend/API server (Django).                  |
 | `pp-spindle`      | The server hosting the Spindle parser.            |
@@ -90,7 +90,7 @@ docker compose --profile prod up --build -d
 
 The Spindle server needs to download several files before the parser is ready to receive input. You should wait a few minutes until the message *App is ready!* appears in the Spindle container logs.
 
-Open your browser and visit your project at http://localhost:5000 to view the application.
+Open your browser and visit your project at http://localhost:5001 to view the application.
 
 ## Preparing for development
 
@@ -102,11 +102,11 @@ Note that the Aethel dataset will be loaded in every time the backend server res
 You need to install the following software:
 
 -   PostgreSQL >= 10, client, server and C libraries
--   Python >= 3.8, <= 3.10
+-   Python >= 3.10
 -   virtualenv
 -   WSGI-compatible webserver (deployment only)
 -   [Visual C++ for Python][1] (Windows only)
--   Node.js >= 14.20.0
+-   Node.js >= 14.20.0 (>=20 for Macbook users, see [below](#installation-for-arm-chips-macbooks-m1))
 -   Yarn
 -   [WebDriver][2] for at least one browser (only for functional testing)
 
@@ -142,6 +142,17 @@ First time after cloning this project:
 $ python bootstrap.py
 ```
 
+This will set up several development systems, i.e.:
+ - a python virtual environment,
+ - install backend requirements in the virtual environment,
+ - install frontend requirements
+ - create a postgres database,
+ - create a django superuser,
+ - run django migrations,
+ - set up git flow
+
+This is just a preliminary script to get you started, check `bootstrap.log` in the parseport directory to see which of these steps you need to complete manually.
+
 Running the application in [development mode][8] (hit ctrl-C to stop):
 
 ```console
@@ -151,6 +162,14 @@ $ yarn start
 This will run the backend and frontend applications, as well as their unittests, and watch all source files for changes. You can visit the frontend on http://localhost:8000/, the browsable backend API on http://localhost:8000/api/ and the backend admin on http://localhost:8000/admin/. On every change, unittests rerun, frontend code rebuilds and open browser tabs refresh automatically (livereload).
 
 [8]: #development-mode-vs-production-mode
+
+### Installation for ARM-chips (Macbooks M1+)
+
+When installing this application, ARM-chip user need to additionally run:
+```shell
+brew install cmake llvm libomp
+```
+You will need to have homebrew installed to run this. These are the additional packages required to install pytorch on ARM-chips.
 
 ### Recommended order of development
 
