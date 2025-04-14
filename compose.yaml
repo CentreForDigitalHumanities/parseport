@@ -177,7 +177,7 @@ services:
         profiles: ["dev"]
         environment:
             - VULCAN_DEBUG=1
-            - VULCAN_SECRET_KEY=$VULCAN_KEY
+            - VULCAN_SECRET_KEY=$VULCAN_SECRET_KEY
         command: >
             gunicorn -k eventlet -w 1 -b 0.0.0.0:32771 'app:create_app()'
             --reload
