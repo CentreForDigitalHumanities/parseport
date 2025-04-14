@@ -68,7 +68,7 @@ This application can be run in both `production` and `development` mode. Either 
 
 | Name              | Description                                       |
 |-------------------|---------------------------------------------------|
-| `pp-nginx`           | Entry point and reverse proxy, exposes port 5000. |
+| `pp-nginx`        | Entry point and reverse proxy, exposes port 5000. |
 | `pp-ng`           | The frontend server (Angular).                    |
 | `pp-dj`           | The backend/API server (Django).                  |
 | `pp-spindle`      | The server hosting the Spindle parser.            |
