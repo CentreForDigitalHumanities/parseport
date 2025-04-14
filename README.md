@@ -22,10 +22,10 @@ See the instructions in the README files of these repositories for more informat
 In addition, you need to add a configuration file named `.env` to the root directory of this project with at least the following settings. Use generated keys for the `_KEY` settings. Use `0` or `1` for the `DJANGO_DEBUG` setting, depending on whether you want to run the backend server in production or development mode.
 
 ```properties
-DJANGO_KEY=<secret_key_here>
+DJANGO_SECRET_KEY=<secret_key_here>
 DJANGO_DEBUG=<0 for production, 1 for development>
-MG_PARSER_KEY=<secret_key_here>
-VULCAN_KEY=<secret_key_here>
+MG_PARSER_SECRET_KEY=<secret_key_here>
+VULCAN_SECRET_KEY=<secret_key_here>
 ```
 
 In overview, your file structure should be as follows.
