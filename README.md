@@ -19,10 +19,13 @@ In order to run this application you need a working installation of Docker and a
 
 See the instructions in the README files of these repositories for more information on these codebases.
 
-In addition, you need to add a configuration file named `.env` to the root directory of this project with at least the following setting.
+In addition, you need to add a configuration file named `.env` to the root directory of this project with at least the following settings. Use generated keys for the `_KEY` settings. Use `0` or `1` for the `DJANGO_DEBUG` setting, depending on whether you want to run the backend server in production or development mode.
 
-```conf
-DJANGO_SECRET_KEY=...
+```properties
+DJANGO_SECRET_KEY=<secret_key_here>
+DJANGO_DEBUG=<0 for production, 1 for development>
+MG_PARSER_SECRET_KEY=<secret_key_here>
+VULCAN_SECRET_KEY=<secret_key_here>
 ```
 
 In overview, your file structure should be as follows.
@@ -75,13 +78,13 @@ This application can be run in both `production` and `development` mode. Either 
 
 Start the Docker network in **development mode** by running the following command in your terminal.
 
-```
+```bash
 docker compose --profile dev up --build -d
 ```
 
 For **production mode**, run the following instead.
 
-```
+```bash
 docker compose --profile prod up --build -d
 ```
 

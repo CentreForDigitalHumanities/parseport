@@ -1,14 +1,14 @@
 FROM node:20.11
 
-# Set the working directory
+# Set the working directory.
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the container
+# Copy package.json and package-lock.json to the container.
 COPY package.json yarn.lock ./
 
-# Install dependencises
+# Install dependencies.
 RUN yarn global add @angular/cli
 RUN yarn install
 
-# Expose the port used by the development server
+# Expose the port used by the development server.
 EXPOSE 4200
