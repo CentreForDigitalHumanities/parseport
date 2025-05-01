@@ -104,3 +104,21 @@ export interface AethelSampleDataReturn {
     results: AethelSampleDataResult[];
     error: string | null;
 }
+
+// This should be the same as the one in the backend.
+export enum MGParserErrorSource {
+    INPUT = "input",
+    MG_PARSER = "mg_parser",
+    GENERAL = "general",
+    VULCAN = "vulcan",
+}
+
+
+export type MGParserInput = string;
+
+export interface MGParserOutput {
+    error: MGParserErrorSource | null;
+    id: string | null;
+}
+
+export type MGParserLoading = boolean;

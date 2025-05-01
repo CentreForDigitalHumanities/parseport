@@ -19,7 +19,9 @@ import { SpindleNotationComponent } from "./spindle/spindle-notation/spindle-not
 import { ReferencesComponent } from "./references/references.component";
 import { SampleComponent } from "./sample/sample.component";
 import { SampleDataComponent } from "./aethel/sample-details/sample-data.component";
+import { AboutComponent } from "./about/about.component";
 import { SharedModule } from "./shared/shared.module";
+import { MinimalistParserModule } from "./minimalist-parser/minimalist-parser.module";
 
 @NgModule({
     declarations: [
@@ -34,6 +36,7 @@ import { SharedModule } from "./shared/shared.module";
         AethelComponent,
         SampleComponent,
         SampleDataComponent,
+        AboutComponent
     ],
     imports: [
         AppRoutingModule,
@@ -43,6 +46,11 @@ import { SharedModule } from "./shared/shared.module";
         ReactiveFormsModule,
         FontAwesomeModule,
         TableModule,
+        SharedModule,
+        MinimalistParserModule
+    ],
+    exports: [
+        FontAwesomeModule,
         SharedModule,
     ],
     bootstrap: [AppComponent],

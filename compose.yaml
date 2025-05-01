@@ -1,18 +1,18 @@
-version: "3"
-
 services:
     nginx:
-        container_name: nginx
+        container_name: pp-nginx
         restart: unless-stopped
         image: nginx:latest
         volumes:
             - ./nginx.conf:/etc/nginx/nginx.conf
+            - ./vulcan-static:/usr/share/nginx/html:ro
         ports:
             - "5001:80"
 
     ng-dev:
         image: pp-ng-dev
         container_name: pp-ng
+        restart: no
         profiles: ["dev"]
         build:
             context: ./frontend
@@ -58,6 +58,7 @@ services:
     dj-dev:
         <<: *dj-prod
         image: pp-dj-dev
+        restart: no
         profiles: ["dev"]
         environment:
             - DJANGO_DEBUG=1
@@ -85,6 +86,7 @@ services:
     spindle-dev:
         <<: *spindle-prod
         image: pp-spindle-dev
+        restart: no
         profiles: ["dev"]
         command: flask run --host 0.0.0.0 --port 32768
         ports:
@@ -110,10 +112,79 @@ services:
     latex-dev:
         <<: *latex-prod
         image: pp-latex-dev
+        restart: no
         profiles: ["dev"]
         command: flask run --host 0.0.0.0 --port 32769
         ports:
             - "32769:32769"
+
+    mg-parser-prod: &mg-parser-prod
+        image: pp-mg-parser-prod
+        container_name: pp-mg-parser
+        build:
+            context: ../mg-parser-server
+        profiles: ["prod"]
+        restart: unless-stopped
+        environment:
+            - FLASK_DEBUG=0
+            - MG_PARSER_SECRET_KEY=$MG_PARSER_SECRET_KEY
+        command: >
+            gunicorn -w 1 -b 0.0.0.0:32770 'app:create_app()'
+            --capture-output
+            --access-logfile /logs/access_log
+            --error-logfile /logs/error_log
+        expose:
+            - "32770"
+        volumes:
+            - ../../log/mg-parser:/logs
+
+    mg-parser-dev:
+        <<: *mg-parser-prod
+        image: pp-mg-parser-dev
+        restart: no
+        profiles: ["dev"]
+        environment:
+            - FLASK_DEBUG=1
+            - MG_PARSER_SECRET_KEY=$MG_PARSER_SECRET_KEY
+        command: flask run --host 0.0.0.0 --port 32770
+        ports:
+            - "32770:32770"
+
+    vulcan-prod: &vulcan-prod
+        image: pp-vulcan-prod
+        container_name: pp-vulcan
+        build:
+            context: ../vulcan-parseport
+        profiles: ["prod"]
+        restart: unless-stopped
+        environment:
+            - VULCAN_DEBUG=0
+            - VULCAN_SECRET_KEY=$VULCAN_SECRET_KEY
+        command: >
+            gunicorn -k eventlet -w 1 -b 0.0.0.0:32771 'app:create_app()'
+            --capture-output
+            --access-logfile /logs/access_log
+            --error-logfile /logs/error_log
+        expose:
+            - "32771"
+        volumes:
+            - ../../log/vulcan:/logs
+
+    vulcan-dev:
+        <<: *vulcan-prod
+        image: pp-vulcan-dev
+        restart: no
+        profiles: ["dev"]
+        environment:
+            - VULCAN_DEBUG=1
+            - VULCAN_SECRET_KEY=$VULCAN_SECRET_KEY
+        command: >
+            gunicorn -k eventlet -w 1 -b 0.0.0.0:32771 'app:create_app()'
+            --reload
+        ports:
+            - "32771:32771"
+        volumes:
+            - ../vulcan-parseport/app:/app
 
 networks:
     parseport:

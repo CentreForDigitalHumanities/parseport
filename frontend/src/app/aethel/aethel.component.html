@@ -27,7 +27,7 @@
                 occurrences of the same word-type pair.
             </p>
 
-            @if (status$ | async) {
+            @if (statusOk$ | async) {
             <form
                 class="form mb-4"
                 [formGroup]="form"
@@ -56,6 +56,23 @@
                     @if (form.touched && form.invalid) {
                     <p class="is-size-7 has-text-danger" i18n>
                         Please enter at least three characters.
+                    </p>
+                    <p class="mt-2" i18n>
+                        More info can be found under
+                        <a [routerLink]="['/', 'about']">About</a> and
+                        <a [routerLink]="['/', 'references']">References</a>.
+                        The notations are explained under
+                        <a [routerLink]="['/', 'spindle', 'notation']"
+                            >Notation</a
+                        >.
+                    </p>
+                    <p class="mt-2 mb-4" i18n>
+                        You can use the interface below to search for a word or
+                        lemma. Once you have retrieved a sample, you can inspect
+                        it to isolate and look into a word, a type, or a
+                        word-type pair. You can then look for other words that
+                        occur with the same type, or other occurrences of the
+                        same word-type pair.
                     </p>
                     }
                 </div>

@@ -2,66 +2,93 @@
 
 [![Actions Status](https://github.com/UUDigitalHumanitieslab/parseport/workflows/Unit%20tests/badge.svg)](https://github.com/UUDigitalHumanitieslab/parseport/actions)
 
-ParsePort is an interface for the [Spindle](https://github.com/konstantinosKokos/spindle) parser using the [Æthel](https://github.com/konstantinosKokos/aethel) library, both developed by dr. Konstantinos Kogkalidis as part of a research project conducted with prof. dr. Michaël Moortgat at Utrecht University. Other parsers may be added in the future.
+ParsePort is a web interface for two NLP-related (natural language processing) parsers and two associated pre-parsed text corpora, both developed at Utrecht University.
+
+1. The [Spindle](https://github.com/konstantinosKokos/spindle) parser is used to produce type-logical parses of Dutch sentences. It features a pre-parsed corpus of around 65.000 sentences (based on [Lassy Small](https://taalmaterialen.ivdnt.org/download/lassy-klein-corpus6/)) called [Æthel](https://github.com/konstantinosKokos/aethel). These tools have been developed by dr. Konstantinos Kogkalidis as part of a research project conducted with prof. dr. Michaël Moortgat at Utrecht University.
+
+2. The Minimalist Parser produces syntactic tree models of English sentences based on user input, creating syntax trees in the style of [Chomskyan Minimalist Grammar](https://en.wikipedia.org/wiki/Minimalist_program). The parser has been developed by dr. Meaghan Fowlie at Utrecht University and comes with a pre-parsed corpus of 100 sentences taken from the Wall Street Journal. The tool used to visualize these syntax trees in an interactive way is Vulcan, developed by dr. Jonas Groschwitz, also at Utrecht University.
 
 ## Running this application in Docker
 
-In order to run this application you need a working installation of Docker and an internet connection. You will also need the source code from two other repositories, `spindle-server` and `latex-service` to be present in the same directory as the `parseport` source code.
+In order to run this application you need a working installation of Docker and an internet connection. You will also need the source code from four other repositories. These must be located in the same directory as the `parseport` source code.
 
-In addition, you need to add a configuration file named `.env` to the root directory of this project with at least the following setting.
+1. [`spindle-server`](https://github.com/CentreForDigitalHumanities/spindle-server) hosts the source code for a server with the Spindle parser;
+2. [`latex-service`](https://github.com/CentreForDigitalHumanities/latex-service) contains a LaTeX compiler that is used to export the Spindle parse results in PDF format;
+3. [`mg-parser-server`](https://github.com/CentreForDigitalHumanities/mg-parser-server) has the source code for the Minimalist Grammar parser;
+4. [`vulcan-parseport`](https://github.com/CentreForDigitalHumanities/vulcan-parseport) is needed for the websocket-based webserver that hosts Vulcan, the visualization tool for MGParser parse results.
 
-```
-DJANGO_SECRET_KEY=...
+See the instructions in the README files of these repositories for more information on these codebases.
+
+In addition, you need to add a configuration file named `.env` to the root directory of this project with at least the following settings. Use generated keys for the `_KEY` settings. Use `0` or `1` for the `DJANGO_DEBUG` setting, depending on whether you want to run the backend server in production or development mode.
+
+```properties
+DJANGO_SECRET_KEY=<secret_key_here>
+DJANGO_DEBUG=<0 for production, 1 for development>
+MG_PARSER_SECRET_KEY=<secret_key_here>
+VULCAN_SECRET_KEY=<secret_key_here>
 ```
 
 In overview, your file structure should be as follows.
 
 ```
+┌── parseport (this project)
+|   ├── compose.yaml
+|   ├── .env
+|   ├── frontend
+|   |   └── Dockerfile
+|   └── backend
+|       ├── Dockerfile
+|       └── aethel_db
+|           └── data
+|               └── aethel.pickle
+|
 ├── spindle-server
-|   └── Dockerfile
+|   ├── Dockerfile
 |   └── model_weights.pt
 |
 ├── latex-service
 |   └── Dockerfile
 |
-└── parseport (this project)
-    ├── compose.yaml
-    ├── .env
-    ├── frontend
-    |   └── Dockerfile
-    └── backend
-        ├── Dockerfile
-        └── aethel.pickle
+├── mg-parser-server
+|   └── Dockerfile
+|
+└── vulcan-parseport
+    ├── Dockerfile
+    └── app
+        └── standard.pickle
 ```
 
-Note that you will need two data files in order to run this project.
+Note that you will need three data files in order to run this project.
 
 - `model_weights.pt` should be put in the root directory of the `spindle-server` project. It can be downloaded from _Yoda-link here_.
-- `aethel.pickle` should live at `parseport/backend/`. You can find it in the zip archive [here](https://github.com/konstantinosKokos/aethel/tree/stable/data).
+- `aethel.pickle` contains the pre-parsed data for Æthel and should live at `parseport/backend/aethel_db/data`. You can find it in the zip archive [here](https://github.com/konstantinosKokos/aethel/tree/stable/data).
+- `standard.pickle` contains the pre-parsed corpus for the Minimalist Parser. It should be placed in the `vulcan-parseport/app` directory. You can download it from _Yoda-link here_.
 
-This application can be run in both `production` and `development` mode. Either mode will start a network of five containers.
+This application can be run in both `production` and `development` mode. Either mode will start a network of seven containers.
 
-| Name         | Description                                       |
-|--------------|---------------------------------------------------|
-| `nginx`      | Entry point and reverse proxy, exposes port 5001. |
-| `pp-ng`      | The frontend server (Angular).                    |
-| `pp-dj`      | The backend/API server (Django).                  |
-| `pp-spindle` | The server hosting the Spindle parser.            |
-| `pp-latex`   | The server hosting a LaTeX compiler.              |
+| Name              | Description                                       |
+|-------------------|---------------------------------------------------|
+| `pp-nginx`        | Entry point and reverse proxy, exposes port 5001. |
+| `pp-ng`           | The frontend server (Angular).                    |
+| `pp-dj`           | The backend/API server (Django).                  |
+| `pp-spindle`      | The server hosting the Spindle parser.            |
+| `pp-latex`        | The server hosting a LaTeX compiler.              |
+| `pp-mg-parser`    | The server hosting the Minimalist Grammar parser. |
+| `pp-vulcan`       | The server hosting the Vulcan visualization tool. |
 
 Start the Docker network in **development mode** by running the following command in your terminal.
 
-```
+```bash
 docker compose --profile dev up --build -d
 ```
 
 For **production mode**, run the following instead.
 
-```
+```bash
 docker compose --profile prod up --build -d
 ```
 
-The Spindle server needs to download several files before the parser is ready to receive. You should wait a few minutes until the message *App is ready!* appears in the Spindle container logs.
+The Spindle server needs to download several files before the parser is ready to receive input. You should wait a few minutes until the message *App is ready!* appears in the Spindle container logs.
 
 Open your browser and visit your project at http://localhost:5001 to view the application.
 
@@ -116,10 +143,10 @@ $ python bootstrap.py
 ```
 
 This will set up several development systems, i.e.:
- - a python virtual environment, 
+ - a python virtual environment,
  - install backend requirements in the virtual environment,
- - install frontend requirements 
- - create a postgres database, 
+ - install frontend requirements
+ - create a postgres database,
  - create a django superuser,
  - run django migrations,
  - set up git flow
@@ -142,7 +169,7 @@ When installing this application, ARM-chip user need to additionally run:
 ```shell
 brew install cmake llvm libomp
 ```
-You will need to have homebrew installed to run this. These are the additional packages required to install pytorch on ARM-chips. 
+You will need to have homebrew installed to run this. These are the additional packages required to install pytorch on ARM-chips.
 
 ### Recommended order of development
 

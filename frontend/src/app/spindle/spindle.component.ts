@@ -26,7 +26,7 @@ export class SpindleComponent implements OnInit {
 
     spindleReady$ = timer(0, 5000).pipe(
         takeUntil(this.stopStatus$),
-        switchMap(() => this.statusService.get()),
+        switchMap(() => this.statusService.getStatus$()),
         map((status) => status.spindle),
         share(),
     );
