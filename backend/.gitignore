@@ -23,7 +23,7 @@ sqlite.db
 backend/sqlite.db
 
 # Dev datasets
-aethel_db/data/
+aethel_db/data/*.pickle
 
 # pyenv
 .python-version
