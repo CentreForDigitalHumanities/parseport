@@ -98,7 +98,11 @@ Open your browser and visit your project at http://localhost:5001 to view the ap
 
 ## Preparing for development
 
-Note that the Aethel dataset will be loaded in every time the backend server restarts. To avoid slow feedback loops in a development environment, consider running `python manage.py create_aethel_subset` before starting the development server. This will take create a much smaller subset that takes less than a second to load.
+The Aethel dataset (in `aethel.pickle`) will be loaded in every time the backend server restarts. To avoid slow feedback loops in a development environment, consider running the Django `create_aethel_subset` management command in `backend` before starting the development server. This will take create a much smaller subset that takes less than a second to load. You will need to specify your source file (the full pickle) and the path to the new subset file. The following will work for development purposes. Note that `settings.py` will look for these paths, so adjust them accordingly if you place the files elsewhere.
+
+```bash
+python manage.py create_aethel_subset .\aethel_db\data\aethel.pickle .\aethel_db\data\aethel_subset.pickle
+```
 
 
 ## Before you start
