@@ -78,6 +78,8 @@ This application can be run in both `production` and `development` mode. Either 
 | `pp-mg-parser`    | The server hosting the Minimalist Grammar parser. |
 | `pp-vulcan`       | The server hosting the Vulcan visualization tool. |
 
+Before starting your container, make sure to run `yarn run prebuild` in the `frontend` directory to generate the `version.ts` file required for the frontend build.
+
 Start the Docker network in **development mode** by running the following command in your terminal.
 
 ```bash
