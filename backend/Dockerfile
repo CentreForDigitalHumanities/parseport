@@ -1,8 +1,8 @@
 FROM python:3.10-bullseye
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # Install dependencies
 RUN apt update
@@ -21,5 +21,11 @@ COPY . /src/
 # Create a directory for Gunicorn logs (production).
 RUN mkdir -p /logs
 
+# Copy and set permissions for entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Expose port
 EXPOSE 8000
+
+ENTRYPOINT ["/entrypoint.sh"]
