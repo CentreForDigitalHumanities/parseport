@@ -6,16 +6,38 @@
             <p i18n>
                 Click the button below to browse through a pre-parsed corpus
                 consisting of 100 sentences taken from the Wall Street Journal.
+                These 100 sentences are from the test set: the model was not
+                directly trained on them, but rather on similar sentences and
+                trees.
+            </p>
+
+            <p i18n>
+                For an explanation of the output visualisation, click here for
+                an
+                <a
+                    href="assets/minimalist-parser/pdfs/annotated_screenshot_browse.pdf"
+                    >annotated screenshot (PDF)</a
+                >. For more about the formalism behind the output, click
+                <a [routerLink]="['/', 'minimalist-parser', 'about']">here</a>.
+            </p>
+
+            <p i18n>
+                The 100 sentences can be searched; click on Search at the top, which opens up a search dialogue. For an explanation of the search dialogue, click <a href="assets/minimalist-parser/pdfs/annotated_screenshot_search.pdf">here</a>.
             </p>
 
             @if (statusOk$ | async) {
-            <button type="button" class="button is-primary" (click)="navigateToVulcan()" i18n>
+            <button
+                type="button"
+                class="button is-primary"
+                (click)="navigateToVulcan()"
+                i18n
+            >
                 Start browsing
             </button>
             } @else {
-                <p class="notification mt-6" i18n>
-                    The Vulcan visualization tool is temporarily unavailable.
-                </p>
+            <p class="notification mt-6" i18n>
+                The Vulcan visualization tool is temporarily unavailable.
+            </p>
             }
         </div>
     </div>

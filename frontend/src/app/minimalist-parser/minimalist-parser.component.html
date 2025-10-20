@@ -1,16 +1,120 @@
 <div class="content">
     <div class="columns is-centered">
         <div class="column is-two-thirds">
-            <h1 i18n>Minimalist Parser</h1>
+            <article>
+                <h1 i18n>Minimalist Parser</h1>
 
-            <p i18n>
-                Welcome to the Minimalist Parser, developed by Meaghan Fowlie at
-                Utrecht University. This parser has been trained to analyze the
-                syntax of English sentences and provide minimalist-style tree
-                diagrams using the Vulcan visualisation tool.
-            </p>
+                <section class="mt-4">
+                    <header>
+                        <h2 i18n>Quick start</h2>
+                    </header>
 
-            <i>More info coming soon!</i>
+                    <div class="button-group">
+                        <div class="button-group-item">
+                            <a
+                                class="action-button action-button-primary"
+                                [routerLink]="[
+                                    '/',
+                                    'minimalist-parser',
+                                    'parse'
+                                ]"
+                                aria-describedby="parse-description"
+                            >
+                                <fa-icon
+                                    [icon]="icons.parse"
+                                    class="action-button-icon"
+                                ></fa-icon>
+                                <span i18n>Parse sentence</span>
+                            </a>
+                            <p
+                                class="action-description"
+                                id="parse-description"
+                                i18n
+                            >
+                                Make the model automatically generate a
+                                "minimalist derivation tree" for a sentence.
+                            </p>
+                        </div>
+                        <div class="button-group-item">
+                            <a
+                                class="action-button action-button-secondary"
+                                [routerLink]="[
+                                    '/',
+                                    'minimalist-parser',
+                                    'browse'
+                                ]"
+                                aria-describedby="browse-description"
+                            >
+                                <fa-icon
+                                    [icon]="icons.browse"
+                                    class="action-button-icon"
+                                ></fa-icon>
+                                <span i18n>Browse sentences</span>
+                            </a>
+                            <p
+                                class="action-description"
+                                id="browse-description"
+                                i18n
+                            >
+                                Explore an already parsed corpus.
+                            </p>
+                        </div>
+                        <div class="button-group-item">
+                            <a
+                                class="action-button action-button-tertiary"
+                                [routerLink]="[
+                                    '/',
+                                    'minimalist-parser',
+                                    'about'
+                                ]"
+                                aria-describedby="about-description"
+                            >
+                                <fa-icon
+                                    [icon]="icons.about"
+                                    class="action-button-icon"
+                                ></fa-icon>
+                                <span i18n>About</span>
+                            </a>
+                            <p
+                                class="action-description"
+                                id="about-description"
+                                i18n
+                            >
+                                See a more detailed explanation of the
+                                visualisations.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mt-6">
+                    <header>
+                        <h2 i18n>Project</h2>
+                    </header>
+                    <p i18n>
+                        This is a parser developed by Meaghan Fowlie at Utrecht
+                        University. It produces syntactic parses of English
+                        sentences in accordance with the framework of Chomskyan
+                        Minimalism.
+                    </p>
+                    <p i18n>
+                        The model in this demo is trained on about 80,000
+                        sentences mostly from the Wall Street Journal. The trees
+                        are derived from
+                        <a
+                            href="https://aclanthology.org/E17-3021/"
+                            target="_blank"
+                            >John Torr's MGBank (opens in a new tab)</a
+                        >
+                    </p>
+                    <p i18n>
+                        For more details, go to
+                        <a [routerLink]="['/', 'minimalist-parser', 'about']"
+                            >About</a
+                        >.
+                    </p>
+                </section>
+            </article>
         </div>
     </div>
 </div>
