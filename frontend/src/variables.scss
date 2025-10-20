@@ -2,4 +2,12 @@
 // e.g. $primary: red;
 $lab-color: #007ad9;
 
-@import 'bulma/sass/utilities/_all';
+// Action button colors
+$action-purple: #6b5b95;
+$action-purple-hover: #5a4a7f;
+$action-teal: #20b2aa;
+$action-teal-hover: #1a9992;
+$action-coral: #e76f8a;
+$action-coral-hover: #d45e77;
+
+@import "bulma/sass/utilities/_all";
