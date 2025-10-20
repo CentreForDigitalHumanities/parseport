@@ -7,6 +7,7 @@ import { MinimalistParserBrowserComponent } from "./minimalist-parser-browser/mi
 import { SharedModule } from "../shared/shared.module";
 import { RouterModule } from "@angular/router";
 import { NgOptimizedImage } from "@angular/common";
+import { IconButtonComponent } from "../shared/components/icon-button/icon-button.component";
 
 @NgModule({
     declarations: [
@@ -16,6 +17,6 @@ import { NgOptimizedImage } from "@angular/common";
         MinimalistParserReferencesComponent,
         MinimalistParserBrowserComponent,
     ],
-    imports: [SharedModule, RouterModule, NgOptimizedImage],
+    imports: [SharedModule, RouterModule, NgOptimizedImage, IconButtonComponent],
 })
-export class MinimalistParserModule {}
+export class MinimalistParserModule { }

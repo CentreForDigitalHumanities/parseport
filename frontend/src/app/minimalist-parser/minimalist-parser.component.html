@@ -10,80 +10,39 @@
                     </header>
 
                     <div class="button-group">
-                        <div class="button-group-item">
-                            <a
-                                class="action-button action-button-primary"
-                                [routerLink]="[
-                                    '/',
-                                    'minimalist-parser',
-                                    'parse'
-                                ]"
-                                aria-describedby="parse-description"
-                            >
-                                <fa-icon
-                                    [icon]="icons.parse"
-                                    class="action-button-icon"
-                                ></fa-icon>
-                                <span i18n>Parse sentence</span>
-                            </a>
-                            <p
-                                class="action-description"
-                                id="parse-description"
-                                i18n
-                            >
-                                Make the model automatically generate a
-                                "minimalist derivation tree" for a sentence.
-                            </p>
-                        </div>
-                        <div class="button-group-item">
-                            <a
-                                class="action-button action-button-secondary"
-                                [routerLink]="[
-                                    '/',
-                                    'minimalist-parser',
-                                    'browse'
-                                ]"
-                                aria-describedby="browse-description"
-                            >
-                                <fa-icon
-                                    [icon]="icons.browse"
-                                    class="action-button-icon"
-                                ></fa-icon>
-                                <span i18n>Browse sentences</span>
-                            </a>
-                            <p
-                                class="action-description"
-                                id="browse-description"
-                                i18n
-                            >
-                                Explore an already parsed corpus.
-                            </p>
-                        </div>
-                        <div class="button-group-item">
-                            <a
-                                class="action-button action-button-tertiary"
-                                [routerLink]="[
-                                    '/',
-                                    'minimalist-parser',
-                                    'about'
-                                ]"
-                                aria-describedby="about-description"
-                            >
-                                <fa-icon
-                                    [icon]="icons.about"
-                                    class="action-button-icon"
-                                ></fa-icon>
-                                <span i18n>About</span>
-                            </a>
-                            <p
-                                class="action-description"
-                                id="about-description"
-                                i18n
-                            >
-                                See a more detailed explanation of the
-                                visualisations.
-                            </p>
-                        </div>
+                        <pp-icon-button
+                            [icon]="icons.parse"
+                            label="Parse sentence"
+                            i18n-label
+                            size="large"
+                            [routerLink]="['/', 'minimalist-parser', 'parse']"
+                            variant="purple"
+                            ariaDescribedBy="parse-description"
+                            description="Make the model automatically generate a 'minimalist derivation tree' for a sentence."
+                            i18n-description
+                        />
+                        <pp-icon-button
+                            [icon]="icons.browse"
+                            label="Browse sentences"
+                            i18n-label
+                            size="large"
+                            [routerLink]="['/', 'minimalist-parser', 'browse']"
+                            variant="teal"
+                            ariaDescribedBy="browse-description"
+                            description="Explore an already parsed corpus."
+                            i18n-description
+                        />
+                        <pp-icon-button
+                            [icon]="icons.about"
+                            label="About"
+                            i18n-label
+                            size="large"
+                            [routerLink]="['/', 'minimalist-parser', 'about']"
+                            variant="coral"
+                            ariaDescribedBy="about-description"
+                            description="See a more detailed explanation of the visualisations."
+                            i18n-description
+                        />
                     </div>
                 </section>
 

@@ -1,6 +1,7 @@
 import { Component, DestroyRef, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons";
 import { map } from "rxjs";
 import { ErrorHandlerService } from "src/app/shared/services/error-handler.service";
 import { MGParserAPIService } from "src/app/shared/services/mg-parser-api.service";
@@ -25,12 +26,14 @@ export class MinimalistParserInputComponent implements OnInit {
         .getStatus$()
         .pipe(map((status) => status.mp && status.vulcan));
 
+    public faParse = faWandMagicSparkles;
+
     constructor(
         private destroyRef: DestroyRef,
         private apiService: MGParserAPIService,
         private statusService: StatusService,
         private errorHandler: ErrorHandlerService,
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.apiService.output$
