@@ -26,7 +26,6 @@ export class IconButtonComponent {
     @Input() isLoading$?: Observable<boolean>;
 
     get buttonClasses(): string[] {
-        // return [];
         const classes = ['mp-button', `mp-button-${this.variant}`];
 
         if (!this.routerLink) {
