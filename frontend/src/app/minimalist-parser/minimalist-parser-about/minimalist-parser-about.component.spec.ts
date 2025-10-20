@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-
+import { RouterModule } from "@angular/router";
 import { MinimalistParserAboutComponent } from "./minimalist-parser-about.component";
+import { routes } from "src/app/routes";
 
 describe("MinimalistParserAboutComponent", () => {
     let component: MinimalistParserAboutComponent;
@@ -8,6 +9,7 @@ describe("MinimalistParserAboutComponent", () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
+            imports: [RouterModule.forRoot(routes)],
             declarations: [MinimalistParserAboutComponent],
         }).compileComponents();
 
