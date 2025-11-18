@@ -80,19 +80,19 @@ This application can be run in both `production` and `development` mode. Either 
 
 Before starting your container, make sure to run `yarn run prebuild` in the `frontend` directory to generate the `version.ts` file required for the frontend build.
 
-Start the Docker network in **development mode** by running the following command in your terminal.
+Then, either start the Docker network in **development mode** or **production mode** by running one of the two following commands in your terminal.
 
 ```bash
+# development
 docker compose --profile dev up --build -d
-```
 
-For **production mode**, run the following instead.
-
-```bash
+# production
 docker compose --profile prod up --build -d
 ```
 
-The Spindle server needs to download several files before the parser is ready to receive input. You should wait a few minutes until the message *App is ready!* appears in the Spindle container logs.
+NB:
+- `pp-vulcan` will serve the template in `/backend/vulcan/templates/vulcan/index.html` and the script/style files in `/vulcan-static/` not the files in the `vulcan-parseport` repository. The latter are used when running Vulcan outside of the ParsePort network.
+- The Spindle server needs to download several files before the parser is ready to receive input. You should wait a few minutes until the message *App is ready!* appears in the Spindle container logs.
 
 Open your browser and visit your project at http://localhost:5001 to view the application.
 
