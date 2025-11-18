@@ -52,3 +52,9 @@ strong.navbar-item {
     font-size: 2em;
     margin-bottom: 1em;
 }
+
+/** Override Bulma styles for SVG. */
+svg {
+    width: calc(100% - 16px) !important;
+    height: calc(100% - 16px) !important;
+}
