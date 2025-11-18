@@ -58,12 +58,13 @@
                     </p>
 
                     <p i18n>
-                        Specifically, this is a <strong>parser</strong>: a model
-                        that automatically generates a linguistic structure for
-                        a sentence. The kind of linguistic structure generated
-                        is a <strong>Minimalist derivation tree</strong>, which
-                        is a description of the building process of a sentence,
-                        using contemporary syntactic theory.
+                        Specifically, this is a <em><b>parser</b></em
+                        >: a model that automatically generates a linguistic
+                        structure for a sentence. The kind of linguistic
+                        structure generated is a
+                        <em><b>Minimalist derivation tree</b></em
+                        >, which is a description of the building process of a
+                        sentence, using contemporary syntactic theory.
                     </p>
 
                     <p i18n>
@@ -106,13 +107,13 @@
                     <p i18n>
                         Much of comtemporary syntactic theory is dominated by
                         Noam Chomsky's
-                        <strong>Minimalist Program</strong> (Chomsky 1995 etc),
+                        <em><b>Minimalist Program</b></em> (Chomsky 1995 etc),
                         loosely defined by theories of grammar that rely on the
                         very simple idea that you build up a sentence by
                         repeatedly taking two things and putting them together.
                         Which things you put together and in which order
-                        determine both the form of the sentence -- the order of
-                        its words -- and the meaning of the sentence.
+                        determine both the form of the sentence—the order of its
+                        words—and the meaning of the sentence.
                     </p>
 
                     <p i18n>
@@ -172,7 +173,7 @@
                         the design of a system. For example, while in
                         Minimalism, it is generally thought that each word is a
                         bundle of features that, among other things, drive at
-                        least some aspects of the derivation. In MGs, each word
+                        least some aspects of the derivation, in MGs, each word
                         comes with a <strong>stack</strong> of features, and the
                         features <strong>determine</strong> which operations are
                         possible and what they do.
@@ -215,9 +216,9 @@
                         instance, one step could be to put <em>good</em> and
                         <em>boy</em> together to form a noun phrase. A neural
                         network is used to encode both the sentence and the
-                        current state of the parser -- the trees built so far,
-                        the steps taken to do so, what words remain to be
-                        handled, etc. To get it to work, they
+                        current state of the parser—the trees built so far, the
+                        steps taken to do so, what words remain to be handled,
+                        etc. To get it to work, they
                         <strong>trained</strong>
                         it on thousands of examples of sentences and syntax
                         trees until it was very good at predicting the process
@@ -227,7 +228,7 @@
                     </p>
 
                     <p i18n>
-                        The trees of interest for this paper are
+                        The trees of interest for Dyer et al are
                         <strong>phrase structure trees</strong>, in which the
                         internal nodes are labeled with names for the type of
                         the subtrees they are above. For example,
@@ -363,10 +364,10 @@
 
                     <p i18n>
                         This research is still ongoing. This demo is not exactly
-                        the RNNG-inspired model, but rather a strong baseline --
-                        a model that uses most of the relevant ideas, but does
-                        not yet include the special ingredient that addresses
-                        the exact question of interest.
+                        the RNNG-inspired model, but rather a strong baseline—a
+                        model that uses most of the relevant ideas, but does not
+                        yet include the special ingredient that addresses the
+                        exact question of interest.
                     </p>
 
                     <p i18n>
@@ -488,8 +489,10 @@
                         <em>Merge</em>. In my featureless Minimalist algebras,
                         there is a <em>Merge</em> operation for each kind of
                         head movement (left, right, excorporation, and
-                        across-the-board). It updates the inner algebra term.
-                        (Those without any head movement are annotated with
+                        across-the-board). It updates the
+                        <a [routerLink]="[]" fragment="putting-it-together"
+                            >inner algebra term</a
+                        >. (Those without any head movement are annotated with
                         "<code>simple</code>" in the operation name).
                     </p>
 
@@ -571,7 +574,9 @@
                         ><span i18n>.</span>
                     </p>
 
-                    <h3 i18n>Putting it all together</h3>
+                    <h3 id="putting-it-together" i18n>
+                        Putting it all together
+                    </h3>
 
                     <p i18n>
                         A full derivation of <em>Who will deserve fudge?</em>
