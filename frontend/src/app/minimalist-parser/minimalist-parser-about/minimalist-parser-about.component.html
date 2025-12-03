@@ -175,8 +175,8 @@
                         Minimalism, it is generally thought that each word is a
                         bundle of features that, among other things, drive at
                         least some aspects of the derivation, in MGs, each word
-                        comes with a <strong>stack</strong> of features, and the
-                        features <strong>determine</strong> which operations are
+                        comes with a stack of features, and the
+                        features determine which operations are
                         possible and what they do.
                     </p>
 
@@ -220,7 +220,7 @@
                         current state of the parser—the trees built so far, the
                         steps taken to do so, what words remain to be handled,
                         etc. To get it to work, they
-                        <strong>trained</strong>
+                        <em><b>trained</b></em>
                         it on thousands of examples of sentences and syntax
                         trees until it was very good at predicting the process
                         of building the trees for the sentences they had. The
@@ -452,7 +452,7 @@
                                     pragmatic, prosodic, or coordination
                                     reasons)
                                 </li>
-                                <li i18n>Self-movers</li>
+                                <li i18n>"Self"-movers</li>
                             </ul>
                             <p i18n>
                                 There is one Merge 2 function for each of the
@@ -488,9 +488,9 @@
 
                     <p i18n>
                         In Minimalist grammars, this is modelled as a variant of
-                        <em>Merge</em>. In my featureless Minimalist algebras,
-                        there is a <em>Merge</em> operation for each kind of
-                        head movement (left, right, excorporation, and
+                        <code>Merge</code>. In my featureless Minimalist algebras,
+                        there is a <code>Merge</code> operation for each kind of
+                        head movement (suffix, prefix, excorporation, and
                         across-the-board). It updates the
                         <a [routerLink]="[]" fragment="putting-it-together"
                             >inner algebra term</a
@@ -554,7 +554,7 @@
                             slot:</span
                         >
                         <code
-                            >Move2+A+Bar((deserves fudge, {{ "{" }}A:who{{
+                            >Move2+A+ABar((deserves fudge, {{ "{" }}A:who{{
                                 "}"
                             }})) = (deserves fudge, {{ "{" }}Abar:who{{
                                 "}"
@@ -587,16 +587,16 @@
 
                     <figure>
                         <img
-                            ngSrc="assets/minimalist-parser/diagrams/fulldt.png"
-                            width="379"
-                            height="423"
-                            alt="Derivation of 'Who will deserve fudge?' with
+                            ngSrc="assets/minimalist-parser/diagrams/annotated-dt.png"
+                            width="816"
+                            height="528"
+                            alt="Annotated derivation of 'Who will deserve fudge?' with
                             full operation names"
                             ngOptimizedImage
                             i18n-alt
                         />
                         <figcaption i18n>
-                            Derivation of <em>Who will deserve fudge?</em> with
+                            Annotated derivation of <em>Who will deserve fudge?</em> with
                             full operation names
                         </figcaption>
                     </figure>
