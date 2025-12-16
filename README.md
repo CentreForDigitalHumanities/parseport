@@ -94,7 +94,7 @@ NB:
 - `pp-vulcan` will serve the template in `/backend/vulcan/templates/vulcan/index.html` and the script/style files in `/vulcan-static/` not the files in the `vulcan-parseport` repository. The latter are used when running Vulcan outside of the ParsePort network.
 - The Spindle server needs to download several files before the parser is ready to receive input. You should wait a few minutes until the message *App is ready!* appears in the Spindle container logs.
 
-Open your browser and visit your project at http://localhost:5001 to view the application.
+Open your browser and visit your project at [http://localhost:5001](http://localhost:5001) to view the application.
 
 ## Preparing for development
 

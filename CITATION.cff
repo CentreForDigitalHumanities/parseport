@@ -36,6 +36,14 @@ authors:
     email: m.j.moortgat@uu.nl
     affiliation: Utrecht University Institute for Language Sciences
     orcid: 'https://orcid.org/0000-0003-3568-9920'
+  - given-names: Meaghan
+    family-names: Fowlie
+    email: m.fowlie@uu.nl
+    affiliation: Utrecht University Institute for Language Sciences
+    orcid: 'https://orcid.org/0000-0002-9931-4485'
+  - given-names: Jonas
+    family-names: Groschwitz
+    email: jonas.groschwitz@gmail.com
 repository-code: 'https://github.com/CentreForDigitalHumanities/parseport'
 url: 'https://parseport.hum.uu.nl/home'
 abstract: >-
@@ -52,3 +60,6 @@ keywords:
   - vulcan
   - type-logical grammar
 license: BSD-3-Clause
+commit: 2c9cd559a56c64a02cb86756cdf56aca116a4eba
+version: 1.1.0
+date-released: '2025-05-01'
