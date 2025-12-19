@@ -1,4 +1,4 @@
-FROM python:3.10-bullseye
+FROM python:3.12-slim-trixie
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Install dependencies
 RUN apt update
-RUN apt install -y gettext
+RUN apt install -y gettext git gcc libpq-dev
 RUN pip install gunicorn
 
 # Copy requirements file
