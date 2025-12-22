@@ -50,7 +50,8 @@ In overview, your file structure should be as follows.
 |   └── Dockerfile
 |
 ├── mg-parser-server
-|   └── Dockerfile
+|   ├── Dockerfile
+|   └── model.tar.gz
 |
 └── vulcan-parseport
     ├── Dockerfile
@@ -63,6 +64,7 @@ Note that you will need three data files in order to run this project.
 - `model_weights.pt` should be put in the root directory of the `spindle-server` project. It can be downloaded from _Yoda-link here_.
 - `aethel.pickle` contains the pre-parsed data for Æthel and should live at `parseport/backend/aethel_db/data`. You can find it in the zip archive [here](https://github.com/konstantinosKokos/aethel/tree/stable/data).
 - `standard.pickle` contains the pre-parsed corpus for the Minimalist Parser. It should be placed in the `vulcan-parseport/app` directory. You can download it from _Yoda-link here_.
+- `model.tar.gz` should be put in the root directory of the `mg-parser-server` project. It can be downloaded from _Yoda-link here_.
 
 This application can be run in both `production` and `development` mode. Either mode will start a network of seven containers.
 
@@ -75,6 +77,8 @@ This application can be run in both `production` and `development` mode. Either 
 | `pp-latex`        | The server hosting a LaTeX compiler.              |
 | `pp-mg-parser`    | The server hosting the Minimalist Grammar parser. |
 | `pp-vulcan`       | The server hosting the Vulcan visualization tool. |
+
+Before starting your container, make sure to run `yarn run prebuild` in the `frontend` directory to generate the `version.ts` file required for the frontend build.
 
 Start the Docker network in **development mode** by running the following command in your terminal.
 
@@ -94,7 +98,11 @@ Open your browser and visit your project at http://localhost:5001 to view the ap
 
 ## Preparing for development
 
-Note that the Aethel dataset will be loaded in every time the backend server restarts. To avoid slow feedback loops in a development environment, consider running `python manage.py create_aethel_subset` before starting the development server. This will take create a much smaller subset that takes less than a second to load.
+The Aethel dataset (in `aethel.pickle`) will be loaded in every time the backend server restarts. To avoid slow feedback loops in a development environment, consider running the Django `create_aethel_subset` management command in `backend` before starting the development server. This will take create a much smaller subset that takes less than a second to load. You will need to specify your source file (the full pickle) and the path to the new subset file. The following will work for development purposes. Note that `settings.py` will look for these paths, so adjust them accordingly if you place the files elsewhere.
+
+```bash
+python manage.py create_aethel_subset .\aethel_db\data\aethel.pickle .\aethel_db\data\aethel_subset.pickle
+```
 
 
 ## Before you start
