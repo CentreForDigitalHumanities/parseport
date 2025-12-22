@@ -44,6 +44,9 @@ authors:
   - given-names: Jonas
     family-names: Groschwitz
     email: jonas.groschwitz@gmail.com
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.18015820
 repository-code: 'https://github.com/CentreForDigitalHumanities/parseport'
 url: 'https://parseport.hum.uu.nl/home'
 abstract: >-

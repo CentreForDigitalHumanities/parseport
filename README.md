@@ -1,6 +1,6 @@
 # ParsePort
 
-[![Actions Status](https://github.com/UUDigitalHumanitieslab/parseport/workflows/Unit%20tests/badge.svg)](https://github.com/UUDigitalHumanitieslab/parseport/actions)
+[![Actions Status](https://github.com/UUDigitalHumanitieslab/parseport/workflows/Unit%20tests/badge.svg)](https://github.com/UUDigitalHumanitieslab/parseport/actions) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18015820.svg)](https://doi.org/10.5281/zenodo.18015820)
 
 ParsePort is a web interface for two NLP-related (natural language processing) parsers and two associated pre-parsed text corpora, both developed at Utrecht University.
 
@@ -61,22 +61,22 @@ In overview, your file structure should be as follows.
 
 Note that you will need three data files in order to run this project.
 
-- `model_weights.pt` should be put in the root directory of the `spindle-server` project. It can be downloaded from _Yoda-link here_.
-- `aethel.pickle` contains the pre-parsed data for Æthel and should live at `parseport/backend/aethel_db/data`. You can find it in the zip archive [here](https://github.com/konstantinosKokos/aethel/tree/stable/data).
-- `standard.pickle` contains the pre-parsed corpus for the Minimalist Parser. It should be placed in the `vulcan-parseport/app` directory. You can download it from _Yoda-link here_.
-- `model.tar.gz` should be put in the root directory of the `mg-parser-server` project. It can be downloaded from _Yoda-link here_.
+-   `model_weights.pt` should be put in the root directory of the `spindle-server` project. It can be downloaded from _Yoda-link here_.
+-   `aethel.pickle` contains the pre-parsed data for Æthel and should live at `parseport/backend/aethel_db/data`. You can find it in the zip archive [here](https://github.com/konstantinosKokos/aethel/tree/stable/data).
+-   `standard.pickle` contains the pre-parsed corpus for the Minimalist Parser. It should be placed in the `vulcan-parseport/app` directory. You can download it from _Yoda-link here_.
+-   `model.tar.gz` should be put in the root directory of the `mg-parser-server` project. It can be downloaded from _Yoda-link here_.
 
 This application can be run in both `production` and `development` mode. Either mode will start a network of seven containers.
 
-| Name              | Description                                       |
-|-------------------|---------------------------------------------------|
-| `pp-nginx`        | Entry point and reverse proxy, exposes port 5001. |
-| `pp-ng`           | The frontend server (Angular).                    |
-| `pp-dj`           | The backend/API server (Django).                  |
-| `pp-spindle`      | The server hosting the Spindle parser.            |
-| `pp-latex`        | The server hosting a LaTeX compiler.              |
-| `pp-mg-parser`    | The server hosting the Minimalist Grammar parser. |
-| `pp-vulcan`       | The server hosting the Vulcan visualization tool. |
+| Name           | Description                                       |
+| -------------- | ------------------------------------------------- |
+| `pp-nginx`     | Entry point and reverse proxy, exposes port 5001. |
+| `pp-ng`        | The frontend server (Angular).                    |
+| `pp-dj`        | The backend/API server (Django).                  |
+| `pp-spindle`   | The server hosting the Spindle parser.            |
+| `pp-latex`     | The server hosting a LaTeX compiler.              |
+| `pp-mg-parser` | The server hosting the Minimalist Grammar parser. |
+| `pp-vulcan`    | The server hosting the Vulcan visualization tool. |
 
 Before starting your container, make sure to run `yarn run prebuild` in the `frontend` directory to generate the `version.ts` file required for the frontend build.
 
@@ -91,8 +91,9 @@ docker compose --profile prod up --build -d
 ```
 
 NB:
-- `pp-vulcan` will serve the template in `/backend/vulcan/templates/vulcan/index.html` and the script/style files in `/vulcan-static/` not the files in the `vulcan-parseport` repository. The latter are used when running Vulcan outside of the ParsePort network.
-- The Spindle server needs to download several files before the parser is ready to receive input. You should wait a few minutes until the message *App is ready!* appears in the Spindle container logs.
+
+-   `pp-vulcan` will serve the template in `/backend/vulcan/templates/vulcan/index.html` and the script/style files in `/vulcan-static/` not the files in the `vulcan-parseport` repository. The latter are used when running Vulcan outside of the ParsePort network.
+-   The Spindle server needs to download several files before the parser is ready to receive input. You should wait a few minutes until the message _App is ready!_ appears in the Spindle container logs.
 
 Open your browser and visit your project at [http://localhost:5001](http://localhost:5001) to view the application.
 
@@ -103,7 +104,6 @@ The Aethel dataset (in `aethel.pickle`) will be loaded in every time the backend
 ```bash
 python manage.py create_aethel_subset .\aethel_db\data\aethel.pickle .\aethel_db\data\aethel_subset.pickle
 ```
-
 
 ## Before you start
 
@@ -151,13 +151,14 @@ $ python bootstrap.py
 ```
 
 This will set up several development systems, i.e.:
- - a python virtual environment,
- - install backend requirements in the virtual environment,
- - install frontend requirements
- - create a postgres database,
- - create a django superuser,
- - run django migrations,
- - set up git flow
+
+-   a python virtual environment,
+-   install backend requirements in the virtual environment,
+-   install frontend requirements
+-   create a postgres database,
+-   create a django superuser,
+-   run django migrations,
+-   set up git flow
 
 This is just a preliminary script to get you started, check `bootstrap.log` in the parseport directory to see which of these steps you need to complete manually.
 
@@ -174,9 +175,11 @@ This will run the backend and frontend applications, as well as their unittests,
 ### Installation for ARM-chips (Macbooks M1+)
 
 When installing this application, ARM-chip user need to additionally run:
+
 ```shell
 brew install cmake llvm libomp
 ```
+
 You will need to have homebrew installed to run this. These are the additional packages required to install pytorch on ARM-chips.
 
 ### Recommended order of development
