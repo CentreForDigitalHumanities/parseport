@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
 import { map } from "rxjs";
 import { StatusService } from "src/app/shared/services/status.service";
 import { environment } from "src/environments/environment";
@@ -12,6 +13,8 @@ export class MinimalistParserBrowserComponent {
     public statusOk$ = this.statusService
         .getStatus$()
         .pipe(map((status) => status.vulcan));
+    
+    public faBrowse = faBookOpen;
 
     constructor(private statusService: StatusService) {}
 

@@ -1,21 +1,810 @@
 <div class="content">
     <div class="columns is-centered">
         <div class="column is-two-thirds">
-            <h1 i18n>About Minimalist Parser</h1>
+            <article>
+                <h1 i18n>About</h1>
 
-            <p i18n>
-                Minimalist Parser is a parser developed by Meaghan Fowlie at
-                Utrecht University. It produces syntactic parses of English
-                sentences in accordance with the framework of Chomskyan
-                Minimalism.
-            </p>
+                <section class="mt-6">
+                    <header>
+                        <h2 i18n>Overview</h2>
+                    </header>
 
-            <h2 i18n>Demonstrated parse</h2>
+                    <p i18n>
+                        Computational linguistics and mainstream linguistics are
+                        once again diverging. Very large language models such as
+                        GPT have mysteriously cracked the code of English
+                        grammar, consistently generating grammatical sentences
+                        despite never having explicitly been taught grammar.
+                        While these advances are amazing, they leave the basic
+                        questions of linguistics unanswered: what it language
+                        like? Why can babies learn it so automatically with
+                        orders of magnitude less input than GPT?
+                    </p>
 
-            <i i18n>
-                Coming soon: an example of a parse produced by Minimalist
-                Parser.
-            </i>
+                    <p i18n>
+                        LLMs learn the language globally, based on
+                        indiscriminate input. Linguists, on the other hand,
+                        often aim to describe accurately small corners of the
+                        grammar of a language: what explains the order of
+                        adjectives in a noun phrase? Why can <em>any</em> appear
+                        in only certain contexts? How do verbs get their
+                        suffixes? While the overall aim is to provide a complete
+                        picture of how human languages can work and what makes
+                        each language different, often these small components
+                        are not in practice put together in to a complete
+                        grammar. As a result, it is not always clear what
+                        proposals are mutually compatible.
+                    </p>
+
+                    <p i18n>
+                        This is where computational models can help.
+                        Computational models force us to make very specific
+                        decisions. We can try putting together many researchers'
+                        ideas into a large grammar of many aspects of a
+                        language, and see whether the model still makes sense.
+                    </p>
+
+                    <p i18n>
+                        We can also use machine learning to teach a model what
+                        these grammatical structures can look like, and see
+                        whether they can make sense of new sentences and
+                        structures.
+                    </p>
+
+                    <p i18n>
+                        This project is in this space, using modern machine
+                        learning tools to address the question of how language
+                        actually works.
+                    </p>
+
+                    <p i18n>
+                        Specifically, this is a <em><b>parser</b></em
+                        >: a model that automatically generates a linguistic
+                        structure for a sentence. The kind of linguistic
+                        structure generated is a
+                        <em><b>Minimalist derivation tree</b></em
+                        >, which is a description of the building process of a
+                        sentence, using contemporary syntactic theory.
+                    </p>
+
+                    <p i18n>
+                        The data for this project is from MGBank (<a
+                            href="https://aclanthology.org/E17-3021/"
+                            target="_blank"
+                            >Torr 2018</a
+                        >), a corpus of about 80,000 minimalist derivation trees
+                        for sentences mostly taken from the
+                        <a
+                            href="https://catalog.ldc.upenn.edu/LDC99T42"
+                            target="_blank"
+                            >Penn Tree Bank</a
+                        >.
+                    </p>
+
+                    <p i18n>
+                        The visualisations are powered by Jonas Groschwitz's
+                        <a
+                            href="https://github.com/jgroschwitz/vulcan"
+                            target="_blank"
+                            >Vulcan</a
+                        >, an open-source visualisation tool for linguistic
+                        structures.
+                    </p>
+
+                    <p i18n>
+                        This work is part of the research programme Learning
+                        meaning from structure: neural semantic parsing with
+                        minimalist grammars with project number VI.Veni.194.057,
+                        which is funded by the Dutch Research Council (NWO).
+                    </p>
+                </section>
+
+                <section id="minimalist-syntax" class="mt-6">
+                    <header>
+                        <h2 i18n>Minimalist syntax</h2>
+                    </header>
+
+                    <p i18n>
+                        Much of comtemporary syntactic theory is dominated by
+                        Noam Chomsky's
+                        <em><b>Minimalist Program</b></em> (Chomsky 1995 etc),
+                        loosely defined by theories of grammar that rely on the
+                        very simple idea that you build up a sentence by
+                        repeatedly taking two things and putting them together.
+                        Which things you put together and in which order
+                        determine both the form of the sentence—the order of its
+                        words—and the meaning of the sentence.
+                    </p>
+
+                    <p i18n>
+                        For example, the sentence
+                        <em>Every good boy deserves fudge</em> can be built by
+                        putting <em>boy</em> and <em>good</em> together to make
+                        <em>good boy</em>, then adding <em>every</em>, creating
+                        the subject of the sentence <em>every good boy</em>.
+                    </p>
+
+                    <p i18n>
+                        Meanwhile <em>deserves</em> merges with its object
+                        <em>fudge</em>, forming the predicate
+                        <em>deserves fudge</em>. Only then can we put the whole
+                        sentence together, merge predicate with subject. Such a
+                        procedure can be represented with a
+                        <em><b>derivation tree</b></em
+                        >, as follows:
+                    </p>
+
+                    <figure>
+                        <img
+                            ngSrc="assets/minimalist-parser/diagrams/egbdf.png"
+                            alt="Example derivation tree of 'Every good boy deserves fudge'."
+                            width="327"
+                            height="231"
+                            ngOptimizedImage
+                            i18n-alt
+                        />
+                        <figcaption i18n>
+                            Derivation of
+                            <em>every good boy deserves fudge</em>.
+                        </figcaption>
+                    </figure>
+
+                    <p i18n>
+                        The "leaves" are labelled with the words, and the
+                        internal nodes with the operation
+                        <code>Merge</code> that puts them together.
+                    </p>
+                </section>
+
+                <section class="mt-6">
+                    <header>
+                        <h2 i18n>
+                            Minimalist Grammars (<a
+                                href="https://linguistics.ucla.edu/people/stabler/eps-lacl.pdf"
+                                target="_blank"
+                                >Stabler 1996</a
+                            >, etc.)
+                        </h2>
+                    </header>
+
+                    <p i18n>
+                        Minimalist Grammars (MGs) are a formalisation of some of
+                        the ideas behind Chomsky's Minimalist Program.
+                        Formalising requires making very specific choices about
+                        the design of a system. For example, while in
+                        Minimalism, it is generally thought that each word is a
+                        bundle of features that, among other things, drive at
+                        least some aspects of the derivation, in MGs, each word
+                        comes with a stack of features, and the
+                        features determine which operations are
+                        possible and what they do.
+                    </p>
+
+                    <p i18n>
+                        For example, <em>deserves</em> is a transitive verb,
+                        meaning it requires both a subject and an object. This
+                        is expressed in features on the verb, requesting two
+                        nouns: <code>deserves::=N =N V</code>.
+                    </p>
+                </section>
+
+                <section class="mt-6">
+                    <header>
+                        <h2 i18n>
+                            Shift-reduce parsing and Recurrent Neural Network
+                            Grammars (RNNGs)
+                        </h2>
+                    </header>
+
+                    <p i18n>
+                        Parsing is the task of automatically generating a
+                        grammatical structure for a sentence. In my case, this
+                        is a minimalist derivation tree (see
+                        <a [routerLink]="[]" fragment="minimalist-syntax"
+                            >above</a
+                        >), which constitutes building instructions for the
+                        sentence.
+                    </p>
+
+                    <p i18n>
+                        <a
+                            href="https://aclanthology.org/N16-1024/"
+                            target="_blank"
+                            >Dyer et al (2016)</a
+                        >
+                        created a grammar/parser that uses neural networks to
+                        predict syntax trees for sentences, step by step. For
+                        instance, one step could be to put <em>good</em> and
+                        <em>boy</em> together to form a noun phrase. A neural
+                        network is used to encode both the sentence and the
+                        current state of the parser—the trees built so far, the
+                        steps taken to do so, what words remain to be handled,
+                        etc. To get it to work, they
+                        <em><b>trained</b></em>
+                        it on thousands of examples of sentences and syntax
+                        trees until it was very good at predicting the process
+                        of building the trees for the sentences they had. The
+                        hope is then that it will also work well for new
+                        sentences.
+                    </p>
+
+                    <p i18n>
+                        The trees of interest for Dyer et al are
+                        <em><b>phrase structure trees</b></em
+                        >, in which the internal nodes are labeled with names
+                        for the type of the subtrees they are above. For
+                        example, <em>good boy</em> is a noun phrase (NP) made
+                        out of a noun (N) and an adjective (A):
+                    </p>
+
+                    <figure>
+                        <img
+                            ngSrc="assets/minimalist-parser/diagrams/xbar.png"
+                            width="353"
+                            height="295"
+                            alt="Phrase structure tree for 'Every good boy deserves fudge'."
+                            ngOptimizedImage
+                            i18n-alt
+                        />
+                        <figcaption i18n>
+                            Phrase structure tree for
+                            <em>every good boy deserves fudge</em>.
+                        </figcaption>
+                    </figure>
+
+                    <p i18n>
+                        <a
+                            href="https://aclanthology.org/E17-1117/"
+                            target="_blank"
+                            >Kuncoro et al (2017)</a
+                        >
+                        found that the method was not only good at generating
+                        trees for new sentences, but it was also good at it even
+                        when the internal nodes of the tree were not labelled,
+                        and there were no rules about which types of trees could
+                        be combined with which other ones. That is, it worked
+                        almost as well when there was no explicit grammar at
+                        all. Somehow the model was able to implicitly learn some
+                        approximation of the grammar rules and put together
+                        words and trees just based on the network's encoding of
+                        those trees. An example of a tree without internal node
+                        labels is below.
+                    </p>
+
+                    <figure>
+                        <img
+                            ngSrc="assets/minimalist-parser/diagrams/baretree.png"
+                            width="276"
+                            height="194"
+                            alt="Bare phrase structure tree."
+                            ngOptimizedImage
+                            i18n-alt
+                        />
+                        <figcaption i18n>Bare phrase structure tree</figcaption>
+                    </figure>
+
+                    <p i18n>
+                        The advantage of not having rules about what is allowed
+                        to combine with what is that we as linguists don't
+                        actually know all the rules of any language yet.
+                        Constraining your model with an incomplete set of rules
+                        means it can't handle any kinds of sentences that you
+                        the linguist don't know how to handle. Having the model
+                        implicitly learn something like the grammar is harder,
+                        but also much more flexible.
+                    </p>
+                </section>
+
+                <section class="mt-6">
+                    <header>
+                        <h2 i18n>Research Question</h2>
+                    </header>
+
+                    <p i18n>
+                        My question was this:
+                        <strong
+                            >can something similar work for Minimalism</strong
+                        >? Could we leave out the features altogether, and train
+                        a model like the one in
+                        <a
+                            href="https://aclanthology.org/E17-1117/"
+                            target="_blank"
+                            >Kuncoro et al (2017)</a
+                        >
+                        to generate featureless Minimalist derivation trees?
+                    </p>
+
+                    <p i18n>
+                        A major challenge for Minimalism is that while for
+                        phrase structure trees, the order of the words in the
+                        sentence is the same as the order of words in the tree,
+                        in Minimalism this is not always true. This is because
+                        Minimalism, in additional to <code>Merge</code>, which
+                        puts two things together, also has <code>Move</code>,
+                        which takes something already <code>Merge</code>d and
+                        puts it in a different place in the sentence. For
+                        example, <em>what</em> in the sentence below is thought
+                        to start in the usual object position after
+                        <em>deserves</em>, just like <em>fudge</em> in
+                        <em>every good boy deserves fudge</em>, but then later
+                        <code>Move</code>s to the start of the sentence.
+                    </p>
+
+                    <p i18n class="has-text-centered">
+                        <em>What does every good boy deserve?</em>
+                    </p>
+
+                    <p i18n>
+                        The derivation tree for this sentence would look
+                        something like this. Notice that <em>what</em> is not at
+                        the beginning of the sentence in the tree. Instead it
+                        appears where it was <code>Merge</code>d. The
+                        <code>Move</code> node at the top is the instruction to
+                        move <em>what</em> to the beginning of the sentence.
+                    </p>
+
+                    <figure>
+                        <img
+                            ngSrc="assets/minimalist-parser/diagrams/move.png"
+                            alt="Derivation tree with 'Move'."
+                            width="315"
+                            height="359"
+                            ngOptimizedImage
+                            i18n-alt
+                        />
+                        <figcaption i18n>
+                            Derivation tree with <em>Move</em>
+                        </figcaption>
+                    </figure>
+                </section>
+
+                <section class="mt-6">
+                    <header>
+                        <h2 i18n>The model in this demo</h2>
+                    </header>
+
+                    <p i18n>
+                        This research is still ongoing. This demo is not exactly
+                        the RNNG-inspired model, but rather a strong baseline—a
+                        model that uses most of the relevant ideas, but does not
+                        yet include the special ingredient that addresses the
+                        exact question of interest.
+                    </p>
+
+                    <p i18n>
+                        While a future model will use the RNNG-style parser,
+                        which generates the tree step by step, using an encoding
+                        of all the partially-constructed trees to guide its
+                        decision, the version here is a type of
+                        "sequence-to-sequence" model.
+                    </p>
+
+                    <p i18n>
+                        Specifically, this is the BART language model,
+                        fine-tuned to directly generate derivation trees
+                        <strong>as strings</strong>. For example, given
+                        <em>What does every good boy deserve?</em> its job is to
+                        generate, one element at a time, including the brackets
+                        and commas:
+                    </p>
+
+                    <p>
+                        <code
+                            >[ Move [ Merge does , [ Merge [ Merge every , [
+                            Merge good , boy ] ] [ Merge deserve , what ] ] ]
+                            ]</code
+                        >
+                    </p>
+
+                    <p i18n>
+                        It works suprisingly well. Around 75% of sequences like
+                        this are in fact interpretable as derivation trees.
+                    </p>
+                </section>
+
+                <section class="mt-6">
+                    <header>
+                        <h2 i18n>Coming soon</h2>
+                    </header>
+
+                    <p i18n>
+                        The full model is now fully designed and will be trained
+                        this fall. If it works, or is just interesting, we'll
+                        swap it in!
+                    </p>
+                </section>
+
+                <section class="mt-6">
+                    <header>
+                        <h2 i18n>Minimalist operations in this corpus</h2>
+                    </header>
+
+                    <p i18n>
+                        Because my derivation trees have no features, the
+                        operations need to be split up into more than just
+                        <code>Merge</code> and <code>Move</code>.
+                    </p>
+
+                    <h3 i18n>Merge operations</h3>
+
+                    <p i18n>
+                        There are two kinds of <code>Merge</code> operations:
+                    </p>
+
+                    <dl>
+                        <dt i18n>Merge 1</dt>
+                        <dd i18n>
+                            Concatenate the selected phrase to the left or right
+                            of the selector
+                        </dd>
+
+                        <dt i18n>Merge 2</dt>
+                        <dd>
+                            <p i18n>
+                                Merge a word that will later move. A maximum of
+                                4 phrases can be waiting to move at a time:
+                            </p>
+                            <ul>
+                                <li i18n>A-movers (e.g. for case)</li>
+                                <li i18n>A'-movers (e.g. wh-movement)</li>
+                                <li i18n>
+                                    R-movers (rightward movers, usually for
+                                    pragmatic, prosodic, or coordination
+                                    reasons)
+                                </li>
+                                <li i18n>"Self"-movers</li>
+                            </ul>
+                            <p i18n>
+                                There is one Merge 2 function for each of the
+                                four mover slots.
+                            </p>
+                        </dd>
+                    </dl>
+
+                    <p i18n>
+                        Additionally, MGBank allows for
+                        <em><b>Head Movement</b></em
+                        >. For example, in
+                        <em>Does every good boy deserve fudge?</em> the
+                        auxilliary <em>does</em> is thought to start in the
+                        T(ense) position and move up to the C(omplementiser)
+                        position. Rather than the whole TP constituent moving,
+                        only the T head itself moves:
+                    </p>
+
+                    <figure>
+                        <img
+                            ngSrc="assets/minimalist-parser/diagrams/headmove.png"
+                            width="356"
+                            height="543"
+                            alt="Phrase structure tree with Head Movement."
+                            ngOptimizedImage
+                            i18n-alt
+                        />
+                        <figcaption i18n>
+                            Phrase structure tree with Head Movement
+                        </figcaption>
+                    </figure>
+
+                    <p i18n>
+                        In Minimalist grammars, this is modelled as a variant of
+                        <code>Merge</code>. In my featureless Minimalist algebras,
+                        there is a <code>Merge</code> operation for each kind of
+                        head movement (suffix, prefix, excorporation, and
+                        across-the-board). It updates the
+                        <a [routerLink]="[]" fragment="putting-it-together"
+                            >inner algebra term</a
+                        >. (Those without any head movement are annotated with
+                        "<code>simple</code>" in the operation name).
+                    </p>
+
+                    <p i18n>
+                        For example, <code>Merge1+concat_right+simple</code>
+                        simply concatenates the selectee to the right of the
+                        selector:
+                        <code
+                            >Merge1+concat_right+simple(deserves, fudge) =
+                            deserves fudge</code
+                        >.
+                    </p>
+
+                    <p i18n>
+                        <code>Merge2+Abar</code>, on the other hand, stores the
+                        selectee in the <code>Abar</code> mover slot, to be
+                        Moved later:
+                    </p>
+
+                    <p>
+                        <code
+                            >Merge2+Abar(deserve, what) = (deserve,
+                            {{ "{" }}Abar:what{{ "}" }})</code
+                        >
+                    </p>
+
+                    <h3 i18n>Move operations</h3>
+
+                    <p i18n>
+                        There are two kinds of <code>Move</code> operations:
+                    </p>
+
+                    <dl>
+                        <dt i18n>Move 1 (final move)</dt>
+                        <dd i18n>concatenate the mover to the main phrase</dd>
+
+                        <dt i18n>Move 2 (nonfinal move)</dt>
+                        <dd i18n>
+                            The mover will move again, so do not concatenate it.
+                            Refile it in its new mover slot.
+                        </dd>
+                    </dl>
+
+                    <p i18n>
+                        There is a Move 1 for each of the four mover slots (A,
+                        A', R, Self), indicating which slots to get the mover
+                        from. There is a Move 2 for each pair of mover slots,
+                        indicating which slot to take the mover from and where
+                        to refile it.
+                    </p>
+
+                    <p>
+                        <span i18n
+                            >For example, <code>Move2+A+Abar</code> takes
+                            whatever is stored in the <code>A</code> mover slot
+                            and refiles it in the <code>Abar</code> mover
+                            slot:</span
+                        >
+                        <code
+                            >Move2+A+ABar((deserves fudge, {{ "{" }}A:who{{
+                                "}"
+                            }})) = (deserves fudge, {{ "{" }}Abar:who{{
+                                "}"
+                            }})</code
+                        >
+                    </p>
+
+                    <p>
+                        <span i18n
+                            ><code>Move1+concat_left+Abar</code>, on the other
+                            hand, takes whatever is stored in the
+                            <code>Abar</code> mover slot and concatenates it to
+                            the left:</span
+                        >
+                        <code
+                            >Move1+concat_left+Abar((deserves fudge,
+                            {{ "{" }}Abar:who{{ "}" }})) = who deserves
+                            fudge</code
+                        ><span i18n>.</span>
+                    </p>
+
+                    <h3 id="putting-it-together" i18n>
+                        Putting it all together
+                    </h3>
+
+                    <p i18n>
+                        A full derivation of <em>Who will deserve fudge?</em>
+                        could go as follows:
+                    </p>
+
+                    <figure>
+                        <img
+                            ngSrc="assets/minimalist-parser/diagrams/annotated-dt.png"
+                            width="816"
+                            height="528"
+                            alt="Annotated derivation of 'Who will deserve fudge?' with
+                            full operation names"
+                            ngOptimizedImage
+                            i18n-alt
+                        />
+                        <figcaption i18n>
+                            Annotated derivation of <em>Who will deserve fudge?</em> with
+                            full operation names
+                        </figcaption>
+                    </figure>
+
+                    <p i18n>
+                        If you parse a new sentence (<a
+                            [routerLink]="['/', 'minimalist-parser', 'parse']"
+                            >Parse sentence</a
+                        >), you will see two trees. The first tree is the
+                        Minimalist derivation tree like the one above. The
+                        second is the so-called <em>inner term</em> which
+                        directly generates the string. It would look like this
+                        for this derivation:
+                    </p>
+
+                    <figure>
+                        <img
+                            ngSrc="assets/minimalist-parser/diagrams/inner.png"
+                            alt="Inner term for 'Who will deserve fudge?'"
+                            width="288"
+                            height="295"
+                            ngOptimizedImage
+                            i18n-alt
+                        />
+                        <figcaption i18n>
+                            Inner term for <em>Who will deserve fudge?</em>
+                        </figcaption>
+                    </figure>
+
+                    <p i18n>
+                        These are part of the model because they allow us to
+                        generalise. Minimalist Grammars can in principle
+                        generate anything you like, from sentences to trees to
+                        meaning representations for sentences. By trading out
+                        the inner term but keeping the derivation tree the same,
+                        we can generate multiple kinds of output.
+                    </p>
+
+                    <p i18n>
+                        However, this version of the parser generates only
+                        strings. I hope to add a semantic component in future.
+                    </p>
+                </section>
+
+                <section class="mt-6">
+                    <header>
+                        <h2 i18n>References</h2>
+                    </header>
+
+                    <ul>
+                        <li>
+                            <strong class="mr-2">AutoBank:</strong>
+                            <a
+                                href="https://github.com/john0380/Autobank"
+                                target="_blank"
+                                >https://github.com/john0380/Autobank</a
+                            >
+                            <ul>
+                                <li>
+                                    Minimalist Grammar and Treebank Building
+                                    Software
+                                </li>
+                                <li>John Torr (2018)</li>
+                                <li>
+                                    Autobank was used by Torr to create
+                                    <a
+                                        href="https://aclanthology.org/E17-3021/"
+                                        target="_blank"
+                                        >MGBank</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong class="mr-2">MGBank:</strong>
+                            <a
+                                href="https://aclanthology.org/E17-3021/"
+                                target="_blank"
+                                >https://aclanthology.org/E17-3021/</a
+                            >
+                            <ul>
+                                <li>
+                                    80,000 derivation trees mostly from the Penn
+                                    Tree Bank
+                                </li>
+                                <li>
+                                    John Torr. 2017. Autobank: a semi-automatic
+                                    annotation tool for developing deep
+                                    Minimalist Grammar treebanks. In
+                                    <em
+                                        >Proceedings of the Software
+                                        Demonstrations of the 15th Conference of
+                                        the European Chapter of the Association
+                                        for Computational Linguistics</em
+                                    >, pages 81–86, Valencia, Spain. Association
+                                    for Computational Linguistics.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Minimalist Grammars:</strong> starting with
+                            <a
+                                href="https://linguistics.ucla.edu/people/stabler/eps-lacl.pdf"
+                                target="_blank"
+                                >Stabler 1996</a
+                            >
+                            <ul>
+                                <li>
+                                    Edward Stabler. 1996. Derivational
+                                    minimalism. In
+                                    <em
+                                        >International conference on logical
+                                        aspects of computational linguistics</em
+                                    >
+                                    (pp. 68-95). Berlin, Heidelberg: Springer
+                                    Berlin Heidelberg.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Minimalism:</strong> starting with Chomsky
+                            1995
+                            <ul>
+                                <li>
+                                    Noam Chomsky. 1995. The minimalist program.
+                                    MIT press.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong
+                                >Recurrent Neural Network Grammars
+                                (RNNGs):</strong
+                            >
+                            <ul>
+                                <li>
+                                    original paper: Chris Dyer, Adhiguna
+                                    Kuncoro, Miguel Ballesteros, and Noah A.
+                                    Smith. 2016.
+                                    <a
+                                        href="https://aclanthology.org/N16-1024/"
+                                        target="_blank"
+                                        >Recurrent neural network grammars</a
+                                    >. In <em>Proceedings of NAACL</em>.
+                                </li>
+                                <li>
+                                    Follow-up, including unlabelled trees:
+                                    Adhiguna Kuncoro, Miguel Ballesteros,
+                                    Lingpeng Kong, Chris Dyer, Graham Neubig,
+                                    and Noah A. Smith. 2017.
+                                    <a
+                                        href="https://aclanthology.org/E17-1117/"
+                                        target="_blank"
+                                        >What Do Recurrent Neural Network
+                                        Grammars Learn About Syntax?</a
+                                    >. In Proceedings of the 15th Conference of
+                                    the European Chapter of the Association for
+                                    Computational Linguistics: Volume 1, Long
+                                    Papers, pages 1249–1258, Valencia, Spain.
+                                    Association for Computational Linguistics.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong
+                                ><a
+                                    href="https://catalog.ldc.upenn.edu/LDC99T42"
+                                    target="_blank"
+                                    >Penn Tree Bank</a
+                                >:</strong
+                            >
+                            Mitchell P. Marcus, Beatrice Santorini, and Mary Ann
+                            Marcinkiewicz. 1993.
+                            <a
+                                href="https://aclanthology.org/J93-2004/"
+                                target="_blank"
+                                >Building a Large Annotated Corpus of English:
+                                The Penn Treebank</a
+                            >. Computational Linguistics, 19(2):313–330.
+                        </li>
+                        <li>
+                            <strong
+                                ><a
+                                    href="https://github.com/jgroschwitz/vulcan"
+                                    target="_blank"
+                                    >Vulcan</a
+                                >
+                                (visualisation tool):</strong
+                            >
+                            <ul>
+                                <li>
+                                    Jonas Groschwitz. 2023.
+                                    <a
+                                        href="https://aclanthology.org/2023.blackboxnlp-1.15/"
+                                        target="_blank"
+                                        >Introducing VULCAN: A Visualization
+                                        Tool for Understanding Our Models and
+                                        Data by Example</a
+                                    >. In Proceedings of the 6th BlackboxNLP
+                                    Workshop: Analyzing and Interpreting Neural
+                                    Networks for NLP, pages 199–211, Singapore.
+                                    Association for Computational Linguistics.
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </article>
         </div>
     </div>
 </div>

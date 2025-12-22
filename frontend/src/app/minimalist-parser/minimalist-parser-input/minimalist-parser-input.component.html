@@ -3,7 +3,11 @@
         <div class="column is-two-thirds">
             <h1 i18n>Minimalist Parser</h1>
 
-            <p i18n>Please enter a sentence below to begin.</p>
+            <p i18n>
+                Enter an English sentence here, and the model will attempt to
+                provide a Minimalist derivation tree that generates the
+                sentence.
+            </p>
 
             @if (statusOk$ | async) {
             <form class="form" [formGroup]="form" (ngSubmit)="parse()">
@@ -22,13 +26,13 @@
                             i18n-placeholder
                         />
                     </div>
-                    <button
-                        type="submit"
-                        class="button is-primary"
-                        [class.is-loading]="loading$ | async"
-                    >
-                        <span i18n>Submit</span>
-                    </button>
+                    <pp-icon-button
+                        [icon]="faParse"
+                        label="Submit"
+                        i18n-label
+                        variant="purple"
+                        [isLoading$]="loading$"
+                    />
                 </div>
                 @if (form.touched && form.invalid) {
                 <p class="is-size-7 has-text-danger" i18n>
@@ -41,6 +45,15 @@
                 The Minimalist Parser is temporarily unavailable.
             </p>
             }
+
+            <p class="mt-4" i18n>
+                For an explanation of the output, click
+                <a
+                    target="_blank"
+                    href="assets/minimalist-parser/pdfs/annotated_screenshot_parsed_sentence.pdf"
+                    >here (PDF)</a
+                >. (Link will open in a new tab.)
+            </p>
         </div>
     </div>
 </div>
