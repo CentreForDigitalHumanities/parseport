@@ -1,9 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { AethelComponent } from "./aethel.component";
-import {
-    HttpClientTestingModule,
-    HttpTestingController,
-} from "@angular/common/http/testing";
+import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
@@ -11,6 +8,7 @@ import { routes } from "../routes";
 import { of } from "rxjs";
 import { AethelApiService } from "../shared/services/aethel-api.service";
 import { TableModule } from "primeng/table";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 
 describe("AethelComponent", () => {
     let component: AethelComponent;
@@ -24,12 +22,14 @@ describe("AethelComponent", () => {
         await TestBed.configureTestingModule({
             declarations: [AethelComponent],
             imports: [
-                HttpClientTestingModule,
                 ReactiveFormsModule,
                 CommonModule,
                 TableModule,
-                RouterModule.forRoot(routes),
+                RouterModule.forRoot(routes)
             ],
+            providers: [
+                provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()
+            ]
         }).compileComponents();
         httpController = TestBed.inject(HttpTestingController);
         route = TestBed.inject(ActivatedRoute);

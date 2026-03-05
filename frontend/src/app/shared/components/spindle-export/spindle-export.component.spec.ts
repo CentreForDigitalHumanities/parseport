@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SpindleExportComponent } from "./spindle-export.component";
 import { SharedModule } from "../../shared.module";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 
 describe("SpindleExportComponent", () => {
     let component: SpindleExportComponent;
@@ -10,7 +11,9 @@ describe("SpindleExportComponent", () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [SharedModule, HttpClientTestingModule],
+            imports: [SharedModule],
+            providers: [
+                provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
         }).compileComponents();
 
         fixture = TestBed.createComponent(SpindleExportComponent);

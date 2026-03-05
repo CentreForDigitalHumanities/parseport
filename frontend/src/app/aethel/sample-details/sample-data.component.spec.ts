@@ -1,12 +1,10 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SampleDataComponent } from "./sample-data.component";
-import {
-    HttpClientTestingModule,
-    HttpTestingController,
-} from "@angular/common/http/testing";
+import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { AethelListResult, AethelSampleDataReturn } from "src/app/shared/types";
 import { environment } from "src/environments/environment";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 
 describe("SampleDataComponent", () => {
     let component: SampleDataComponent;
@@ -16,7 +14,10 @@ describe("SampleDataComponent", () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             declarations: [SampleDataComponent],
-            imports: [HttpClientTestingModule],
+            imports: [],
+            providers: [
+                provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()
+            ]
         }).compileComponents();
 
         fixture = TestBed.createComponent(SampleDataComponent);

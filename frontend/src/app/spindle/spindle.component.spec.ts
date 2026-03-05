@@ -1,16 +1,14 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { SpindleComponent } from "./spindle.component";
-import {
-    HttpClientTestingModule,
-    HttpTestingController,
-} from "@angular/common/http/testing";
+import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ExportButtonComponent } from "../shared/components/spindle-export/export-button/export-button.component";
 import { RouterModule } from "@angular/router";
 import { SpindleApiService } from "../shared/services/spindle-api.service";
 import { SpindleReturn } from "../shared/types";
 import { SharedModule } from "../shared/shared.module";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 
 describe("SpindleComponent", () => {
     let component: SpindleComponent;
@@ -20,13 +18,13 @@ describe("SpindleComponent", () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
+            declarations: [SpindleComponent, ExportButtonComponent],
             imports: [
-                HttpClientTestingModule,
                 ReactiveFormsModule,
                 SharedModule,
-                RouterModule.forRoot([]),
-            ],
-            declarations: [SpindleComponent, ExportButtonComponent],
+                RouterModule.forRoot([])],
+            providers: [
+                provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
         }).compileComponents();
 
         fixture = TestBed.createComponent(SpindleComponent);
