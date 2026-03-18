@@ -1,6 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HttpClientModule } from "@angular/common/http";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 
 import { AppComponent } from "./app.component";
@@ -38,21 +38,23 @@ import { MinimalistParserModule } from "./minimalist-parser/minimalist-parser.mo
         SampleDataComponent,
         AboutComponent
     ],
+    exports: [
+        FontAwesomeModule,
+        SharedModule,
+    ],
+    bootstrap: [AppComponent],
     imports: [
         AppRoutingModule,
         BrowserModule,
         BrowserAnimationsModule,
-        HttpClientModule,
         ReactiveFormsModule,
         FontAwesomeModule,
         TableModule,
         SharedModule,
         MinimalistParserModule
     ],
-    exports: [
-        FontAwesomeModule,
-        SharedModule,
-    ],
-    bootstrap: [AppComponent],
+    providers: [
+        provideHttpClient(withInterceptorsFromDi())
+    ]
 })
-export class AppModule {}
+export class AppModule { }

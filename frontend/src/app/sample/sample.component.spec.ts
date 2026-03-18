@@ -3,10 +3,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { SampleComponent } from "./sample.component";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { routes } from "../routes";
-import {
-    HttpClientTestingModule,
-    HttpTestingController,
-} from "@angular/common/http/testing";
+import { HttpTestingController, provideHttpClientTesting } from "@angular/common/http/testing";
 import {
     AethelDetail,
     AethelDetailError,
@@ -16,6 +13,7 @@ import { By } from "@angular/platform-browser";
 import { SharedModule } from "../shared/shared.module";
 import { CommonModule } from "@angular/common";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 
 const fakePhrase: AethelDetailPhrase = {
     type: "cheese->tosti",
@@ -41,13 +39,10 @@ describe("SampleComponent", () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             declarations: [SampleComponent],
-            imports: [
-                HttpClientTestingModule,
-                SharedModule,
+            imports: [SharedModule,
                 FontAwesomeModule,
                 CommonModule,
-                RouterModule.forRoot(routes),
-            ],
+                RouterModule.forRoot(routes)],
             providers: [
                 {
                     provide: ActivatedRoute,
@@ -59,7 +54,9 @@ describe("SampleComponent", () => {
                         },
                     },
                 },
-            ],
+                provideHttpClient(withInterceptorsFromDi()),
+                provideHttpClientTesting(),
+            ]
         }).compileComponents();
 
         fixture = TestBed.createComponent(SampleComponent);

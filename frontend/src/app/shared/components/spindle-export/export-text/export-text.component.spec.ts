@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ExportTextComponent } from "./export-text.component";
 import { SharedModule } from "../../../shared.module";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 
 describe("ExportTextComponent", () => {
     let component: ExportTextComponent;
@@ -10,7 +11,9 @@ describe("ExportTextComponent", () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule, SharedModule],
+            imports: [SharedModule],
+            providers: [
+                provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
         }).compileComponents();
 
         fixture = TestBed.createComponent(ExportTextComponent);

@@ -22,6 +22,8 @@ services:
             - "4200"
         volumes:
             - ./frontend:/app
+        # Shadow mount node_modules to prevent conflicts between host and container dependencies.
+            - /app/node_modules
 
     ng-prod:
         image: pp-ng-prod
