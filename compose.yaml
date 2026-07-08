@@ -163,7 +163,7 @@ services:
             - VULCAN_DEBUG=0
             - VULCAN_SECRET_KEY=$VULCAN_SECRET_KEY
         command: >
-            gunicorn -k eventlet -w 1 -b 0.0.0.0:32771 'app:create_app()'
+            gunicorn -w 1 -b 0.0.0.0:32771 'app:create_app()'
             --capture-output
             --access-logfile /logs/access_log
             --error-logfile /logs/error_log
@@ -181,7 +181,7 @@ services:
             - VULCAN_DEBUG=1
             - VULCAN_SECRET_KEY=$VULCAN_SECRET_KEY
         command: >
-            gunicorn -k eventlet -w 1 -b 0.0.0.0:32771 'app:create_app()'
+            gunicorn -w 1 -b 0.0.0.0:32771 'app:create_app()'
             --reload
         ports:
             - "32771:32771"
