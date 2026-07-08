@@ -63,6 +63,6 @@ keywords:
   - vulcan
   - type-logical grammar
 license: BSD-3-Clause
-commit: 2c9cd559a56c64a02cb86756cdf56aca116a4eba
-version: 1.2.0
-date-released: '2025-12-22'
+commit: c64ac21c4fe8c39194123db387f63c8d1fedbfa9q
+version: 1.2.1
+date-released: '2026-07-08'
