@@ -3,7 +3,7 @@ FROM node:24.14-slim
 # Set the working directory.
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the container.
+# Copy package.json and yarn.lock to the container.
 COPY package.json yarn.lock ./
 
 # Install dependencies.
