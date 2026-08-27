@@ -1,4 +1,5 @@
-<div class="output-container" *ngIf="textOutput">
+@if (textOutput) {
+<div class="output-container">
     <div class="output-button-container">
         <button
             class="button is-small download-file"
@@ -28,3 +29,4 @@
         disabled
     ></pre>
 </div>
+}

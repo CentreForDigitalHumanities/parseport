@@ -5,9 +5,11 @@
     (click)="exportResult.emit(mode ?? 'term-table')"
     type="button"
 >
-    <span *ngIf="mode" class="icon">
+    @if (mode) {
+    <span class="icon">
         <img src="./assets/{{ mode }}-logo.svg" alt="{{ mode }}-logo" />
     </span>
+    }
     <span
         class="button-text"
         [class.with-icon]="mode !== null"

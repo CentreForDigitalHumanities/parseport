@@ -29,7 +29,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let phrase of sample.phrases; index as i">
+                    @for (phrase of sample.phrases; track phrase; let i =
+                    $index) {
+                    <tr>
                         <td>
                             <span class="proof"
                                 ><var
@@ -38,9 +40,9 @@
                             >
                         </td>
                         <td>
-                            <span *ngFor="let item of phrase.items"
-                                >{{ item.word }}
-                            </span>
+                            @for (item of phrase.items; track item) {
+                            <span>{{ item.word }} </span>
+                            }
                         </td>
                         <td>
                             <span
@@ -78,6 +80,7 @@
                             }
                         </td>
                     </tr>
+                    }
                 </tbody>
             </table>
 
