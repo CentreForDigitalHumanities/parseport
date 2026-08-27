@@ -13,34 +13,36 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf import settings
-from django.urls import path, re_path, include
+
+from django.urls import path, include
 from django.contrib import admin
 from django.views.generic import RedirectView
 
 from rest_framework import routers
 
 from spindle.views import SpindleView
-from .index import index
-from .proxy_frontend import proxy_frontend
+from .views import StatusView
+
 
 api_router = routers.DefaultRouter()  # register viewsets with this router
 
-if settings.PROXY_FRONTEND:
-    spa_url = re_path(r'^(?P<path>.*)$', proxy_frontend)
-else:
-    spa_url = re_path(r'', index)
 
 urlpatterns = [
-    path('admin', RedirectView.as_view(url='/admin/', permanent=True)),
-    path('api', RedirectView.as_view(url='/api/', permanent=True)),
-    path('api-auth', RedirectView.as_view(url='/api-auth/', permanent=True)),
-    path('admin/', admin.site.urls),
-    path('api/', include(api_router.urls)),
-    path('api/spindle', SpindleView.as_view(), name='spindle'),
-    path('api-auth/', include(
-        'rest_framework.urls',
-        namespace='rest_framework',
-    )),
-    spa_url,  # catch-all; unknown paths to be handled by a SPA
+    path("admin", RedirectView.as_view(url="/admin/", permanent=True)),
+    path("api", RedirectView.as_view(url="/api/", permanent=True)),
+    path("api-auth", RedirectView.as_view(url="/api-auth/", permanent=True)),
+    path("admin/", admin.site.urls),
+    path("api/", include(api_router.urls)),
+    path("api/status/", StatusView.as_view(), name="status"),
+    path("api/spindle/<str:mode>", SpindleView.as_view(), name="spindle"),
+    path("api/aethel/", include("aethel_db.urls")),
+    path("api/mp/", include("minimalist_parser.urls")),
+    path(
+        "api-auth/",
+        include(
+            "rest_framework.urls",
+            namespace="rest_framework",
+        ),
+    ),
+    path("vulcan/", include("vulcan.urls")),
 ]

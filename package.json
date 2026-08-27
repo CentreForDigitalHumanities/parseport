@@ -1,6 +1,6 @@
 {
     "name": "parseport",
-    "version": "0.0.0",
+    "version": "1.2.2",
     "description": "Dutch sentence parser for Spindle + Æthel (and maybe others in the future).",
     "author": "UU Centre for Digital Humanities - Research Software Lab",
     "license": "BSD-3-Clause",
@@ -21,7 +21,7 @@
         "test-back": "yarn back pytest",
         "test-func": "yarn func pytest",
         "test": "yarn test-back && yarn test-front && yarn test-func",
-        "start-front": "yarn fyarn stop && yarn front yarn serve",
+        "start-front": "yarn front yarn serve",
         "start-back": "cd backend && python manage.py runserver --settings glue --pythonpath ..",
         "livereload-back": "cd backend && python manage.py livereload --settings glue --pythonpath ..",
         "watch-test-front": "yarn front yarn test",
@@ -36,8 +36,5 @@
         "watch-front-p": "yarn front yarn watch",
         "start-back-p": "cd backend && python manage.py runserver --settings production --insecure --pythonpath ..",
         "start-p": "yarn static-p && yarn watch-front-p & yarn start-back-p"
-    },
-    "devDependencies": {
-        "@angular/cli": ">=15 <16"
     }
 }

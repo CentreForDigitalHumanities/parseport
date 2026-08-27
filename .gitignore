@@ -35,6 +35,14 @@ venv.bak/
 node_modules/
 frontend/src/environments/version.ts
 frontend/.angular/
+frontend/.angular
+frontend/dist
 
-# Build files
-dist/
+# VS Code
+.vscode/
+
+# SQLite
+backend/sqlite.db
+
+# Aethel dataset
+aethel.pickle

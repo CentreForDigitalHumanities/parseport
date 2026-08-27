@@ -1,0 +1,28 @@
+<div class="button-group-item">
+    @if (routerLink) {
+    <a
+        [ngClass]="buttonClasses"
+        [attr.aria-describedby]="ariaDescribedBy"
+        [routerLink]="routerLink"
+    >
+        <ng-container *ngTemplateOutlet="buttonContent" />
+    </a>
+    } @else {
+    <button
+        [ngClass]="buttonClasses"
+        [attr.aria-describedby]="ariaDescribedBy"
+        [class.is-loading]="isLoading$ ? (isLoading$ | async) : false"
+    >
+        <ng-container *ngTemplateOutlet="buttonContent" />
+    </button>
+    } @if (description) {
+    <p class="mp-button-description" [id]="ariaDescribedBy">
+        {{ description }}
+    </p>
+    }
+</div>
+
+<ng-template #buttonContent>
+    <fa-icon [icon]="icon" class="mp-button-icon" />
+    <span>{{ label }}</span>
+</ng-template>

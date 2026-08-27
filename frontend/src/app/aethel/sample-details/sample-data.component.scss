@@ -1,0 +1,18 @@
+
+.sample-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    a {
+        margin-left: auto;
+    }
+}
+
+.sample-item:not(:last-child) {
+    margin-bottom: 1rem;
+}
+
+.highlight {
+    font-weight: bold;
+}

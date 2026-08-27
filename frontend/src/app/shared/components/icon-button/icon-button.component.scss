@@ -1,0 +1,72 @@
+@import "../../../../variables";
+
+.button-group-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 280px;
+}
+
+.mp-button {
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    width: 100%;
+    
+    &.large {
+        padding: 1.25rem 2rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    &-icon.large {
+        font-size: 1.5rem;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5);
+    }
+
+    &:active {
+        transform: translateY(0);
+        box-shadow: none;
+    }
+}
+
+$button-variants: (
+    "purple": (
+        $mp-purple,
+        $mp-purple-hover,
+    ),
+    "teal": (
+        $mp-teal,
+        $mp-teal-hover,
+    ),
+    "coral": (
+        $mp-coral,
+        $mp-coral-hover,
+    ),
+);
+
+@each $name, $colors in $button-variants {
+    .mp-button-#{$name} {
+        background: nth($colors, 1);
+
+        &:hover {
+            background: nth($colors, 2);
+        }
+    }
+}
+
+.mp-button-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    text-align: center;
+}

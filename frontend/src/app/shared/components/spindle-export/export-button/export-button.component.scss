@@ -1,0 +1,52 @@
+.button {
+    min-width: 200px;
+}
+
+.button-text {
+    &.with-icon {
+        margin-left: .5em;
+    }
+
+    &.invisible {
+        visibility: hidden;
+    }
+}
+
+.logo {
+    max-height: 75%;
+}
+
+.with-text-below {
+    position: relative;
+
+    .text-below {
+        position: absolute;
+        font-size: .75em;
+        bottom: -1.5em;
+        color: gray;
+    }
+}
+
+.latex-button {
+    background-color: black;
+    color: white;
+
+    .icon {
+        width: 40px;
+    }
+}
+
+.overleaf-button {
+    background-color: #47A141;
+    color: white;
+}
+
+.pdf-button {
+    background-color: #FF0000;
+    color: white;
+}
+
+.proof-button {
+    background-color: #4444ca;
+    color: white;
+}

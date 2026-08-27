@@ -1,0 +1,59 @@
+<div class="content">
+    <div class="columns is-centered">
+        <div class="column is-two-thirds">
+            <h1 i18n>Minimalist Parser</h1>
+
+            <p i18n>
+                Enter an English sentence here, and the model will attempt to
+                provide a Minimalist derivation tree that generates the
+                sentence.
+            </p>
+
+            @if (statusOk$ | async) {
+            <form class="form" [formGroup]="form" (ngSubmit)="parse()">
+                <label for="minimalist-parser-input" class="label" i18n>
+                    Enter a sentence
+                </label>
+                <div class="control-wrapper">
+                    <div class="control">
+                        <input
+                            id="minimalist-parser-input"
+                            type="text"
+                            class="input"
+                            [class.is-danger]="form.touched && form.invalid"
+                            [formControl]="form.controls.mpInput"
+                            placeholder="Enter a sentence"
+                            i18n-placeholder
+                        />
+                    </div>
+                    <pp-icon-button
+                        [icon]="faParse"
+                        label="Submit"
+                        i18n-label
+                        variant="purple"
+                        [isLoading$]="loading$"
+                    />
+                </div>
+                @if (form.touched && form.invalid) {
+                <p class="is-size-7 has-text-danger" i18n>
+                    Please enter a sentence first.
+                </p>
+                }
+            </form>
+            } @else {
+            <p class="notification mt-6" i18n>
+                The Minimalist Parser is temporarily unavailable.
+            </p>
+            }
+
+            <p class="mt-4" i18n>
+                For an explanation of the output, click
+                <a
+                    target="_blank"
+                    href="assets/minimalist-parser/pdfs/annotated_screenshot_parsed_sentence.pdf"
+                    >here (PDF)</a
+                >. (Link will open in a new tab.)
+            </p>
+        </div>
+    </div>
+</div>

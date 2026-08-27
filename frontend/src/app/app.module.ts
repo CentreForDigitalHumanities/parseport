@@ -1,42 +1,63 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { NgModule } from "@angular/core";
+import { providePrimeNG } from "primeng/config";
+import Aura from "@primeuix/themes/aura";
 
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from "./app.component";
+import { AppRoutingModule } from "./app-routing.module";
 
-import { FooterComponent } from './footer/footer.component';
-import { MenuComponent } from './menu/menu.component';
-import { HomeComponent } from './home/home.component';
-import { SpindleComponent } from './spindle/spindle.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { AlertComponent } from './shared/components/alert/alert.component';
-import { AlertContainerDirective } from './shared/directives/alert-container.directive';
-import { AlertService } from './shared/services/alert.service';
+import { FooterComponent } from "./footer/footer.component";
+import { MenuComponent } from "./menu/menu.component";
+import { HomeComponent } from "./home/home.component";
+import { SpindleComponent } from "./spindle/spindle.component";
+import { ReactiveFormsModule } from "@angular/forms";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { TableModule } from "primeng/table";
+import { AethelComponent } from "./aethel/aethel.component";
+import { SpindleAboutComponent } from "./spindle/spindle-about/spindle-about.component";
+import { SpindleNotationComponent } from "./spindle/spindle-notation/spindle-notation.component";
+import { ReferencesComponent } from "./references/references.component";
+import { SampleComponent } from "./sample/sample.component";
+import { SampleDataComponent } from "./aethel/sample-details/sample-data.component";
+import { AboutComponent } from "./about/about.component";
+import { SharedModule } from "./shared/shared.module";
+import { MinimalistParserModule } from "./minimalist-parser/minimalist-parser.module";
 
 @NgModule({
     declarations: [
-        AlertComponent,
-        AlertContainerDirective,
         AppComponent,
         FooterComponent,
         HomeComponent,
         MenuComponent,
         SpindleComponent,
+        SpindleAboutComponent,
+        SpindleNotationComponent,
+        ReferencesComponent,
+        AethelComponent,
+        SampleComponent,
+        SampleDataComponent,
+        AboutComponent
     ],
+    exports: [
+        FontAwesomeModule,
+        SharedModule,
+    ],
+    bootstrap: [AppComponent],
     imports: [
         AppRoutingModule,
         BrowserModule,
         BrowserAnimationsModule,
-        HttpClientModule,
-        HttpClientXsrfModule.withOptions({
-            cookieName: 'csrftoken',
-            headerName: 'X-CSRFToken'
-        }),
         ReactiveFormsModule,
+        FontAwesomeModule,
+        TableModule,
+        SharedModule,
+        MinimalistParserModule
     ],
-    providers: [AlertService],
-    bootstrap: [AppComponent]
+    providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        providePrimeNG({ theme: { preset: Aura } })
+    ]
 })
 export class AppModule { }

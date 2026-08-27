@@ -196,7 +196,7 @@ def modify_angular_json():
             data['projects'][project]['architect']['build']['configurations'][f'production-{code}'] = production
 
             serve = merge_json({}, data['projects'][project]['architect']['serve']['configurations']['production'])
-            serve['browserTarget'] += f'-{code}'
+            serve['buildTarget'] += f'-{code}'
             data['projects'][project]['architect']['serve']['configurations'][code] = serve
 
         data['projects'][project]['architect']['build']['options']['outputPath'] = \

@@ -1,15 +1,17 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-import { buildTime, version, sourceUrl } from './version';
+import { buildTime, version, sourceUrl } from "./version";
 
 export const environment = {
-  production: false,
-  // URL path prefix for assets
-  assets: 'assets',
-  buildTime,
-  version,
-  sourceUrl
+    production: false,
+    // URL path prefix for assets
+    assets: "assets",
+    apiUrl: "/api/",
+    vulcanUrl: "/vulcan/",
+    buildTime,
+    version,
+    sourceUrl,
 };
 
 /*

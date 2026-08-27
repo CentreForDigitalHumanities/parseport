@@ -19,6 +19,11 @@ coverage.xml
 *.log
 local_settings.py
 db.sqlite3
+sqlite.db
+backend/sqlite.db
+
+# Dev datasets
+aethel_db/data/*.pickle
 
 # pyenv
 .python-version

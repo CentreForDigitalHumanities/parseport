@@ -1,8 +1,11 @@
-Django>=4.0.1,<5
+Django<6
 djangorestframework
 django-livereload-server
 django-revproxy>=0.10.0
-psycopg2 --no-binary psycopg2
+nltk # Needed to unpickle MG Parser response
+psycopg2>=2.9.10
 pytest
 pytest-django
 pytest-xdist
+django-cors-headers==4.3.1
+aethel @ git+https://github.com/konstantinosKokos/aethel@stable#egg=aethel

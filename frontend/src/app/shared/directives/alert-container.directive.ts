@@ -5,7 +5,8 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Directive({
     // eslint-disable-next-line @angular-eslint/directive-selector
-    selector: '[alertContainer]'
+    selector: '[alertContainer]',
+    standalone: false
 })
 export class AlertContainerDirective implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();

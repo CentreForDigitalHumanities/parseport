@@ -1,0 +1,49 @@
+<div class="content">
+    <div class="columns is-centered">
+        <div class="column is-two-thirds">
+            <h1 i18n>Minimalist Parser</h1>
+
+            <p i18n>
+                Click the button below to browse through a pre-parsed corpus
+                consisting of 100 sentences taken from the Wall Street Journal.
+                These 100 sentences are from the test set: the model was not
+                directly trained on them, but rather on similar sentences and
+                trees.
+            </p>
+
+            @if (statusOk$ | async) {
+            <pp-icon-button
+                [icon]="faBrowse"
+                label="Start browsing"
+                variant="teal"
+                (click)="navigateToVulcan()"
+                class="mt-6"
+            />
+            } @else {
+            <p class="notification mt-6" i18n>
+                The Vulcan visualization tool is temporarily unavailable.
+            </p>
+            }
+
+            <p class="mt-4" i18n>
+                For an explanation of the output visualisation, click here for
+                an
+                <a
+                    href="assets/minimalist-parser/pdfs/annotated_screenshot_browse.pdf"
+                    >annotated screenshot (PDF)</a
+                >. For more about the formalism behind the output, click
+                <a [routerLink]="['/', 'minimalist-parser', 'about']">here</a>.
+            </p>
+
+            <p i18n>
+                The 100 sentences can be searched; click on Search at the top,
+                which opens up a search dialogue. For an explanation of the
+                search dialogue, click
+                <a
+                    href="assets/minimalist-parser/pdfs/annotated_screenshot_search.pdf"
+                    >here (PDF)</a
+                >.
+            </p>
+        </div>
+    </div>
+</div>

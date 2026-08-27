@@ -7,9 +7,10 @@ import { Component, ViewChild } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
-  template: `
+    template: `
       <div alertContainer></div>
-  `
+  `,
+    standalone: false
 })
 class TestComponent {
 @ViewChild(AlertContainerDirective) alertContainerDirective!: AlertContainerDirective;
@@ -52,7 +53,7 @@ describe('AlertContainerDirective', () => {
       const alertInfo: AlertInfo = { type: AlertType.SUCCESS, message: 'Test alert', duration: 5000 };
       alertService.alert$.next(alertInfo);
       fixture.detectChanges();
-      const alertComponent = fixture.debugElement.query(By.css('dh-alert')).componentInstance;
+      const alertComponent = fixture.debugElement.query(By.css('pp-alert')).componentInstance;
       spyOn(alertComponent.destroyMe, 'emit');
       alertComponent.destroyMe.emit();
       fixture.detectChanges();
@@ -63,7 +64,7 @@ describe('AlertContainerDirective', () => {
       const alertInfo: AlertInfo = { type: AlertType.SUCCESS, message: 'Test alert', duration: 500 };
       alertService.alert$.next(alertInfo);
       fixture.detectChanges();
-      const alertComponent = fixture.debugElement.query(By.css('dh-alert')).componentInstance;
+      const alertComponent = fixture.debugElement.query(By.css('pp-alert')).componentInstance;
       spyOn(alertComponent, 'closeModal');
       jasmine.clock().install();
       jasmine.clock().tick(1000);

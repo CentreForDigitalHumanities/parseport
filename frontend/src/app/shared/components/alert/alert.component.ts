@@ -17,10 +17,11 @@ const ALERT_TYPE_CLASSES: { [key in AlertType]: `is-${key}` } = {
 };  
 
 @Component({
-    selector: 'dh-alert',
+    selector: 'pp-alert',
     templateUrl: './alert.component.html',
     styleUrls: ['./alert.component.scss'],
-    animations: animations
+    animations: animations,
+    standalone: false
 })
 export class AlertComponent implements AfterViewInit {
     @Output() destroyMe = new EventEmitter<void>();

@@ -19,7 +19,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "dh",
+            "prefix": "pp",
             "style": "camelCase"
           }
         ],
@@ -27,10 +27,12 @@
           "error",
           {
             "type": "element",
-            "prefix": "dh",
+            "prefix": "pp",
             "style": "kebab-case"
           }
-        ]
+        ],
+        "@angular-eslint/prefer-standalone": "off",
+        "@angular-eslint/prefer-inject": "off"
       }
     },
     {
