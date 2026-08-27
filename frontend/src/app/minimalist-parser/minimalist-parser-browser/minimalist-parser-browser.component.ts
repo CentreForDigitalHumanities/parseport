@@ -8,6 +8,7 @@ import { environment } from "src/environments/environment";
     selector: "pp-minimalist-parser-browser",
     templateUrl: "./minimalist-parser-browser.component.html",
     styleUrl: "./minimalist-parser-browser.component.scss",
+    standalone: false
 })
 export class MinimalistParserBrowserComponent {
     public statusOk$ = this.statusService

@@ -10,7 +10,6 @@ export type ButtonSize = 'normal' | 'large';
 
 @Component({
     selector: 'pp-icon-button',
-    standalone: true,
     imports: [CommonModule, RouterModule, FontAwesomeModule],
     templateUrl: './icon-button.component.html',
     styleUrl: './icon-button.component.scss'

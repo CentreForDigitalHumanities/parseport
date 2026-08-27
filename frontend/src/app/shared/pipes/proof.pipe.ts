@@ -12,6 +12,7 @@ const SYMBOL_MAPPING = {
 
 @Pipe({
     name: "proof",
+    standalone: false
 })
 export class ProofPipe implements PipeTransform {
     transform(value: string): SafeHtml {

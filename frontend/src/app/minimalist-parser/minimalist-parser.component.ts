@@ -5,6 +5,7 @@ import { faWandMagicSparkles, faBookOpen, faCircleInfo } from "@fortawesome/free
     selector: "pp-minimalist-parser",
     templateUrl: "./minimalist-parser.component.html",
     styleUrl: "./minimalist-parser.component.scss",
+    standalone: false
 })
 export class MinimalistParserComponent {
     public icons = {

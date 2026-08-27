@@ -13,6 +13,7 @@ export interface TextOutput {
     selector: "pp-export-text",
     templateUrl: "./export-text.component.html",
     styleUrl: "./export-text.component.scss",
+    standalone: false
 })
 export class ExportTextComponent {
     @Input({ required: true }) textOutput: TextOutput | null = null;

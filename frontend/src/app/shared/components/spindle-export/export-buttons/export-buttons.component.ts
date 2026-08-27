@@ -6,6 +6,7 @@ import { Observable } from "rxjs";
     selector: "pp-export-buttons",
     templateUrl: "./export-buttons.component.html",
     styleUrl: "./export-buttons.component.scss",
+    standalone: false
 })
 export class ExportButtonsComponent {
     @Input({ required: true })

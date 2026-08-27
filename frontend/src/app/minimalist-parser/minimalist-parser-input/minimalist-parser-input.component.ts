@@ -12,6 +12,7 @@ import { environment } from "src/environments/environment";
     selector: "pp-minimalist-parser-input",
     templateUrl: "./minimalist-parser-input.component.html",
     styleUrl: "./minimalist-parser-input.component.scss",
+    standalone: false
 })
 export class MinimalistParserInputComponent implements OnInit {
     public form = new FormGroup({

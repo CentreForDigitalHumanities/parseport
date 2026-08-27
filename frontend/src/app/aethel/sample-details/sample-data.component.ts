@@ -15,6 +15,7 @@ import { environment } from "src/environments/environment";
     selector: "[pp-sample-data]",
     templateUrl: "./sample-data.component.html",
     styleUrl: "./sample-data.component.scss",
+    standalone: false
 })
 export class SampleDataComponent implements OnInit {
     @Input({ required: true }) aethelResult: AethelListResult | null = null;

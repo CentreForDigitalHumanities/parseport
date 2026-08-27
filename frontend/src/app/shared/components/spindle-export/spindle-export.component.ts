@@ -7,6 +7,7 @@ import { Observable } from "rxjs";
     selector: "pp-spindle-export",
     templateUrl: "./spindle-export.component.html",
     styleUrl: "./spindle-export.component.scss",
+    standalone: false
 })
 export class SpindleExportComponent {
     @Input({ required: true }) textOutput: TextOutput | null = null;

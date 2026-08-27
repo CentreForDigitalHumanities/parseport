@@ -7,9 +7,10 @@ import { Component, ViewChild } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
-  template: `
+    template: `
       <div alertContainer></div>
-  `
+  `,
+    standalone: false
 })
 class TestComponent {
 @ViewChild(AlertContainerDirective) alertContainerDirective!: AlertContainerDirective;

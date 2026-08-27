@@ -6,6 +6,7 @@ import { animations, ShowState } from "../animations";
     selector: "pp-menu",
     templateUrl: "./menu.component.html",
     styleUrls: ["./menu.component.scss"],
+    standalone: false,
 })
 export class MenuComponent {
     public burgerShow: ShowState = "show";

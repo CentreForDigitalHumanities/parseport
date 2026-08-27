@@ -15,6 +15,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     selector: "pp-sample",
     templateUrl: "./sample.component.html",
     styleUrl: "./sample.component.scss",
+    standalone: false
 })
 export class SampleComponent implements OnInit {
     private sampleName = this.route.snapshot.params["sampleName"];

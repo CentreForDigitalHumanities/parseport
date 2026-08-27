@@ -2,6 +2,8 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { NgModule } from "@angular/core";
+import { providePrimeNG } from "primeng/config";
+import Aura from "@primeuix/themes/aura";
 
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
@@ -54,7 +56,8 @@ import { MinimalistParserModule } from "./minimalist-parser/minimalist-parser.mo
         MinimalistParserModule
     ],
     providers: [
-        provideHttpClient(withInterceptorsFromDi())
+        provideHttpClient(withInterceptorsFromDi()),
+        providePrimeNG({ theme: { preset: Aura } })
     ]
 })
 export class AppModule { }

@@ -18,6 +18,7 @@ import { SortEvent } from "primeng/api";
     selector: "pp-aethel",
     templateUrl: "./aethel.component.html",
     styleUrl: "./aethel.component.scss",
+    standalone: false
 })
 export class AethelComponent implements OnInit {
     @ViewChild("datatable") datatable?: Table;

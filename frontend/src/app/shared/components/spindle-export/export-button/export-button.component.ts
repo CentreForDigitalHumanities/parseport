@@ -5,6 +5,7 @@ import { ExportMode } from "src/app/shared/types";
     selector: "pp-export-button",
     templateUrl: "./export-button.component.html",
     styleUrls: ["./export-button.component.scss"],
+    standalone: false
 })
 export class ExportButtonComponent {
     @Output() exportResult = new EventEmitter<ExportMode>();

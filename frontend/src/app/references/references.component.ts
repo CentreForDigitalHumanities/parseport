@@ -4,5 +4,6 @@ import { Component } from "@angular/core";
     selector: "pp-references",
     templateUrl: "./references.component.html",
     styleUrls: ["./references.component.scss"],
+    standalone: false
 })
 export class ReferencesComponent {}

@@ -12,6 +12,7 @@ import { TextOutput } from "../shared/components/spindle-export/export-text/expo
     selector: "pp-spindle",
     templateUrl: "./spindle.component.html",
     styleUrls: ["./spindle.component.scss"],
+    standalone: false
 })
 export class SpindleComponent implements OnInit {
     spindleInput = new FormControl<string>("", {
