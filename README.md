@@ -61,10 +61,10 @@ In overview, your file structure should be as follows.
 
 Note that you will need three data files in order to run this project.
 
--   `model_weights.pt` should be put in the root directory of the `spindle-server` project. It can be downloaded from _Yoda-link here_.
+-   `model_weights.pt` should be put in the root directory of the `spindle-server` project. It can be downloaded from [this link](https://dhstatic.hum.uu.nl/spindle-server/model_weights.pt).
 -   `aethel.pickle` contains the pre-parsed data for Æthel and should live at `parseport/backend/aethel_db/data`. You can find it in the zip archive [here](https://github.com/konstantinosKokos/aethel/tree/stable/data).
--   `standard.pickle` contains the pre-parsed corpus for the Minimalist Parser. It should be placed in the `vulcan-parseport/app` directory. You can download it from _Yoda-link here_.
--   `model.tar.gz` should be put in the root directory of the `mg-parser-server` project. It can be downloaded from _Yoda-link here_.
+-   `standard.pickle` contains the pre-parsed corpus for the Minimalist Parser. It should be placed in the `vulcan-parseport/app` directory. You can download it from [this link](https://dhstatic.hum.uu.nl/vulcan-parseport/standard.pickle).
+-   `model.tar.gz` should be put in the root directory of the `mg-parser-server` project. It can be downloaded from [this link](https://dhstatic.hum.uu.nl/mg-parser/model.tar.gz).
 
 This application can be run in both `production` and `development` mode. Either mode will start a network of seven containers.
 
