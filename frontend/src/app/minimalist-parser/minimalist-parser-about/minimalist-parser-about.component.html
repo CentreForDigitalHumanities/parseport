@@ -175,9 +175,9 @@
                         Minimalism, it is generally thought that each word is a
                         bundle of features that, among other things, drive at
                         least some aspects of the derivation, in MGs, each word
-                        comes with a stack of features, and the
-                        features determine which operations are
-                        possible and what they do.
+                        comes with a stack of features, and the features
+                        determine which operations are possible and what they
+                        do.
                     </p>
 
                     <p i18n>
@@ -356,6 +356,36 @@
                             Derivation tree with <em>Move</em>
                         </figcaption>
                     </figure>
+
+                    <h3>(Un)grammaticality</h3>
+
+                    <p>
+                        Traditionally, parsers are based on strictly-defined
+                        grammars, and if a parser if sound and complete, then
+                        the parser will systematically fail to generate a parse
+                        tree precisely when the sentence is ungrammatical
+                        according to the given grammar.
+                    </p>
+
+                    <p i18n>
+                        This parser, however, does not show this behaviour,
+                        since it is not based on a hand-written grammar. The
+                        intention is rather that the grammar underlying the
+                        language data will be implicitly learned by the model.
+                        Even here, though, the system is not set up to fail to
+                        generate a parse for ungrammatical sentences. Instead,
+                        if it learns well, the hope is that, for an
+                        ungrammatical sentence, the probability distributions
+                        the model assigns to each decision will be very flat.
+                        That is, the model should not be able to see a clear
+                        path to a grammatical parse.
+                    </p>
+
+                    <p i18n>
+                        Future research directions will include exploring this
+                        possibility, extracting the parse probabilities of
+                        grammatical and ungrammatical sentences.
+                    </p>
                 </section>
 
                 <section class="mt-6">
@@ -488,10 +518,10 @@
 
                     <p i18n>
                         In Minimalist grammars, this is modelled as a variant of
-                        <code>Merge</code>. In my featureless Minimalist algebras,
-                        there is a <code>Merge</code> operation for each kind of
-                        head movement (suffix, prefix, excorporation, and
-                        across-the-board). It updates the
+                        <code>Merge</code>. In my featureless Minimalist
+                        algebras, there is a <code>Merge</code> operation for
+                        each kind of head movement (suffix, prefix,
+                        excorporation, and across-the-board). It updates the
                         <a [routerLink]="[]" fragment="putting-it-together"
                             >inner algebra term</a
                         >. (Those without any head movement are annotated with
@@ -596,8 +626,9 @@
                             i18n-alt
                         />
                         <figcaption i18n>
-                            Annotated derivation of <em>Who will deserve fudge?</em> with
-                            full operation names
+                            Annotated derivation of
+                            <em>Who will deserve fudge?</em> with full operation
+                            names
                         </figcaption>
                     </figure>
 
