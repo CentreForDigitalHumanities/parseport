@@ -1,4 +1,4 @@
-Django<6
+Django<7
 djangorestframework
 django-livereload-server
 django-revproxy>=0.10.0
