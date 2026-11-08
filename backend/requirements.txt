@@ -35,7 +35,7 @@ iniconfig==2.3.0
     # via pytest
 joblib==1.5.3
     # via nltk
-nltk==3.10.3
+nltk==3.10.4
     # via -r requirements.in
 packaging==26.3
     # via pytest
