@@ -7,5 +7,5 @@ psycopg2>=2.9.10
 pytest
 pytest-django
 pytest-xdist
-django-cors-headers==4.3.1
+django-cors-headers==4.9.0
 aethel @ git+https://github.com/konstantinosKokos/aethel@stable#egg=aethel
