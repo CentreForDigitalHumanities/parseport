@@ -10,10 +10,6 @@ attrs==26.1.0
     #   trio
 certifi==2026.7.22
     # via selenium
-cffi==2.1.1
-    # via trio
-colorama==0.4.6
-    # via pytest
 h11==0.16.0
     # via wsproto
 idna==3.19
@@ -28,13 +24,11 @@ packaging==26.3
     # via pytest
 pluggy==1.6.0
     # via pytest
-pycparser==3.0
-    # via cffi
 pygments==2.21.0
     # via pytest
 pysocks==1.7.1
     # via urllib3
-pytest==9.1.1
+pytest==9.2.0
     # via -r requirements.in
 selenium==4.49.0
     # via -r requirements.in
