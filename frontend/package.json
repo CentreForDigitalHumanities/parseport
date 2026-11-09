@@ -55,7 +55,7 @@
     "@angular/localize": "21.2.22",
     "@types/jasmine": "~4.3.0",
     "@typescript-eslint/eslint-plugin": "^8.68.0",
-    "@typescript-eslint/parser": "^8.68.0",
+    "@typescript-eslint/parser": "^8.72.1",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.0.0",
     "jasmine-core": "~4.5.0",
