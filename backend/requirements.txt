@@ -41,7 +41,7 @@ packaging==26.3
     # via pytest
 pluggy==1.6.0
     # via pytest
-psycopg2==2.9.12
+psycopg2==2.9.13
     # via -r requirements.in
 pygments==2.21.0
     # via pytest
