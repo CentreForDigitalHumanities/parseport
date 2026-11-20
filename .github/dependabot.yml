@@ -7,16 +7,16 @@ updates:
     - package-ecosystem: pip
       directories: [backend, functional-tests]
       schedule:
-          interval: daily
+          interval: weekly
     - package-ecosystem: docker-compose
       directory: /
       schedule:
-          interval: daily
+          interval: weekly
     - package-ecosystem: docker
       directories: [frontend, backend]
       schedule:
-          interval: daily
+          interval: weekly
     - package-ecosystem: github-actions
       directory: .github
       schedule:
-          interval: daily
+          interval: weekly
