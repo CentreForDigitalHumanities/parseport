@@ -1,7 +1,6 @@
 <div
-    [@visible]="visibility"
-    (@visible.done)="afterDone($event)"
     class="notification {{ className }}"
+    [ngClass]="visibility"
 >
     <button class="delete" aria-label="close" (click)="closeModal()"></button>
     {{ message }}

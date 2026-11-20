@@ -417,13 +417,6 @@
     tinyglobby "^0.2.12"
     yargs "^18.0.0"
 
-"@angular/platform-browser-dynamic@^21.2.22":
-  version "21.2.26"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-21.2.26.tgz#84fe788c5019c8b81e1682f94c1c486d999559a9"
-  integrity sha512-YQOvZbPZZ5JuvCjk+5KCM23qrq93ftPuF8NfGNvSDUll4TX5TnKGaWldN93nl9T76oTa98y1PcRJWrCHiNe+tQ==
-  dependencies:
-    tslib "^2.3.0"
-
 "@angular/platform-browser@^21.2.22":
   version "21.2.26"
   resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-21.2.26.tgz#830837d126fa13d32a29d1a2782d648e59d8843d"
@@ -3093,10 +3086,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/jasmine@~4.3.0":
-  version "4.3.6"
-  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-4.3.6.tgz#d9855fa9f808138488784610f888046bb9a59aff"
-  integrity sha512-3N0FpQTeiWjm+Oo1WUYWguUS7E6JLceiGTriFrG8k5PU7zRLJCzLcWURU3wjMbZGS//a2/LgjsnO3QxIlwxt9g==
+"@types/jasmine@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-7.0.0.tgz#ba760841e7d9a2111ed9ffbc134c95b60bd5e60a"
+  integrity sha512-6yNx9BsBSKiXO2yqLXs/GZDuD58Gkn6Ty26254FFOuw6B4XU5Xq8mAR0xFy8zHgAhqQd++y41fSJ8BdwrWXhqQ==
 
 "@types/json-schema@^7.0.15":
   version "7.0.15"
