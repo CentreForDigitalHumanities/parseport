@@ -1,0 +1,12 @@
+[submodule "spindle-server"]
+	path = spindle-server
+	url = https://github.com/CentreForDigitalHumanities/spindle-server
+[submodule "latex-service"]
+	path = latex-service
+	url = https://github.com/CentreForDigitalHumanities/latex-service
+[submodule "mg-parser-server"]
+	path = mg-parser-server
+	url = https://github.com/CentreForDigitalHumanities/mg-parser-server
+[submodule "vulcan-parseport"]
+	path = vulcan-parseport
+	url = https://github.com/CentreForDigitalHumanities/vulcan-parseport
