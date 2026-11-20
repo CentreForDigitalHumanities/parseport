@@ -25,6 +25,11 @@
                         "outputPath": {
                             "base": "dist/parseport"
                         },
+                        "stylePreprocessorOptions": {
+                            "sass": {
+                                "silenceDeprecations": ["color-functions", "global-builtin", "import"]
+                            }
+                        },
                         "index": "src/index.html",
                         "polyfills": ["zone.js", "@angular/localize/init"],
                         "tsConfig": "tsconfig.app.json",
