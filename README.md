@@ -10,7 +10,13 @@ ParsePort is a web interface for two NLP-related (natural language processing) p
 
 ## Running this application in Docker
 
-In order to run this application you need a working installation of Docker and an internet connection. You will also need the source code from four other repositories. These must be located in the same directory as the `parseport` source code.
+In order to run this application you need a working installation of Docker and an internet connection. This project consists of four separate repositories that have been initialized as Git submodules. After cloning this repository, you can initialize and update the submodules by running the following command in your terminal.
+
+```bash
+git submodule update --init --recursive
+```
+
+For more information on the submodules, visit their repository pages, linked below.
 
 1. [`spindle-server`](https://github.com/CentreForDigitalHumanities/spindle-server) hosts the source code for a server with the Spindle parser;
 2. [`latex-service`](https://github.com/CentreForDigitalHumanities/latex-service) contains a LaTeX compiler that is used to export the Spindle parse results in PDF format;
@@ -31,35 +37,35 @@ VULCAN_SECRET_KEY=<secret_key_here>
 In overview, your file structure should be as follows.
 
 ```
-┌── parseport (this project)
-|   ├── compose.yaml
-|   ├── .env
-|   ├── frontend
-|   |   └── Dockerfile
-|   └── backend
-|       ├── Dockerfile
-|       └── aethel_db
-|           └── data
-|               └── aethel.pickle
-|
-├── spindle-server
-|   ├── Dockerfile
-|   └── model_weights.pt
-|
-├── latex-service
-|   └── Dockerfile
-|
-├── mg-parser-server
-|   ├── Dockerfile
-|   └── model.tar.gz
-|
-└── vulcan-parseport
+parseport (this project)
+    ├── compose.yaml
+    ├── .env
+    ├── frontend
+    |   └── Dockerfile
+    ├── backend
+    |   ├── Dockerfile
+    |   └── aethel_db
+    |       └── data
+    |           └── aethel.pickle
+    |
+    |── spindle-server (submodule)
+    |   ├── Dockerfile
+    |   └── model_weights.pt
+    |
+    |── latex-service (submodule)
+    |   └── Dockerfile
+    |
+    |── mg-parser-server (submodule)
+    |   ├── Dockerfile
+    |   └── model.tar.gz
+    |
+    |── vulcan-parseport (submodule)
     ├── Dockerfile
     └── app
         └── standard.pickle
 ```
 
-Note that you will need three data files in order to run this project.
+Note that you will need four data files in order to run this project.
 
 -   `model_weights.pt` should be put in the root directory of the `spindle-server` project. It can be downloaded from [this link](https://dhstatic.hum.uu.nl/spindle-server/model_weights.pt).
 -   `aethel.pickle` contains the pre-parsed data for Æthel and should live at `parseport/backend/aethel_db/data`. You can find it in the zip archive [here](https://github.com/konstantinosKokos/aethel/tree/stable/data).

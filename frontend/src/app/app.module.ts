@@ -1,5 +1,4 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { providePrimeNG } from "primeng/config";
@@ -48,7 +47,6 @@ import { MinimalistParserModule } from "./minimalist-parser/minimalist-parser.mo
     imports: [
         AppRoutingModule,
         BrowserModule,
-        BrowserAnimationsModule,
         ReactiveFormsModule,
         FontAwesomeModule,
         TableModule,
