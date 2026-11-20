@@ -2,7 +2,7 @@ services:
     nginx:
         container_name: pp-nginx
         restart: unless-stopped
-        image: nginx:latest
+        image: nginx:1.31.9
         volumes:
             - ./nginx.conf:/etc/nginx/nginx.conf
             - ./vulcan-static:/usr/share/nginx/html:ro
@@ -70,8 +70,7 @@ services:
     spindle-prod: &spindle-prod
         image: pp-spindle-prod
         container_name: pp-spindle
-        build:
-            context: ../spindle-server
+        build: spindle-server
         profiles: ["prod"]
         restart: unless-stopped
         command: >
@@ -97,8 +96,7 @@ services:
     latex-prod: &latex-prod
         image: pp-latex-prod
         container_name: pp-latex
-        build:
-            context: ../latex-service
+        build: latex-service
         profiles: ["prod"]
         restart: unless-stopped
         command: >
@@ -123,8 +121,7 @@ services:
     mg-parser-prod: &mg-parser-prod
         image: pp-mg-parser-prod
         container_name: pp-mg-parser
-        build:
-            context: ../mg-parser-server
+        build: mg-parser-server
         profiles: ["prod"]
         restart: unless-stopped
         environment:
@@ -155,8 +152,7 @@ services:
     vulcan-prod: &vulcan-prod
         image: pp-vulcan-prod
         container_name: pp-vulcan
-        build:
-            context: ../vulcan-parseport
+        build: vulcan-parseport
         profiles: ["prod"]
         restart: unless-stopped
         environment:
