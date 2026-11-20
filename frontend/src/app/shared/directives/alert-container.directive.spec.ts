@@ -4,7 +4,6 @@ import { AlertInfo, AlertService } from '../services/alert.service';
 import { AlertType } from '../components/alert/alert.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, ViewChild } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
     template: `
@@ -23,7 +22,6 @@ describe('AlertContainerDirective', () => {
 
   beforeEach(async () => {
       await TestBed.configureTestingModule({
-          imports: [BrowserAnimationsModule],
           declarations: [ TestComponent, AlertContainerDirective ]
       }).compileComponents();
   });

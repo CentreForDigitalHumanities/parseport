@@ -20,18 +20,22 @@
         <div
             id="navbarBasicExample"
             class="navbar-menu"
-            [ngClass]="{ 'is-active': burgerActive }"
-            [@slideInOut]="burgerShow"
+            [ngClass]="{
+                'is-active': burgerActive,
+                'is-open': burgerShow === 'show'
+            }"
         >
             <ul class="navbar-start">
-                <a
-                    class="navbar-item"
-                    [routerLink]="['/home']"
-                    routerLinkActive="is-active"
-                    i18n
-                >
-                    Home
-                </a>
+                <li class="navbar-item">
+                    <a
+                        class="navbar-link"
+                        [routerLink]="['/home']"
+                        routerLinkActive="is-active"
+                        i18n
+                    >
+                        Home
+                    </a>
+                </li>
 
                 <li class="navbar-item has-dropdown is-hoverable">
                     <a
@@ -153,14 +157,16 @@
                     </ul>
                 </li>
 
-                <a
-                    class="navbar-item"
-                    [routerLink]="['/', 'about']"
-                    routerLinkActive="is-active"
-                    i18n
-                >
-                    About
-                </a>
+                <li class="navbar-item">
+                    <a
+                        class="navbar-link"
+                        [routerLink]="['/', 'about']"
+                        routerLinkActive="is-active"
+                        i18n
+                    >
+                        About
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
