@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - develop
-      - feature/build-images-in-workflow
     tags:
       - "*"
   pull_request:
@@ -22,6 +21,8 @@ env:
   LATEX_SERVICE_IMAGE_NAME: parseport-latex-service
   MG_PARSER_IMAGE_NAME: parseport-mg-parser
   VULCAN-PARSEPORT_IMAGE_NAME: parseport-vulcan
+  # Target branch name for PRs; tag or ref name for pushes.
+  IMAGE_TAG: ${{ github.base_ref || github.ref_name }}
 
 jobs:
   build-push:
@@ -51,10 +52,10 @@ jobs:
           docker push ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }}
 
           # Tag the image with the branch name or tag
-          docker tag ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:${{ github.ref_name }}
+          docker tag ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:$IMAGE_TAG
 
           # Push the tagged image
-          docker push ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:${{ github.ref_name }}
+          docker push ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:$IMAGE_TAG
 
           # Tag the image as latest
           docker tag ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:latest
@@ -74,10 +75,10 @@ jobs:
           docker push ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }}
 
           # Tag the image with the branch name or tag
-          docker tag ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ github.ref_name }}
+          docker tag ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:$IMAGE_TAG
 
           # Push the tagged image
-          docker push ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ github.ref_name }}
+          docker push ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:$IMAGE_TAG
 
           # Tag the image as latest
           docker tag ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:latest
