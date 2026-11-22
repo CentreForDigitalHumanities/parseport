@@ -21,7 +21,6 @@ env:
   LATEX_SERVICE_IMAGE_NAME: parseport-latex-service
   MG_PARSER_IMAGE_NAME: parseport-mg-parser
   VULCAN-PARSEPORT_IMAGE_NAME: parseport-vulcan
-  # Target branch name for PRs; tag or ref name for pushes.
   IMAGE_TAG: ${{ github.base_ref || github.ref_name }}
 
 jobs:
