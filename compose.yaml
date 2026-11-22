@@ -2,7 +2,7 @@ services:
     nginx:
         container_name: pp-nginx
         restart: unless-stopped
-        image: nginx:latest
+        image: nginx:1.31.9
         volumes:
             - ./nginx.conf:/etc/nginx/nginx.conf
             - ./vulcan-static:/usr/share/nginx/html:ro
