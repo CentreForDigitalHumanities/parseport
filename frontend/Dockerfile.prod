@@ -1,4 +1,4 @@
-FROM node:26-slim AS builder
+FROM node:26.13.1-slim AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -22,7 +22,7 @@ RUN npm run prebuild
 RUN npm run build -- --output-path=./dist/out --configuration production
 
 # Setup NGINX to serve the app
-FROM nginx:alpine
+FROM nginx:1.31.9-alpine
 
 # Copy the built app to the NGINX server
 COPY --from=builder /app/dist/out/browser /usr/share/nginx/html
