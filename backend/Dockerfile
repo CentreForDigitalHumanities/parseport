@@ -1,4 +1,5 @@
-FROM python:3.15.2-slim-trixie
+# Aethel requires 3.12 (see GitHub for more info).
+FROM python:3.12.16-slim-trixie
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
