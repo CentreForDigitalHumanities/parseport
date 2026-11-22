@@ -64,6 +64,10 @@ jobs:
 
       - name: Build and Push Docker image (frontend)
         run: |
+          # Install Git
+            sudo apt-get update
+            sudo apt-get install -y git
+
           # Build the Docker image
           docker build \
           -f frontend/Dockerfile.prod \
