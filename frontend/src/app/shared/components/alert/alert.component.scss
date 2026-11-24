@@ -4,10 +4,10 @@
     transition:
         height 300ms ease,
         opacity 300ms ease;
-}
 
-.notification.hide {
-    height: 0;
-    opacity: 0;
-    overflow: hidden;
+    &.hide {
+        height: 0;
+        opacity: 0;
+        overflow: hidden;
+    }
 }

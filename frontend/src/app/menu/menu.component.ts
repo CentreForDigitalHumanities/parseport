@@ -7,7 +7,7 @@ import { Component, NgZone } from "@angular/core";
     standalone: false,
 })
 export class MenuComponent {
-    public burgerShow: "show" | "hide" = "show";
+    public burgerShow: "show" | "hide" = "hide";
     public burgerActive = false;
 
     constructor(private ngZone: NgZone) {}
