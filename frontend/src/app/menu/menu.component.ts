@@ -1,15 +1,13 @@
 import { Component, NgZone } from "@angular/core";
-import { animations, ShowState } from "../animations";
 
 @Component({
-    animations,
     selector: "pp-menu",
     templateUrl: "./menu.component.html",
     styleUrls: ["./menu.component.scss"],
     standalone: false,
 })
 export class MenuComponent {
-    public burgerShow: ShowState = "show";
+    public burgerShow: "show" | "hide" = "hide";
     public burgerActive = false;
 
     constructor(private ngZone: NgZone) {}
