@@ -15,11 +15,13 @@ RUN yarn install
 # Copy app source
 COPY . /app
 
-# Pre-build
-RUN npm run prebuild
-
 # Build app
-RUN npm run build -- --output-path=./dist/out --configuration production
+ARG APP_VERSION
+RUN export APP_VERSION="${APP_VERSION:-$(node -p "require('./package.json').version")}" \
+    BUILD_TIME="$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+    && npm run build -- --output-path=./dist/out --configuration production \
+      "--define=__APP_VERSION__=$(node -p 'JSON.stringify(process.env.APP_VERSION)')" \
+      "--define=__BUILD_TIME__=$(node -p 'JSON.stringify(process.env.BUILD_TIME)')"
 
 # Setup NGINX to serve the app
 FROM nginx:1.31.9-alpine

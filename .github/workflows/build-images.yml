@@ -1,0 +1,103 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    tags:
+      - "*"
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  ORGANIZATION: centrefordigitalhumanities
+  SERVER_IMAGE_NAME: parseport
+  FRONTEND_IMAGE_NAME: parseport-frontend
+  BACKEND_IMAGE_NAME: parseport-backend
+  SPINDLE_IMAGE_NAME: parseport-spindle
+  LATEX_SERVICE_IMAGE_NAME: parseport-latex-service
+  MG_PARSER_IMAGE_NAME: parseport-mg-parser
+  VULCAN-PARSEPORT_IMAGE_NAME: parseport-vulcan
+  IMAGE_TAG: ${{ github.base_ref || github.ref_name }}
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker image (backend)
+        run: |
+          # Build the Docker image
+          docker build \
+          -f backend/Dockerfile \
+          --tag ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }} \
+          backend
+
+          # Push to GitHub Container Registry
+          docker push ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }}
+
+          # Tag the image with the branch name or tag
+          docker tag ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:$IMAGE_TAG
+
+          # Push the tagged image
+          docker push ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:$IMAGE_TAG
+
+          # Tag the image as latest
+          docker tag ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:latest
+
+          # Push the latest image
+          docker push ghcr.io/${{ env.ORGANIZATION }}/${{ env.BACKEND_IMAGE_NAME }}:latest
+
+      - name: Build and Push Docker image (frontend)
+        run: |
+          # Build the Docker image
+          docker build \
+          -f frontend/Dockerfile.prod \
+          --tag ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }} \
+          frontend
+
+          # Push to GitHub Container Registry
+          docker push ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }}
+
+          # Tag the image with the branch name or tag
+          docker tag ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:$IMAGE_TAG
+
+          # Push the tagged image
+          docker push ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:$IMAGE_TAG
+
+          # Tag the image as latest
+          docker tag ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:latest
+
+          # Push the latest image
+          docker push ghcr.io/${{ env.ORGANIZATION }}/${{ env.FRONTEND_IMAGE_NAME }}:latest
+
+  delete-untagged-images:
+    runs-on: ubuntu-latest
+    needs: build-push
+    permissions:
+      packages: write
+    concurrency:
+      group: ghcr-cleanup-parseport
+      cancel-in-progress: false
+    steps:
+      - name: Package/Container Cleanup action in ghcr.io
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          owner: ${{ env.ORGANIZATION }}
+          packages: ${{ env.FRONTEND_IMAGE_NAME }},${{ env.BACKEND_IMAGE_NAME }}
+          delete-untagged: true
+          keep-n-tagged: 2

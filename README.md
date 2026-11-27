@@ -34,6 +34,8 @@ MG_PARSER_SECRET_KEY=<secret_key_here>
 VULCAN_SECRET_KEY=<secret_key_here>
 ```
 
+For the production frontend, you can also set `APP_VERSION` in this `.env` file. Docker Compose passes it as a build argument; it is embedded in the public frontend, so do not use a secret. See the [frontend build documentation](frontend/README.md#build) for details.
+
 In overview, your file structure should be as follows.
 
 ```
@@ -84,9 +86,7 @@ This application can be run in both `production` and `development` mode. Either 
 | `pp-mg-parser` | The server hosting the Minimalist Grammar parser. |
 | `pp-vulcan`    | The server hosting the Vulcan visualization tool. |
 
-Before starting your container, make sure to run `yarn run prebuild` in the `frontend` directory to generate the `version.ts` file required for the frontend build.
-
-Then, either start the Docker network in **development mode** or **production mode** by running one of the two following commands in your terminal.
+Start the Docker network in **development mode** or **production mode** by running one of the two following commands in your terminal.
 
 ```bash
 # development
