@@ -33,6 +33,8 @@ services:
         build:
             context: ./frontend
             dockerfile: Dockerfile.prod
+            args:
+                APP_VERSION: ${APP_VERSION:-}
 
     dj-prod: &dj-prod
         image: pp-dj-prod
